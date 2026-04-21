@@ -1,2 +1,3 @@
 # Modification History
 2026-04-21 14:28: Refactored Slideshow caption positioning. Replaced select menus with percentage range sliders (0-100%) for both Desktop and Mobile. Updated sections/section-slideshow.liquid and assets/section-slideshow.css to use absolute positioning with CSS variables and translate(-50%, -50%) for precise centering. 
+2026-04-21 14:34: Resolved Slideshow positioning conflicts. Neutralized max-width constraints on the content container and moved CSS variables directly to the inner content div. Applied high-specificity CSS overrides in the section's style tag to enforce absolute positioning and ensure precise 0-100% movement across all viewports. 

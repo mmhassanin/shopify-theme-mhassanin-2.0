@@ -318,19 +318,9 @@
 }
 
 .section-slideshow .slide-content-inner {
-  position: absolute !important;
-  left: var(--pos-x-desk, 50%);
-  top: var(--pos-y-desk, 50%);
-  transform: translate(-50%, -50%) !important;
+  position: relative;
   pointer-events: auto;
   z-index: 2;
-}
-
-@media (max-width: 767px) {
-  .section-slideshow .slide-content-inner {
-    left: var(--pos-x-mob, 50%);
-    top: var(--pos-y-mob, 50%);
-  }
 }
 
 .section-slideshow .slide-content-inner > span {

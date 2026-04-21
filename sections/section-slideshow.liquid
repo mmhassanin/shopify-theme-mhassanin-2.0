@@ -90,12 +90,12 @@
                               {%- endif -%}
                             </a>
 
-                            <div class="slide-content text-{{ block.settings.text_alignment }}{% if block.settings.hide_content_mobile %} hide-mobile{% endif %}">
-                              <div
-                                class="slide-content-wrapper"
-                                style="--pos-x-desk: {{ block.settings.caption_x_desktop }}%; --pos-y-desk: {{ block.settings.caption_y_desktop }}%; --pos-x-mob: {{ block.settings.caption_x_mobile }}%; --pos-y-mob: {{ block.settings.caption_y_mobile }}%;"
-                              >
-                                <div class="slide-content-inner">
+                              <div class="slide-content text-{{ block.settings.text_alignment }}{% if block.settings.hide_content_mobile %} hide-mobile{% endif %}">
+                                <div class="slide-content-wrapper">
+                                  <div
+                                    class="slide-content-inner"
+                                    style="--pos-x-desk: {{ block.settings.caption_x_desktop }}%; --pos-y-desk: {{ block.settings.caption_y_desktop }}%; --pos-x-mob: {{ block.settings.caption_x_mobile }}%; --pos-y-mob: {{ block.settings.caption_y_mobile }}%;"
+                                  >
                                   {%- if block.settings.heading != blank -%}
                                     <span class="image-gallery_title content-text-1">{{ block.settings.heading }}</span>
                                   {%- endif -%}
@@ -393,6 +393,28 @@
   @media (max-width: 767px) {
     .section-slideshow#section-{{ section.id }} .bc-slideshow .slider-wrapper .tns-nav{
       bottom: {{ section.settings.dots_bottom_offset | divided_by: 2 }}px !important;
+    }
+  }
+
+  /* Precision Positioning Overrides */
+  .section-slideshow#section-{{ section.id }} .slide-content {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  .section-slideshow#section-{{ section.id }} .slide-content-inner {
+    position: absolute !important;
+    left: var(--pos-x-desk, 50%) !important;
+    top: var(--pos-y-desk, 50%) !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    width: max-content !important;
+    max-width: 90% !important;
+    z-index: 10 !important;
+  }
+  @media (max-width: 767px) {
+    .section-slideshow#section-{{ section.id }} .slide-content-inner {
+      left: var(--pos-x-mob, 50%) !important;
+      top: var(--pos-y-mob, 50%) !important;
     }
   }
 {%- endcapture -%}
