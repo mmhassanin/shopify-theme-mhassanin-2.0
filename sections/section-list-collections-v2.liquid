@@ -17,6 +17,30 @@
   </style>
 {%- endif -%}
 
+<style>
+  .is-wide-layout {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+  
+  @media (min-width: 1200px) {
+    .is-wide-layout {
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+    }
+  }
+  
+  @media (min-width: 1441px) {
+    .is-wide-layout {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  }
+</style>
+
+
 {%- liquid
   assign section_id = '#section-' | append: section.id
   assign style = section.settings.style
@@ -36,7 +60,7 @@
 
 {%- comment -%} ABSOLUTE MASTER WRAPPER {%- endcomment -%}
 <div class="{{ section.settings.section_visibility }}">
-  <div class="{{ section.settings.section_layout }}">
+  <div class="{{ section.settings.section_layout }}{% if is_wide %} is-wide-layout{% endif %}">
     <div class="section-list-collections-v2 style-{{ style }}" 
          id="section-{{ section.id }}" 
          data-section-id="{{ section.id }}"
