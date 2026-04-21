@@ -12,7 +12,19 @@
     - Main branch: `main`.
     - Descriptive commit messages.
 
+## Security & Secrets
+- **Secret Scanning**: Never commit API keys or secrets (e.g., Mapbox, Shopify API credentials) to the repository.
+- **Redaction**: If a secret is detected by GitHub, redact it from the file and amend the commit history before pushing.
+
+## Overlap Pattern (Reusable)
+- Floating overlap between sections is achieved via **dynamic inline `<style>`** targeting `#shopify-section-{{ section.id }}` with negative `margin-top`.
+- Schema settings: `enable_overlap` (checkbox) + `overlap_amount` (range slider).
+- Mobile breakpoint (`max-width: 767px`) halves the overlap value.
+- Cards use solid `background-color: #ffffff` and `box-shadow` to pop over the section beneath.
+
 ## Current State
-- Initializing Git repository.
-- Migrating to GitHub: `https://github.com/mmhassanin/shopify-theme-mhassanin-2.0.git` (HTTPS used as SSH is not configured).
-- Branching strategy: `main`.
+- Git repository initialized and pushed to GitHub.
+- Remote URL: `https://github.com/mmhassanin/shopify-theme-mhassanin-2.0.git` (HTTPS).
+- `section-list-collections-v2`: Floating overlap effect committed and pushed (`47c7026`).
+- `section-slideshow`: Added `dots_bottom_offset` px-based range setting with mobile responsive halving (`b4952a8`).
+- `section-list-collections-v2`: Refactored wrapper to use explicit `is_wide` variable for strict boxed vs wide layout control (`b4952a8`).

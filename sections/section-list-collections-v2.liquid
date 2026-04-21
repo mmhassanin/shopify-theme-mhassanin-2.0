@@ -34,15 +34,9 @@
 
 {%- capture grid_class -%}{%- render 'set-item-per-row', value: section.settings.items_resp -%}{%- endcapture -%}
 
-{%- if is_wide or section.settings.full_background -%}
-  {%- comment -%} Wide / Full-background: section wrapper is outer, layout container is inner {%- endcomment -%}
+{%- comment -%} Boxed/Wide layout container is ALWAYS outer, strictly constraining the entire section {%- endcomment -%}
+<div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
   <div class="section-list-collections-v2 style-{{ style }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
-    <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
-{%- else -%}
-  {%- comment -%} Boxed: layout container is outer, constraining section content to max-width {%- endcomment -%}
-  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
-    <div class="section-list-collections-v2 style-{{ style }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
-{%- endif -%}
 
     <div class="section-wrapper no-padding">
       <div class="section-body">
