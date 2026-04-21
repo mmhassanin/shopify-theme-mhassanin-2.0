@@ -4955,3 +4955,11 @@ b {
   -moz-user-select: none;
   user-select: none;
 }
+
+/* Global Section Visibility Controls */
+@media (max-width: 767px) {
+  .v-desktop-only { display: none !important; }
+}
+@media (min-width: 768px) {
+  .v-mobile-only { display: none !important; }
+}

@@ -13,7 +13,7 @@
   assign limit = gallery_blocks.size
 -%}
 
-<div class="section-slideshow{% if right_sidebar != 'none' %} sidebar-{{ right_sidebar }}{% endif %}" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="featured-blog">
+<div class="section-slideshow{% if right_sidebar != 'none' %} sidebar-{{ right_sidebar }}{% endif %} {{ section.settings.section_visibility }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="featured-blog">
   <div
     class="{% if template == 'index' or template contains 'page' %}{{ section.settings.section_layout }}{% endif %}
     {{ slideshow_height }}"
@@ -331,6 +331,17 @@
           "value": "layout-wide",
           "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
         }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "section_visibility",
+      "label": "Section Visibility",
+      "default": "always",
+      "options": [
+        { "value": "always", "label": "Both Desktop & Mobile" },
+        { "value": "v-desktop-only", "label": "Desktop Only" },
+        { "value": "v-mobile-only", "label": "Mobile Only" }
       ]
     },
     {
