@@ -36,7 +36,7 @@
 
 {%- comment -%} ABSOLUTE MASTER WRAPPER {%- endcomment -%}
 <div class="{{ section.settings.section_visibility }}">
-  <div class="{% if section.settings.section_layout == 'boxed' %}container{% else %}container-fluid{% endif %}" style="overflow: hidden; max-width: 100%;">
+  <div class="{{ section.settings.section_layout }}" style="overflow: hidden;">
     
     <div class="section-list-collections-v2 style-{{ style }}" 
          id="section-{{ section.id }}" 
