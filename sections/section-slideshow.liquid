@@ -62,7 +62,7 @@
                             </a>
 
                             <div class="slide-content text-{{ block.settings.text_alignment }}{% if block.settings.hide_content_mobile %} hide-mobile{% endif %}">
-                              <div class="slide-content-wrapper">
+                              <div class="slide-content-wrapper" style="--caption-h-desk: {{ block.settings.caption_h_desktop }}; --caption-v-desk: {{ block.settings.caption_v_desktop }}; --caption-h-mob: {{ block.settings.caption_h_mobile }}; --caption-v-mob: {{ block.settings.caption_v_mobile }};">
                                 <div class="slide-content-inner">
                                   {%- if block.settings.heading != blank -%}
                                     <span class="image-gallery_title content-text-1">{{ block.settings.heading }}</span>
@@ -717,6 +717,54 @@
           "type": "url",
           "id": "link",
           "label": "t:sections.common.link"
+        },
+        {
+          "type": "header",
+          "content": "Caption Positioning"
+        },
+        {
+          "type": "select",
+          "id": "caption_h_desktop",
+          "label": "Desktop Horizontal Position",
+          "options": [
+            { "value": "flex-start", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "flex-end", "label": "Right" }
+          ],
+          "default": "flex-start"
+        },
+        {
+          "type": "select",
+          "id": "caption_v_desktop",
+          "label": "Desktop Vertical Position",
+          "options": [
+            { "value": "flex-start", "label": "Top" },
+            { "value": "center", "label": "Middle" },
+            { "value": "flex-end", "label": "Bottom" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "caption_h_mobile",
+          "label": "Mobile Horizontal Position",
+          "options": [
+            { "value": "flex-start", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "flex-end", "label": "Right" }
+          ],
+          "default": "flex-start"
+        },
+        {
+          "type": "select",
+          "id": "caption_v_mobile",
+          "label": "Mobile Vertical Position",
+          "options": [
+            { "value": "flex-start", "label": "Top" },
+            { "value": "center", "label": "Middle" },
+            { "value": "flex-end", "label": "Bottom" }
+          ],
+          "default": "flex-end"
         }
       ]
     },
