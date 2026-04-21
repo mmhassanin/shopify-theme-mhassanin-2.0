@@ -73,8 +73,8 @@
 
 /* Ensure items have a solid background to pop over underlying sections */
 .section-list-collections-v2 .item {
-  background-color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  /*background-color: #ffffff;*/
+  /*box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);*/
 }
 
 .section-list-collections-v2.style-1 {
@@ -160,7 +160,9 @@
 }
 
 @media (max-width: 767px) {
-  .section-list-collections-v2.style-1 .col-6:nth-child(2n) .text-box, .section-list-collections-v2.style-1 .col-12 .text-box {
+
+  .section-list-collections-v2.style-1 .col-6:nth-child(2n) .text-box,
+  .section-list-collections-v2.style-1 .col-12 .text-box {
     border-inline-end-width: 0;
     border-inline-end-style: solid;
     border-inline-end-color: transparent;
@@ -168,7 +170,9 @@
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
-  .section-list-collections-v2.style-1 .col-md-3:nth-child(4n) .text-box, .section-list-collections-v2.style-1 .col-md-6:nth-child(2n) .text-box {
+
+  .section-list-collections-v2.style-1 .col-md-3:nth-child(4n) .text-box,
+  .section-list-collections-v2.style-1 .col-md-6:nth-child(2n) .text-box {
     border-inline-end-width: 0;
     border-inline-end-style: solid;
     border-inline-end-color: transparent;
