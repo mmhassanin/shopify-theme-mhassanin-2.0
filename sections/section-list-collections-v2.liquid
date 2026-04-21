@@ -22,6 +22,10 @@
   assign style = section.settings.style
   assign gallery_blocks = section.blocks | where: 'type', 'block-item'
   assign brand_blocks = section.blocks | where: 'type', 'brand'
+  assign is_wide = false
+  if section.settings.section_layout == 'container-fluid'
+    assign is_wide = true
+  endif
 -%}
 
 {%- capture section_heading -%}
@@ -30,13 +34,15 @@
 
 {%- capture grid_class -%}{%- render 'set-item-per-row', value: section.settings.items_resp -%}{%- endcapture -%}
 
-{%- if section.settings.section_layout == 'container-fluid' or section.settings.full_background -%}
-<div class="section-list-collections-v2 style-{{ style }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
-  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
-    {%- else -%}
+{%- if is_wide or section.settings.full_background -%}
+  {%- comment -%} Wide / Full-background: section wrapper is outer, layout container is inner {%- endcomment -%}
+  <div class="section-list-collections-v2 style-{{ style }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
     <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
-      <div class="section-list-collections-v2 style-{{ style }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
-    {%- endif -%}
+{%- else -%}
+  {%- comment -%} Boxed: layout container is outer, constraining section content to max-width {%- endcomment -%}
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-list-collections-v2 style-{{ style }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+{%- endif -%}
 
     <div class="section-wrapper no-padding">
       <div class="section-body">

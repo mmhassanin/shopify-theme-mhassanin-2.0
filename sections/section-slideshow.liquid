@@ -297,6 +297,14 @@
   .section-slideshow#section-{{ section.id }} .bc-slideshow .slider-wrapper .tns-nav{
     bottom: {{ section.settings.dots_position }}%;
   }
+  .section-slideshow#section-{{ section.id }} .bc-slideshow .slider-wrapper .tns-nav{
+    bottom: {{ section.settings.dots_bottom_offset }}px !important;
+  }
+  @media (max-width: 767px) {
+    .section-slideshow#section-{{ section.id }} .bc-slideshow .slider-wrapper .tns-nav{
+      bottom: {{ section.settings.dots_bottom_offset | divided_by: 2 }}px !important;
+    }
+  }
 {%- endcapture -%}
 
 {%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
@@ -417,6 +425,17 @@
       "step": 1,
       "unit": "%",
       "default": 4
+    },
+    {
+      "type": "range",
+      "id": "dots_bottom_offset",
+      "label": "Pagination Dots Bottom Offset",
+      "info": "Pixel-based offset for precise positioning. Overrides the percentage value above.",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 30
     },
     {
       "type": "checkbox",
