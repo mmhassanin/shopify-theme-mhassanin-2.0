@@ -231,20 +231,3 @@
   margin-top: 6px;
   display: block;
 }
-
-/* ULTIMATE FORCED BOUNDARY CONSTRAINT */
-.section-list-collections-v2 {
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-.container-fluid .section-list-collections-v2 {
-  max-width: 100% !important;
-  width: 100% !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-.container .section-list-collections-v2 {
-  border-radius: var(--theme-border-radius, 0);
-}
