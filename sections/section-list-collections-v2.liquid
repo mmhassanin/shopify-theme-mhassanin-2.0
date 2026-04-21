@@ -1,5 +1,22 @@
 {{ 'section-list-collections-v2.css' | asset_url | stylesheet_tag }}
 
+{%- if section.settings.enable_overlap -%}
+  {%- assign overlap_px = section.settings.overlap_amount -%}
+  {%- assign overlap_mobile = overlap_px | divided_by: 2 -%}
+  <style>
+    #shopify-section-{{ section.id }} {
+      position: relative;
+      z-index: 10;
+      margin-top: -{{ overlap_px }}px;
+    }
+    @media (max-width: 767px) {
+      #shopify-section-{{ section.id }} {
+        margin-top: -{{ overlap_mobile }}px;
+      }
+    }
+  </style>
+{%- endif -%}
+
 {%- liquid
   assign section_id = '#section-' | append: section.id
   assign style = section.settings.style
@@ -139,6 +156,27 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "header",
+      "content": "Overlap Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlap",
+      "label": "Enable Floating Overlap",
+      "info": "Pulls this section upward to overlap the section above it (e.g. Slideshow).",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "overlap_amount",
+      "label": "Overlap Amount (px)",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px"
+    },
     {
       "type": "select",
       "id": "section_layout",

@@ -71,11 +71,18 @@
   color: var(--body-color-2);
 }
 
+/* Ensure items have a solid background to pop over underlying sections */
+.section-list-collections-v2 .item {
+  background-color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
 .section-list-collections-v2.style-1 {
   position: relative;
   z-index: 1;
   box-shadow: 0 3px 21px rgba(0, 0, 0, 0.24);
   border-radius: 25px;
+  background-color: #ffffff;
 }
 
 .section-list-collections-v2.style-1 .item {
