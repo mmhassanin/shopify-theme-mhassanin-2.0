@@ -1,0 +1,527 @@
+{{ 'footer.css' | asset_url | stylesheet_tag }}
+
+{%- assign section_id = '#section-' | append: section.id -%}
+
+<div class="footer-content">
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'newsletter' -%}
+      <div class="newsletter-container" id="block-{{ block.id }}">
+        <div class="{{ section.settings.section_layout }}">
+          <div class="newsletter-inner">
+            {%- if block.settings.title != blank -%}
+              <div class="newsletter-title h3">
+                {%- render 'svg', type: 'paper-plane' -%}
+                <span class="text-color" style="color:{{ block.settings.text_color }};">
+                  {{ block.settings.title }}
+                </span>
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.subtext != blank -%}
+              <div class="subtext text-color" style="color:{{ block.settings.text_color }};">
+                {{ block.settings.subtext }}
+              </div>
+            {%- endif -%}
+            {%- render 'subscribe-form', placeholder: block.settings.newsletter_placholder, success: block.settings.newsletter_success, button_style: '1' -%}
+          </div>
+        </div>
+
+        {%- style -%}
+          {%- if block.settings.full_background %}
+            .newsletter-container#block-{{ block.id }}{
+              background-color: {{ block.settings.background }};
+            }
+          {%- else -%}
+            .newsletter-container#block-{{ block.id }} .newsletter-inner{
+              background-color: {{ block.settings.background }};
+            }
+          {%- endif -%}
+          footer .newsletter-container .newsletter-title svg path{
+            fill: {{ block.settings.text_color }};
+          }
+        {%- endstyle -%}
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+  {% comment %} end {% endcomment %}
+
+  <div class="section-footer-widget{% if section.settings.border_top %} border-top{% endif %}" id="section-{{ section.id }}" style="background-color: {{ section.settings.bg_color }};">
+    <div class="{{ section.settings.section_layout }}">
+
+      <div class="section-wrapper">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'information' -%}
+              <div class="block-widget block-{{ block.type }}" {{ block.shopify_attributes }}>
+                <div class="block-wrapper"> 
+                  {%- liquid
+                    assign logo_svg = block.settings.logo_svg
+                    assign logo_type = block.settings.logo_type
+                    assign logo_image = block.settings.logo_image
+                    assign logo_max_width = block.settings.logo_max_width | remove: 'px' | abs
+                    assign logo_max_1x = logo_max_width | append: 'x'
+                    assign logo_max_2x = logo_max_width | times: 2 | append: 'x'
+                    assign logo_1x = logo_image | img_url: logo_max_1x
+                    assign logo_2x = logo_image | img_url: logo_max_2x
+                  -%}
+
+                  {%- unless logo_type == 'none' -%}
+                    <div class="block-widget_item d-flex widget-logo">
+                      <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+                        {%- if logo_type == 'image' -%}
+                          <img class="logo-desk w-100"
+                            src="{{ logo_1x }}"
+                            srcset="{{ logo_1x }} 1x, {{ logo_2x }} 2x"
+                            width="{{ logo_image.width }}"
+                            height="{{ logo_image.height }}"
+                            style="height: auto; width: {{ logo_max_width }}px"
+                            alt="{{ shop.name }}"/>
+                        {%- else -%}
+                          {{ logo_svg }}
+                        {%- endif -%}
+                      </a>
+                    </div>
+                  {%- endunless -%}
+
+                  {%- if block.settings.show_phone -%}
+                    <div class="block-widget_item d-flex widget-phone">
+                      {%- if block.settings.phone_custom_icon != blank -%}
+                        <div class="icon text-color">{{ block.settings.phone_custom_icon }}</div>
+                      {%- endif -%}
+
+                      <div class="phone">
+                        {%- if block.settings.phone_1 != blank -%}
+                          <div class="text-1 text-color">{{ block.settings.phone_1 }}</div>
+                        {%- endif -%}
+                        {%- if block.settings.phone_2 != blank -%}
+                          <div class="text-2 text-color">{{ block.settings.phone_2 }}</div>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.show_address -%}
+                    <div class="block-widget_item widget-address">
+                      {%- if block.settings.address_text != blank -%}
+                        <div class="address-text text-color" style="font-weight: 700;">
+                          {{ block.settings.address_text }}
+                        </div>
+                      {%- endif -%}
+                      {%- if block.settings.address != blank -%}
+                        <div class="address text-1 text-color">
+                          {{ block.settings.address }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.enable_social -%}
+                    <div class="block-widget_item widget-social">
+                      {%- render 'social-media-icons' -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+            {% comment %} end {% endcomment %}
+
+            {%- when 'menu' -%}
+              <div class="block-widget block-{{ block.type }}" {{ block.shopify_attributes }}>
+                <div class="block-wrapper"> 
+                  {%- if block.settings.title != blank -%}
+                    <div class="block-widget_title text-color{% if block.settings.hide_heading_desktop %} hide-title{% endif %}">
+                      {{ block.settings.title }}
+                      <span class="icon">{%- render 'svg', type: 'angle-down' -%}</span>
+                    </div>
+                  {%- endif -%}
+                  <ul class="menu-list">
+                    {%- for link in linklists[block.settings.menu].links -%}
+                      <li class="menu-item">
+                        <a href="{{ link.url }}" class="text-color-1">{{ link.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              </div>
+            {% comment %} end {% endcomment %}
+
+            {%- when 'menu-text' -%}
+              <div class="block-widget block-{{ block.type }}" {{ block.shopify_attributes }}>
+                {%- if block.settings.ct_heading != blank or block.settings.ct_text != blank -%}
+                  <div class="block-wrapper"> 
+                    {%- if block.settings.ct_heading != blank -%}
+                      <div class="block-widget_title text-color">
+                        {{ block.settings.ct_heading }}
+                        <span class="icon">{%- render 'svg', type: 'angle-down' -%}</span>
+                      </div>
+                    {%- endif -%}
+                    {%- if block.settings.ct_text != blank -%}
+                      <div class="menu-list">
+                        {{ block.settings.ct_text }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+                
+                {%- if block.settings.title != blank or block.settings.menu != blank -%}
+                  <div class="block-wrapper"> 
+                    {%- if block.settings.title != blank -%}
+                      <div class="block-widget_title text-color{% if block.settings.hide_heading_desktop %} hide-title{% endif %}">
+                        {{ block.settings.title }}
+                        <span class="icon">{%- render 'svg', type: 'angle-down' -%}</span>
+                      </div>
+                    {%- endif -%}
+                    <ul class="menu-list">
+                      {%- for link in linklists[block.settings.menu].links -%}
+                        <li class="menu-item">
+                          <a href="{{ link.url }}" class="text-color-1">{{ link.title }}</a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
+              </div>
+            {% comment %} end {% endcomment %}
+
+            {%- else -%}
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  let footerBlockTitle = document.querySelectorAll('.block-widget_title');
+
+  footerBlockTitle.forEach(function (e) {
+    e.addEventListener("click", function () {
+      if(this.closest(".block-wrapper").classList.contains("active")){
+        this.closest(".block-wrapper").classList.remove("active");
+      }
+      else{
+        this.closest(".block-wrapper").classList.add("active");
+      }
+    });
+  });
+</script>
+
+{%- capture section_css -%}
+  {{ section_id }} .text-color{ color: {{ section.settings.text_color }};}
+  {{ section_id }} .text-color-1{ color: {{ section.settings.text_1_color }};}
+  {{ section_id }} .text-color-1:hover {color: {{ section.settings.text_2_color }};}
+  .section-footer-widget .widget-social a svg path{
+    color: {{ section.settings.text_1_color }}
+  }
+  .section-footer-widget .widget-social a:hover svg path{
+    color: {{ section.settings.text_2_color }}
+  }
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "t:sections.footer-widget.name",
+  "tag": "section",
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "checkbox",
+      "id": "border_top",
+      "label": "t:sections.common.border_top"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:sections.common.text_color",
+      "default": "#333e48"
+    },
+    {
+      "type": "color",
+      "id": "text_1_color",
+      "label": "t:sections.common.link_color",
+      "default": "#333e48"
+    },
+    {
+      "type": "color",
+      "id": "text_2_color",
+      "label": "t:sections.common.link_hover_color",
+      "default": "#333e48"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "information",
+      "name": "t:sections.footer-widget.blocks.information.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.footer-widget.blocks.information.settings.header_1.content"
+        },
+        {
+          "type": "select",
+          "id": "logo_type",
+          "label": "t:sections.common.type",
+          "options": [
+            {
+              "value": "svg",
+              "label": "t:sections.common.svg"
+            },
+            {
+              "value": "image",
+              "label": "t:sections.common.image"
+            },
+            {
+              "value": "none",
+              "label": "t:sections.common.none"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "range",
+          "id": "logo_max_width",
+          "label": "t:sections.header.settings.logo_max_width.label",
+          "step": 5,
+          "min": 100,
+          "max": 400,
+          "unit": "px",
+          "default": 250
+        },
+        {
+          "type": "html",
+          "id": "logo_svg",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.footer-widget.blocks.information.settings.header_2.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_address",
+          "label": "t:sections.common.enable_widget",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "address_text",
+          "label": "t:sections.common.text",
+          "default": "Contact info"
+        },
+        {
+          "type": "textarea",
+          "id": "address",
+          "label": "t:sections.common.address"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.footer-widget.blocks.information.settings.header_3.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_phone",
+          "label": "t:sections.common.enable_widget",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "phone_1",
+          "label": "t:sections.common.text",
+          "default": "Got questions? Call us 24/7"
+        },
+        {
+          "type": "text",
+          "id": "phone_2",
+          "label": "t:sections.common.phone_number",
+          "default": "(800) 8001-8588"
+        },
+        {
+          "type": "textarea",
+          "id": "phone_custom_icon",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.footer-widget.blocks.information.settings.header_4.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_social",
+          "label": "t:sections.common.enable_widget",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "t:sections.footer-widget.blocks.menu.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "Menu title"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_heading_desktop",
+          "label": "t:sections.footer-widget.blocks.menu.settings.hide_heading_desktop.label"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.common.menu_item",
+          "default": "main-menu"
+        }
+      ]
+    },
+    {
+      "type": "menu-text",
+      "name": "t:sections.footer-widget.blocks.menu-with-custom-text.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "Menu title"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.common.menu_item",
+          "default": "main-menu"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.footer-widget.blocks.menu-with-custom-text.settings.custom_text.label",
+        },
+        {
+          "type": "text",
+          "id": "ct_heading",
+          "label": "t:sections.common.heading"
+        },
+        {
+          "type": "richtext",
+          "id": "ct_text",
+          "label": "t:sections.footer-widget.blocks.menu-with-custom-text.settings.custom_text.label",
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "t:sections.footer-widget.blocks.newsletter.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.footer-widget.blocks.newsletter.info"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "Sign up to Newsletter"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "subtext",
+          "label": "t:sections.common.subtext"
+        },
+        {
+          "type": "text",
+          "id": "newsletter_placholder",
+          "label": "t:sections.common.placeholder",
+          "default": "Enter your email"
+        },
+        {
+          "type": "textarea",
+          "id": "newsletter_success",
+          "label": "t:sections.footer-widget.blocks.newsletter.newsletter_success",
+          "default": "Thanks for subscribing"
+        },
+        {
+          "type": "checkbox",
+          "id": "full_background",
+          "label": "t:sections.common.full_background"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "t:sections.common.background_color",
+          "default": "#fed700"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "t:sections.common.text_color",
+          "default": "#333e48"
+        } 
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.footer-widget.name",
+      "blocks": [
+        {
+          "type": "menu"
+        },
+          {
+          "type": "menu"
+        },
+        {
+          "type": "menu"
+        },
+        {
+          "type": "menu"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

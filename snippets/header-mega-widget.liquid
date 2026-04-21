@@ -1,0 +1,109 @@
+<div class="mega-menu_widget widget-{{ type }}" {{ block.shopify_attributes }} {%- if device != 'mobile' -%} style="width: {{ block.settings.max_width }}%" {%- endif -%}>
+  {%- case type -%}
+    {%- when 'mega-menu' -%}
+      {%- if device == 'mobile' -%}
+        <ul class="menu-list menu-list--lv1">
+          {%- for link in linklists[block.settings.menu].links -%}
+            <li class="menu-item menu-mobile-item-2">
+              {%- if link.links != blank -%}
+                <ul class="menu-list menu-list--lv2">
+                  <li class="menu-item-first">
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                  </li>
+                  {%- for link_lv2 in link.links -%}
+                    <li class="menu-item">
+                      <a href="{{ link_lv2.url }}">{{ link_lv2.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- else -%}
+                <a href="{{ link.url }}">{{ link.title }}</a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+      {%- else -%}
+        {%- if block.settings.show_submenu -%}
+          {%- if block.settings.heading != blank -%}
+            <h4>{{ block.settings.heading }}</h4>
+          {%- endif -%}
+          <ul class="menu-list">
+            {%- for link in linklists[block.settings.menu].links -%}
+              <li class="menu-item">
+                {%- if link.links != blank -%}
+                  <h4 class="menu-item_wrap">
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                  </h4>
+                  <ul class="menu-list menu-list--lv2">
+                    {%- for link_lv2 in link.links -%}
+                      <li class="menu-item">
+                        <a href="{{ link_lv2.url }}">{{ link_lv2.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- else -%}
+                  <a href="{{ link.url }}">{{ link.title }}</a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+
+        {%- else -%}
+          {%- if block.settings.heading != blank -%}
+            <h4>{{ block.settings.heading }}</h4>
+          {%- endif -%}
+          <ul class="menu-list menu-list--lv1">
+            {%- for link in linklists[block.settings.menu].links -%}
+              <li class="menu-item">
+                <a href="{{ link.url }}">{{ link.title }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+      {%- endif -%}
+    {% comment %} end {% endcomment %}
+
+    {%- when 'mega-banner' -%}
+      {%- if block.settings.heading != blank and device != 'mobile' -%}
+        <h4>{{ block.settings.heading }}</h4>
+      {%- endif -%}
+
+      {%- capture banner_capture -%}
+        {%- if block.settings.banner_image != blank -%}
+          <div class="widget-banner_item banner-item">
+            <a href="{{ block.settings.banner_link | default: 'javascript:void(0)' }}">
+              <div class="banner-item_image position-relative">
+                {%- render 'image-style-lazy', image: block.settings.banner_image -%}
+              </div>
+            </a>
+          </div>
+        {%- endif -%}
+      {%- endcapture -%}
+
+      <div class="d-grid">
+        {{ banner_capture }}
+      </div>
+
+    {% comment %} end {% endcomment %}
+
+    {%- when 'mega-product' -%}
+      {%- if block.settings.product != blank -%}
+        {%- liquid
+          assign mega_product = block.settings.product
+          assign product = all_products[mega_product]
+        -%}
+
+        {%- if device != 'mobile' -%}<h4>{{ product.title }}</h4>{%- endif -%}
+        <div class="d-grid">
+          <div class="widget-product_item">
+            {%- render 'menu-product-item', product: product -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+    {% comment %} end {% endcomment %}
+
+  {%- endcase -%}
+</div>

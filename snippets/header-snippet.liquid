@@ -1,0 +1,1370 @@
+{%- case type -%}
+  {%- when 'desk-1' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-top_wrapper d-flex justify-content-between">
+            {%- render 'header-snippet', type: 'logo', section: section -%}
+            {%- render 'header-snippet', type: 'search-form', section: section -%}
+            <div class="header-action-list d-flex">
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-bottom">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-bottom_wrapper d-flex">
+            {%- render 'header-snippet', type: 'second-nav' -%}
+
+            <div class="header-bottom-lr">
+              <div class="header-bottom_left">
+                {%- if section.settings.menu != blank -%}
+                  {%- render 'header-snippet', type: 'navigation', section: section -%}
+                {%- endif -%}
+              </div>
+              {%- if section.settings.textbox != blank -%}
+                <div class="header-bottom_right header-action-list">
+                  <span>{{ section.settings.textbox }}</span>
+                </div>
+              {%- endif -%}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-2' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-top_wrapper d-flex justify-content-between">
+            {%- render 'header-snippet', type: 'logo', section: section -%}
+            {%- if section.settings.menu != blank -%}
+              {%- render 'header-snippet', type: 'navigation', section: section -%}
+            {%- endif -%}
+
+            {%- if section.settings.textbox != blank -%}
+              <div class="header-contact-box">
+                {%- if section.settings.svg != blank -%}{{ section.settings.svg }}{%- endif -%}
+                <div class="text">{{ section.settings.textbox }}</div>
+              </div>
+            {%- endif -%}
+
+          </div>
+        </div>
+      </div>
+
+      <div class="header-bottom">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-bottom_wrapper d-flex">
+            {%- render 'header-snippet', type: 'second-nav' -%}
+
+            <div class="header-bottom-lr">
+              <div class="header-bottom_left">
+                {%- render 'header-snippet', type: 'search-form', section: section -%}
+              </div>
+
+              <div class="header-action-list d-flex">
+                {%- render 'header-snippet', type: 'wishlist-target' -%}
+                {%- render 'header-snippet', type: 'cart' -%}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-3' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-top_wrapper d-flex justify-content-between">
+            {%- render 'header-snippet', type: 'logo', section: section -%}
+            {%- render 'header-snippet', type: 'search-form', section: section -%}
+            <div class="header-action-list d-flex">
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- if section.settings.menu != blank -%}
+        <div class="header-bottom">
+          <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+            <div class="header-bottom_wrapper d-flex">
+              {%- render 'header-snippet', type: 'navigation', section: section -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-5' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-top_wrapper d-flex justify-content-between">
+            {%- render 'header-snippet', type: 'logo', section: section -%}
+            {%- render 'header-snippet', type: 'second-nav' -%}
+            {%- render 'header-snippet', type: 'search-form', section: section -%}
+            <div class="header-action-list d-flex">
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- if section.settings.menu != blank -%}
+        <div class="header-bottom">
+          <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+            <div class="header-bottom_wrapper d-flex">
+              {%- render 'header-snippet', type: 'navigation', section: section -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-6' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-top_wrapper d-flex justify-content-between">
+            {%- if section.settings.textbox_1 != blank or section.settings.textbox_2 != blank -%}
+              <div class="header-contact-box">
+                <ul class="list">
+                  {%- if section.settings.textbox_1 != blank -%}
+                    <li class="item">
+                      {%- if section.settings.icon_1 != blank -%}{{ section.settings.icon_1 }}{%- endif -%}
+                      <span>{{ section.settings.textbox_1 }}</span>
+                    </li>
+                  {%- endif -%}
+
+                  {%- if section.settings.textbox_2 != blank -%}
+                    <li class="item">
+                      {%- if section.settings.icon_2 != blank -%}{{ section.settings.icon_2 }}{%- endif -%}
+                      <span>{{ section.settings.textbox_2 }}</span>
+                    </li>
+                  {%- endif -%}
+                </ul>
+              </div>
+            {%- endif -%}
+
+            <div class="header-logo-search">
+              {%- render 'header-snippet', type: 'logo', section: section -%}
+              {%- render 'header-snippet', type: 'search-form', section: section -%}
+            </div>
+
+            <div class="header-action-list d-flex">
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- if section.settings.menu != blank -%}
+        <div class="header-bottom">
+          <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+            <div class="header-bottom_wrapper d-flex">
+              {%- render 'header-snippet', type: 'navigation', section: section -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-7' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+
+          <div class="header-top_wrapper d-flex justify-content-between">
+            <div class="header-logo-vertical-menu">
+              {%- render 'header-snippet', type: 'second-nav' -%}
+              {%- render 'header-snippet', type: 'logo', section: section -%}
+            </div>
+
+            <div class="header-search-menu">
+              {%- render 'header-snippet', type: 'search-form', section: section -%}
+              {%- if section.settings.menu != blank -%}
+                {%- render 'header-snippet', type: 'navigation', section: section -%}
+              {%- endif -%}
+            </div>
+
+            <div class="header-action-list d-flex">
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-8' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-top_wrapper d-flex justify-content-between">
+            <div class="header-logo-vertical-menu">
+              {%- render 'header-snippet', type: 'logo', section: section -%}
+              {%- if section.settings.toggle_menu != blank -%}
+                {%- render 'header-snippet', type: 'third-nav' -%}
+              {%- endif -%}
+            </div>
+
+            <div class="header-search-menu">
+              {%- render 'header-snippet', type: 'search-form', section: section -%}
+
+              {%- if section.settings.textbox_1 != blank or section.settings.textbox_2 != blank -%}
+                <div class="header-shipping-text">
+                  {%- if section.settings.textbox_1 != blank -%}
+                    <span class="first">{{ section.settings.textbox_1 }}</span>
+                  {%- endif -%}
+
+                  {%- if section.settings.textbox_2 != blank -%}
+                    <span class="second">{{ section.settings.textbox_2 }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="header-action-list d-flex">
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-bottom">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-bottom_wrapper d-flex">
+            {%- render 'header-snippet', type: 'second-nav' -%}
+
+            {%- if section.settings.menu != blank -%}
+              <div class="header-bottom-lr">
+                <div class="header-bottom_left">
+                  {%- render 'header-snippet', type: 'navigation', section: section -%}
+                </div>
+              </div>
+            {%- endif -%} 
+
+          </div>
+        </div>
+      </div>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-9' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+
+          <div class="header-top_wrapper d-flex justify-content-between">
+            <div class="header-logo-vertical-menu">
+              {%- render 'header-snippet', type: 'logo', section: section -%}
+              {%- if section.settings.toggle_menu != blank -%}
+                {%- render 'header-snippet', type: 'third-nav' -%}
+              {%- endif -%}
+            </div>
+
+            {%- render 'header-snippet', type: 'search-form', section: section -%}
+            <div class="header-action-list d-flex">
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-bottom">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-bottom_wrapper d-flex">
+
+            <div class="header-bottom-lr">
+              <div class="header-bottom_left">
+                {%- if section.settings.menu != blank -%}
+                  {%- render 'header-snippet', type: 'navigation', section: section -%}
+                {%- endif -%}
+              </div>
+              {%- if section.settings.textbox != blank -%}
+                <div class="header-bottom_right">
+                  <span>{{ section.settings.textbox }}</span>
+                </div>
+              {%- endif -%}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-10' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top{% if section.settings.border_bottom %} border-bottom{% endif %}">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+
+          <div
+            class="header-top_wrapper d-flex justify-content-between
+            {% if section.settings.toggle_menu == blank %} align-nav{% endif %}"
+          >
+            <div class="header-logo-vertical-menu">
+              {%- render 'header-snippet', type: 'logo', section: section -%}
+              {%- if section.settings.toggle_menu != blank -%}
+                {%- render 'header-snippet', type: 'third-nav' -%}
+              {%- endif -%}
+            </div>
+
+            {%- if section.settings.menu != blank -%}
+              {%- render 'header-snippet', type: 'navigation', section: section -%}
+            {%- endif -%}
+
+            <div class="header-action-list d-flex">
+              {%- render 'header-snippet', type: 'search-icon', section: section -%}
+              {%- if shop.customer_accounts_enabled or shop.customer_accounts_optional -%}
+                <div class="account-target">
+                  <a href="{%- if customer -%} {{ routes.account_url }} {%- else -%} {{ routes.account_login_url }} {%- endif -%}" aria-label="{{ 'sections.breadcrumb.account' | t }}">
+                    {%- render 'svg', type: 'user' -%}
+                  </a>
+                </div>
+              {%- endif -%}
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+          </div> 
+
+        </div>
+      </div>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-11' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-top_wrapper d-flex justify-content-between">
+            {%- render 'header-snippet', type: 'logo', section: section -%}
+            {%- render 'header-snippet', type: 'search-form', section: section -%}
+
+            {%- if section.settings.textbox != blank or section.settings.textbox_2 -%}
+              <div class="header-bottom_right header-textbox">
+                {%- if section.settings.textbox != blank -%}
+                  <div class="header-textbox-1">
+                    {%- if section.settings.textbox_icon != blank -%}
+                      <span class="icon">{{ section.settings.textbox_icon }}</span>
+                    {%- endif -%}
+                    <div class="textbox">{{ section.settings.textbox }}</div>
+                  </div>
+                {%- endif -%}
+
+                {%- if section.settings.textbox_2 != blank -%}
+                  <div class="header-textbox-1">
+                    {%- if section.settings.textbox_icon_2 != blank -%}
+                      <span class="icon">{{ section.settings.textbox_icon_2 }}</span>
+                    {%- endif -%}
+                    <div class="textbox">{{ section.settings.textbox_2 }}</div>
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      <div class="header-bottom">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-bottom_wrapper d-flex">
+            {%- render 'header-snippet', type: 'second-nav' -%}
+
+            <div class="header-bottom-lr">
+              <div class="header-bottom_left">
+                {%- if section.settings.menu != blank -%}
+                  {%- render 'header-snippet', type: 'navigation', section: section -%}
+                {%- endif -%}
+              </div>
+            </div>
+
+            <div class="header-action-list d-flex">
+              {%- if settings.enable_language_selector or settings.enable_currency_selector -%}
+                <div class="currency-language">
+
+                  {%- if settings.enable_language_selector -%}
+                    <div class="currency-language-form">
+                      <div class="select-group">
+                        <select  id="languages-select" name="languages-select" onchange="location = this.value;">
+                          {%- for locale in shop.enabled_locales -%}
+                            <option value="{%- if locale.root_url != '/' -%}{{ locale.root_url }}{%- else -%}/{%- endif -%}" {%- if routes.root_url == locale.root_url -%} selected {%- endif -%}>
+                              {{ locale.iso_code | upcase }}
+                            </option>
+                          {%- endfor -%}
+                        </select>
+                        {%- render 'svg', type: 'angle-down' -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if settings.enable_currency_selector -%}
+                    <div class="currency-language-form">
+                      {%- form 'localization' -%}
+                        <div class="select-group">
+                          <select  id="currencies-select-mobile" name="currency" onchange="this.closest('form').submit()">
+                            {%- for currency in shop.enabled_currencies -%}
+                              <option value="{{ currency.iso_code }}" {% if currency == cart.currency %} selected="true"{% endif %}>
+                                {{ currency.iso_code }}
+                              </option>
+                            {%- endfor -%}
+                          </select>
+                          {%- render 'svg', type: 'angle-down' -%}
+                        </div>
+                      {%- endform -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+              
+              {%- if shop.customer_accounts_enabled or shop.customer_accounts_optional -%}
+                <div class="account-target">
+                  <a href="{%- if customer -%} {{ routes.account_url }} {%- else -%} {{ routes.account_login_url }} {%- endif -%}" aria-label="{{ 'sections.breadcrumb.account' | t }}">
+                    {%- render 'svg', type: 'user' -%}
+                  </a>
+                </div>
+              {%- endif -%}
+
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'desk-12' -%}
+    <div class="header-desk d-none d-lg-block">
+      <div class="header-top">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-top_wrapper d-flex justify-content-between">
+            {%- if section.settings.custom_text_left != blank -%}
+              <div class="header-top_left">
+                <div class="elementor-item">
+                  {%- if section.settings.custom_text_left_icon != blank -%}
+                    <span class="icon">{{ section.settings.custom_text_left_icon }}</span>
+                  {%- endif -%}
+                  <span class="text">{{ section.settings.custom_text_left }}​</span>
+                </div>
+              </div>
+            {%- endif -%}
+
+            {%- render 'header-snippet', type: 'logo', section: section -%}
+
+            <div class="header-top_right d-flex">
+              <ul class="elementor-widget">
+                {%- if section.settings.custom_text_right != blank -%}
+                  <li class="elementor-item">
+                    <a href="{{ section.settings.custom_text_link_right }}">
+                      {%- if section.settings.custom_text_right_icon != blank -%}
+                        <span class="icon">{{ section.settings.custom_text_right_icon }}</span>
+                      {%- endif -%}
+                      <span class="text">{{ section.settings.custom_text_right }}</span>
+                    </a>
+                  </li>
+                {%- endif -%}
+
+                {%- if shop.customer_accounts_enabled or shop.customer_accounts_optional -%}
+                  <li class="elementor-item">
+                    <a href="{{ routes.account_url }}">
+                      <span class="icon">{%- render 'svg', type: 'user' -%}</span>
+                      <span class="text">{{ 'sections.header.my_account' | t }}</span>
+                    </a>
+                  </li>
+                {%- endif -%}
+              </ul>
+            </div> 
+          </div> 
+        </div>
+      </div>
+
+      <div class="header-bottom">
+        <div class="{%- if settings.layout == 'boxed' -%}container{%- else -%}container-fluid{%- endif -%}">
+          <div class="header-bottom_wrapper d-flex">
+            {%- if section.settings.menu != blank -%}
+              <div class="header-bottom_left">
+                {%- render 'header-snippet', type: 'navigation', section: section -%}
+              </div>
+            {%- endif -%}
+
+            <div class="header-action-list d-flex">
+              {%- render 'header-snippet', type: 'search-icon', section: section -%}
+              {%- render 'header-snippet', type: 'wishlist-target' -%}
+              {%- render 'header-snippet', type: 'cart' -%}
+            </div>
+          </div>
+        <div>
+      </div>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'mobile' -%}
+    {%- assign menu = section.settings.menu_mobile -%}
+    <div class="header-mobile d-lg-none">
+      <div class="container">
+        <div class="header-mobile_top">
+          <label class="header-hamburger" for="mobile-drawer-input">
+            {%- render 'svg', type: 'hamburger' -%}
+          </label>
+          {%- render 'header-snippet', type: 'logo-mobile', section: section -%}
+          <div class="header-icons">
+            <ul class="icon-list">
+              <li class="icon-item m-icon-search">
+                <span class="mis-open">{%- render 'svg', type: 'search' -%}</span>
+                <span class="mis-close">{%- render 'svg', type: 'close' -%}</span>
+
+                <script type="text/javascript">
+                  let misOpen = document.querySelector('.mis-open');
+                  let mClose = document.querySelector('.mis-close');
+
+                  misOpen.addEventListener("click", (e) => {
+                    document.querySelector('.m-icon-search').classList.add('active');
+                    document.querySelector('.m-header-search').classList.add('active');
+                  });
+
+                  mClose.addEventListener("click", (e) => {
+                    document.querySelector('.m-icon-search').classList.remove('active');
+                    document.querySelector('.m-header-search').classList.remove('active');
+                  });
+                </script>
+              </li>
+              {%- if shop.customer_accounts_enabled or shop.customer_accounts_optional -%}
+                <li class="icon-item icon-user">
+                  <a href="{%- if customer -%} {{ routes.account_url }} {%- else -%} {{ routes.account_login_url }} {%- endif -%}" aria-label="{{ 'sections.breadcrumb.account' | t }}">
+                    {%- render 'svg', type: 'user' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+
+              <li class="icon-item icon-header-cart">
+                <a href="{{ routes.cart_url }}" class="position-relative js-header-cart-icon--mobile">
+                  {%- render 'svg', type: 'cart' -%}
+                  <span class="number position-absolute js-cart-item-count">{{ cart.item_count }}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="header-mobile_bottom">
+          <div class="header-search m-header-search">
+            <search-form>
+              <form action="{{ routes.search_url }}" class="search-form" methos="get">
+                <input type="hidden" value="{{ settings.search_type }}" name="type">
+                <input type="hidden" value="{{ settings.search_unavailable_products }}" name="options[unavailable_products]">
+                <input type="hidden" value="last" name="options[prefix]">
+                <input type="text" name="q" placeholder="{{ 'sections.header.search_placeholder' | t }}" autocomplete="off">
+                <button type="submit" class="btn btn-2" aria-label="{{ 'sections.breadcrumb.search' | t }}">
+                  {%- render 'svg', type: 'search' -%}
+                  {%- render 'svg', type: 'is-loading' -%}
+                </button>
+              </form>
+              <div class="search-results">
+                <div class="search-results_list">
+                  <div class="search-results_list-inner js-results-container"></div>
+                  <button class="btn btn-1 w-100 js-view-all">{{ 'general.search.view_all' | t }}</button>
+                </div>
+                <div class="search-results_empty text-center">{{ 'general.search.empty' | t }}</div>
+                <div class="search-results_loading w-100 text-center">{%- render 'svg', type: 'is-loading' -%}</div>
+              </div>
+            </search-form>
+          </div>
+        </div>
+      </div>
+
+      <input type="checkbox" class="d-none" id="mobile-drawer-input">
+      <template id="header-mobile-drawer-wrapper">
+        <div class="drawer drawer--left header-mobile_drawer" id="header-mobile-drawer">
+          <div class="mobile-layout-bar">
+            <div class="m-block-icons">
+              <label class="drawer-close" for="mobile-drawer-input">
+                {%- render 'svg', type: 'close' -%}
+              </label>
+              <ul class="icon-list">
+                {%- render 'header-snippet', type: 'wishlist-target' -%}
+              </ul>
+            </div>
+          </div>
+
+          {%- if settings.enable_language_selector -%}
+            {%- if settings.enable_currency_selector -%}
+              {%- assign check_lc = 'lc-two' -%}
+            {%- else -%}
+              {%- assign check_lc = 'lc-one' -%}
+            {%- endif -%}
+          {%- else -%}
+            {%- if settings.enable_currency_selector -%}
+              {%- assign check_lc = 'lc-one' -%}
+            {%- else -%}
+              {%- assign check_lc = '' -%}
+            {%- endif -%}
+          {%- endif -%}
+          <div class="drawer-wrapper {{ check_lc }}">
+            <ul class="menu-list menu-mobile-list style-{{ settings.mobile_touch_menu }}">
+              {%- for link in linklists[menu].links -%}
+                {%- capture mega_capture -%}
+                  {%- render 'header-mega-mobi' section: section, link_title: link.title -%}
+                {%- endcapture -%}
+
+                {%- capture menu_panel_id -%}menu-panel-{{ link.id }}-{{ forloop.index }}{%- endcapture -%}
+
+                {%- if mega_capture != blank -%}
+                  <li class="menu-item menu-mobile-item">
+                    <div class="menu-item_wrap">
+                      <a href="{{ link.url }}">{{ link.title }}</a>
+                      <label for="{{ menu_panel_id }}">
+                        {%- render 'svg', type: 'angle-right' -%}
+                      </label>
+                    </div>
+                    <input type="checkbox"  id="menu-panel-{{ link.id }}-{{ forloop.index }}" class="d-none menu-checkbox-mobile">
+                    {{ mega_capture | replace_first: '[menu-panel-id]', menu_panel_id }}
+                  </li>
+
+                {%- else -%}
+                  <li class="menu-item menu-mobile-item">
+                    {%- if link.links != blank -%}
+                      <div class="menu-item_wrap">
+                        <a href="{{ link.url }}">{{ link.title }}</a>
+                        <label for="{{ menu_panel_id }}">
+                          {%- render 'svg', type: 'angle-right' -%}
+                        </label>
+                      </div>
+                      <input type="checkbox"  id="menu-panel-{{ link.id }}-{{ forloop.index }}" class="d-none menu-checkbox-mobile">
+                      {%- capture sublinks_capture -%}
+                        {%- render 'header-sublinks' link: link, device: 'mobile' -%}
+                      {%- endcapture -%}
+
+                      {{ sublinks_capture | replace_first: '[menu-panel-id]', menu_panel_id }}
+                    {%- else -%}
+                      <a href="{{ link.url }}">{{ link.title }}</a>
+                    {%- endif -%}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%} 
+            </ul>    
+
+            {%- if settings.show_mobile_contact_box -%}
+              <div class="menu-item menu-item--help">
+                {%- if settings.mobile_contact_box_heading != blank -%}
+                  <div class="menu-item--help_title">{{ settings.mobile_contact_box_heading }}</div>
+                {%- endif -%}
+
+                {%- if settings.mobile_contact_box_number != blank -%}
+                  <div class="menu-item--help_text">
+                    {%- render 'svg', type: 'phone' -%}
+                    <span>{{ settings.mobile_contact_box_number }}</span>
+                  </div>
+                {%- endif -%}
+
+                {%- if settings.mobile_contact_box_email != blank -%}
+                  <div class="menu-item--help_text">
+                    {%- render 'svg', type: 'email' -%}
+                    <span>{{ settings.mobile_contact_box_email }}</span>
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if settings.enable_language_selector or settings.enable_currency_selector -%}
+              <div class="currency-language">
+
+                {%- if settings.enable_language_selector -%}
+                  <div class="currency-language-form">
+                    <label for="language_select">{{ 'sections.header.languages' | t }}</label>
+                    <div class="select-group">
+                      <select  id="languages-select" name="languages-select" onchange="location = this.value;">
+                        {%- for locale in shop.enabled_locales -%}
+                          <option value="{%- if locale.root_url != '/' -%}{{ locale.root_url }}{%- else -%}/{%- endif -%}" {%- if routes.root_url == locale.root_url -%} selected {%- endif -%}>{{ locale.iso_code | upcase }}</option>
+                        {%- endfor -%}
+                      </select>
+                      {%- render 'svg', type: 'angle-down' -%}
+                    </div>
+                  </div>
+                {%- endif -%}
+
+                {%- if settings.enable_currency_selector -%}
+                  <div class="currency-language-form">  
+                    {%- form 'localization', id: 'currency_form_mobile' -%}
+                      <label for="currency_select-mobile">{{ 'sections.header.currencies' | t }}</label>
+                      <div class="select-group">
+                        <select  id="currencies-select-mobile" name="currency" onchange="this.closest('form').submit()">
+                          {%- for currency in shop.enabled_currencies -%}
+                            <option value="{{ currency.iso_code }}" {% if currency == cart.currency %} selected="true"{% endif %}>{{ currency.iso_code }}</option>
+                          {%- endfor -%}
+                        </select>
+                        {%- render 'svg', type: 'angle-down' -%}
+                      </div>
+                    {%- endform -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+          </div>
+        </div>
+      </template>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'logo' -%}
+    {%- capture logo_element -%}
+      {%- if section.settings.logo_type == 'image' -%}
+        {%- liquid
+          assign logo_svg = section.settings.logo_svg
+          assign logo_image = section.settings.logo_image
+          assign logo_max_width = section.settings.logo_max_width | append: 'x'
+          assign logo_max_width_2x = section.settings.logo_max_width | times: 2 | at_most: 5760
+        -%}
+        {%- if logo_image != blank -%}
+          <img class="logo-desk w-100"
+            loading="lazy"
+            src="{{ logo_image | image_url: width: logo_max_width }}"
+            srcset="{{ logo_image | image_url: width: logo_max_width }} 1x, {{ logo_image | image_url: width: logo_max_width_2x }} 2x"
+            width="{{ logo_image.width }}"
+            height="{{ logo_image.height }}"
+            style="height: auto;width: {{ section.settings.logo_max_width }}px"
+            alt="{{ shop.name }}"/>
+        {%- endif -%}
+      {%- else -%}
+        {{ section.settings.logo_svg }}
+      {%- endif -%}
+    {%- endcapture -%}
+
+    <div class="header-logo">
+      <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+        {%- if logo_element != blank -%}
+          {{ logo_element }}
+        {%- else -%}
+          <h1>{{ shop.name }}</h1>
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- assign logo = section.settings.logo_image -%}
+    {%- capture sameAs -%}
+      {%- unless settings.social_icon_link_1 == blank -%}|{{ settings.social_icon_link_1 | json }}{%- endunless -%}
+      {%- unless settings.social_icon_link_2 == blank -%}|{{ settings.social_icon_link_2 | json }}{%- endunless -%}
+      {%- unless settings.social_icon_link_3 == blank -%}|{{ settings.social_icon_link_3 | json }}{%- endunless -%}
+      {%- unless settings.social_icon_link_4 == blank -%}|{{ settings.social_icon_link_4 | json }}{%- endunless -%}
+      {%- unless settings.social_icon_link_5 == blank -%}|{{ settings.social_icon_link_5 | json }}{%- endunless -%}
+      {%- unless settings.social_icon_link_6 == blank -%}|{{ settings.social_icon_link_6 | json }}{%- endunless -%}
+    {%- endcapture -%}
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": {{ shop.name | json }},
+        {%- if logo -%}
+          {%- assign image_size = logo.width | append: 'x' -%}
+          "logo": {{ logo | img_url: image_size | prepend: "https:" | json }},
+        {%- endif -%}
+        "sameAs": [{{ sameAs | remove_first: '|' | split: '|' | join: ',' }}],
+        "url": {{ shop.url | append: page.url | json }}
+      }
+    </script>
+
+    {%- if request.page_type == 'index' -%}
+      {%- assign potential_action_target = shop.url | append: routes.search_url | append: "?q={search_term_string}" -%}
+      <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "WebSite",
+          "name": {{ shop.name | json }},
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {{ potential_action_target | json }},
+            "query-input": "required name=search_term_string"
+          },
+          "url": {{ shop.url | append: page.url | json }}
+        }
+      </script>
+    {%- endif -%}
+  {% comment %} end {% endcomment %}
+
+  {%- when 'logo-mobile' -%}
+    {%- capture logo_mobile_element -%}
+      {%- if section.settings.logo_type == 'image' -%}
+        {%- liquid
+          assign logo_mobile_svg = section.settings.logo_svg_mobile
+          assign logo_mobile_image = section.settings.logo_mobile_image
+          assign logo_mobile_max_width = section.settings.mobile_logo_max_width | append: 'x'
+          assign logo_mobile_max_width_2x = section.settings.mobile_logo_max_width | times: 2 | at_most: 5760
+          assign mobile_logo_max_width = section.settings.mobile_logo_max_width
+        -%}
+        {%- if logo_mobile_image != blank -%}
+          <img class="logo-desk w-100 mobile"
+            loading="lazy"
+            src="{{ logo_mobile_image | image_url: width: logo_mobile_max_width }}"
+            srcset="{{ logo_mobile_image | image_url: width: logo_mobile_max_width }} 1x, {{ logo_image | image_url: width: logo_mobile_max_width_2x }} 2x"
+            width="{{ logo_mobile_image.width }}"
+            height="{{ logo_mobile_image.height }}"
+            style="height: auto;width: {{ section.settings.mobile_logo_max_width }}px"
+            alt="{{ shop.name }}"/>
+        {%- endif -%}
+      {%- else -%}
+        {{ section.settings.logo_svg_mobile }}
+      {%- endif -%}
+    {%- endcapture -%}
+
+    <div class="header-logo">
+      <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+        {%- if logo_mobile_element != blank -%}
+          {{ logo_mobile_element }}
+        {%- else -%}
+          {%- capture logo_element -%}
+            {%- if section.settings.logo_type == 'image' -%}
+              {%- liquid
+                assign logo_svg = section.settings.logo_svg
+                assign logo_image = section.settings.logo_image
+                assign logo_max_width = section.settings.logo_max_width | append: 'x'
+                assign logo_max_width_2x = section.settings.logo_image | times: 2 | at_most: 5760
+              -%}
+              {%- if logo_image != blank -%}
+                <img class="logo-desk w-100"
+                  loading="lazy"
+                  src="{{ logo_image | image_url: width: logo_max_width }}"
+                  srcset="{{ logo_image | image_url: width: logo_max_width }} 1x, {{ logo_image | image_url: width: logo_max_width_2x }} 2x"
+                  width="{{ logo_image.width }}"
+                  height="{{ logo_image.height }}"
+                  style="height: auto;width: {{ section.settings.logo_max_width }}px"
+                  alt="{{ shop.name }}"/>
+              {%- endif -%}
+            {%- else -%}
+              {{ section.settings.logo_svg }}
+            {%- endif -%}
+          {%- endcapture -%}
+
+          {%- if logo_element != blank -%}
+            {{ logo_element }}
+          {%- else -%}
+            <h1>{{ shop.name }}</h1>
+          {%- endif -%}
+        {%- endif -%}
+      </a>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'search-icon' -%}
+    <div class="header-search-icon">
+      <span class="search-icon-open">{%- render 'svg', type: 'search' -%}</span>
+      <span class="search-icon-close">{%- render 'svg', type: 'close' -%}</span>
+      {%- render 'header-snippet', type: 'search-form', section: section -%}
+    </div>
+
+    <script type="text/javascript">
+      let searchIconOpen = document.querySelector('.search-icon-open');
+      let searchIconClose = document.querySelector('.search-icon-close');
+
+      searchIconOpen.addEventListener("click", (e) => {
+        document.querySelector('.header-search-icon').classList.add('active');
+        document.querySelector('.d-header-search').classList.add('active');
+      });
+
+      searchIconClose.addEventListener("click", (e) => {
+        document.querySelector('.header-search-icon').classList.remove('active');
+        document.querySelector('.d-header-search').classList.remove('active');
+      });
+    </script>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'search-form' -%}
+    <div class="header-search d-header-search js-header-search">
+      <search-form>
+        <form action="{{ routes.search_url }}" class="search-form" methos="get">
+          <input type="hidden" value="{{ settings.search_type }}" name="type">
+          <input type="hidden" value="{{ settings.search_unavailable_products }}" name="options[unavailable_products]">
+          <input type="hidden" value="last" name="options[prefix]">
+
+          <input type="text" name="q" placeholder="{{ 'sections.header.search_placeholder' | t }}" autocomplete="off">
+          <button type="submit" class="btn btn-1" aria-label="{{ 'sections.breadcrumb.search' | t }}">
+            {%- render 'svg', type: 'search' -%}
+            {%- render 'svg', type: 'is-loading' -%}
+          </button>
+        </form>
+        <div class="search-results">
+          <div class="search-results_list">
+            <div class="search-results_list-inner js-results-container"></div>
+            <button class="btn btn-1 w-100 js-view-all">{{ 'general.search.view_all' | t }}</button>
+          </div>
+          <div class="search-results_empty text-center">{{ 'general.search.empty' | t }}</div>
+          <div class="search-results_loading w-100 text-center">{%- render 'svg', type: 'is-loading' -%}</div>
+        </div>
+      </search-form>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'account' -%}
+    {%- if shop.customer_accounts_enabled or shop.customer_accounts_optional -%}
+      <div class="header-action-item header-account">
+        {%- if customer -%}
+          <a href="{{ routes.account_url }}" class="d-flex">
+            <div class="header-action-item_group header-cart_icon" aria-label="{{ 'sections.breadcrumb.account' | t }}">
+              {%- render 'svg', type: 'user' -%}
+            </div>
+            <div class="header-action-item_group">
+              <div class="header-action-item_group header-action-item_title header-account_title d-flex">
+                <div>{{ 'sections.header.my_account' | t }}</div>
+              </div>
+              <div class="header-action-item_label header-account_label">{{ 'sections.header.hello' | t: name: customer.name }}</div>
+            </div>
+          </a>
+          <div class="header-action-item_dropdown">
+            <ul class="header-account_action-list">
+              <li><a href="{{ routes.account_url }}">{{ 'sections.header.dashboard' | t }}</a></li>
+              <li><a href="{{ routes.account_addresses_url }}">{{ 'sections.header.addresses' | t }}</a></li>
+              <li><a href="{{ routes.account_logout_url }}">{{ 'sections.header.logout' | t }}</a></li>
+            </ul>
+          </div>
+        {%- else -%}
+          <a href="{{ routes.account_login_url }}" class="d-flex">
+            <div class="header-action-item_group header-cart_icon" aria-label="{{ 'sections.breadcrumb.account' | t }}">
+              {%- render 'svg', type: 'user' -%}
+            </div>
+            <div class="header-action-item_group header-action-item_title header-account_title">
+              <div>{{ 'sections.header.my_account' | t }}</div>
+              {%- assign sign_in_lable = 'sections.header.sign_in' |t -%}
+              <div class="header-action-item_label header-account_label">{{ 'sections.header.hello' | t: name: sign_in_lable }}</div>
+            </div>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {% comment %} end {% endcomment %}
+
+  {%- when 'cart' -%}
+    <div class="header-action-item header-cart position-relative">
+      <a href="{{ routes.cart_url }}" class="d-flex js-header-cart-icon--desktop effect-{{ settings.effect_add_cart }}">
+        <div class="header-action-item_group header-cart_icon position-relative">
+          {%- render 'svg', type: 'cart' -%}
+          <div class="number position-absolute js-cart-item-count">{{ cart.item_count }}</div>
+        </div>
+        <div class="header-action-item_group">
+          <div class="header-action-item_label header-cart_label js-cart-item-total">{{ cart.total_price | money }}</div>
+        </div>
+      </a>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'wishlist-target' -%}
+    {%- if settings.enable_product_wishlist -%}
+      <div class="wishlist-target">
+        <button class="st-wishlist-details-button" data-type="manually"></button>
+      </div>
+    {%- endif -%}
+
+  {%- when 'navigation' -%}
+    {%- assign menu = section.settings.menu -%}
+
+    {%- if section.settings.highlight_menu != blank -%}
+      {%- assign _highlight_menu = section.settings.highlight_menu | split: ';' | uniq -%}
+      {%- assign _work_handles_highlight = "" -%}
+
+      {%- for _handle in _highlight_menu -%}
+        {%- capture _striped_handle -%}{{ _handle }}{%- endcapture -%}
+        {%- if _work_handles_highlight == blank -%}
+            {%- assign _work_handles_highlight = _striped_handle -%}
+        {%- else -%}
+            {%- assign _work_handles_highlight = _work_handles_highlight | append: '[|||]' | append: _striped_handle -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign _highlight_menu = _work_handles_highlight | split: '[|||]' -%}
+    {%- endif -%}
+
+    {%- assign menu_label_html_1 = "" -%}
+    {%- assign menu_label_html_2 = "" -%}
+    {%- assign menu_label_html_3 = "" -%}
+
+    {%- capture menu_label_1 -%}<span class="menu-label label-1">{{ section.settings.menu_label_text_1 }}</span>{%- endcapture -%}
+    {%- capture menu_label_2 -%}<span class="menu-label label-2">{{ section.settings.menu_label_text_2 }}</span>{%- endcapture -%} 
+    {%- capture menu_label_3 -%}<span class="menu-label label-3">{{ section.settings.menu_label_text_3 }}</span>{%- endcapture -%} 
+
+    {%- if section.settings.menu_label_1 != blank -%}
+        {%- assign menu_label_html_1 = menu_label_1 -%}
+    {%- endif -%}
+
+    {%- if section.settings.menu_label_2 != blank -%}
+        {%- assign menu_label_html_2 = menu_label_2 -%}
+    {%- endif -%}
+
+    {%- if section.settings.menu_label_3 != blank -%}
+        {%- assign menu_label_html_3 = menu_label_3-%}
+    {%- endif -%}
+
+    {%- assign menu_label_handles_1 = section.settings.menu_label_1 | split: ';' | uniq -%}
+    {%- assign menu_label_handles_2 = section.settings.menu_label_2 | split: ';' | uniq -%}
+    {%- assign menu_label_handles_3 = section.settings.menu_label_3 | split: ';' | uniq -%}
+
+    {%- assign _work_handles_label_1 = "" -%}
+    {%- for _handle in menu_label_handles_1 -%}
+      {%- capture _striped_handle %}{{ _handle }}{%- endcapture -%}
+        {%- if _work_handles_label_1 == blank -%}
+        {%- assign _work_handles_label_1 = _striped_handle -%}
+      {%- else -%}
+        {%- assign _work_handles_label_1 = _work_handles_label_1 | append: '[|||]' | append: _striped_handle -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign menu_label_handles_1 = _work_handles_label_1 | split: '[|||]' -%}
+
+    {%- assign _work_handles_label_2 = "" -%}
+    {%- for _handle in menu_label_handles_2 -%}
+      {%- capture _striped_handle %}{{ _handle }}{%- endcapture -%}
+        {%- if _work_handles_label_2 == blank -%}
+        {%- assign _work_handles_label_2 = _striped_handle -%}
+      {%- else -%}
+        {%- assign _work_handles_label_2 = _work_handles_label_2 | append: '[|||]' | append: _striped_handle -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign menu_label_handles_2 = _work_handles_label_2 | split: '[|||]' -%}
+
+    {%- assign _work_handles_label_3 = "" -%}
+    {%- for _handle in menu_label_handles_3 -%}
+      {%- capture _striped_handle %}{{ _handle }}{%- endcapture -%}
+        {%- if _work_handles_label_3 == blank -%}
+        {%- assign _work_handles_label_3 = _striped_handle -%}
+      {%- else -%}
+        {%- assign _work_handles_label_3 = _work_handles_label_3 | append: '[|||]' | append: _striped_handle -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign menu_label_handles_3 = _work_handles_label_3 | split: '[|||]' -%}
+
+    <div class="header-menu">
+      <ul class="menu-list">
+        {%- for link in linklists[menu].links -%}
+
+          {%- capture mega_capture -%}
+            {%- render 'header-mega', section: section, link_title: link.title, mega_type: 'hor' -%}
+          {%- endcapture -%}
+
+          {%- if mega_capture != blank -%}
+            <li class="menu-item mega-menu-item position-unset{% if _highlight_menu contains link.title %} highlight{% endif %}">
+              <div class="menu-item_wrapper">
+                <a href="{{ link.url }}">
+                  <span>{{ link.title }}</span>
+                  {%- capture _menu_label -%}
+                    {%- if menu_label_handles_1 contains link.title -%}{{ menu_label_html_1 }}{%- endif -%}
+                    {%- if menu_label_handles_2 contains link.title -%}{{ menu_label_html_2 }}{%- endif -%}
+                    {%- if menu_label_handles_3 contains link.title -%}{{ menu_label_html_3 }}{%- endif -%}
+                  {%- endcapture -%}
+                  {%- if _menu_label != blank -%}<span class="labels-wrapper">{{ _menu_label }}</span>{%- endif -%}
+                </a>
+                {%- render 'svg', type: 'angle-down' -%}
+              </div>
+              {%- unless request.design_mode -%}<template class="temp-id">{%- endunless -%}{{ mega_capture }}{%- unless request.design_mode -%}</template>{%- endunless -%}
+            </li>
+          {%- else -%}
+            <li class="menu-item{% if link.links != blank %} mega-menu-item{% endif %}{% if _highlight_menu contains link.title %} highlight{% endif %}">
+              {%- if link.links != blank -%}
+                <div class="menu-item_wrapper">
+                  <a href="{{ link.url }}">
+                    <span>{{ link.title }}</span>
+                    {%- capture _menu_label -%}
+                      {%- if menu_label_handles_1 contains link.title -%}{{ menu_label_html_1 }}{%- endif -%}
+                      {%- if menu_label_handles_2 contains link.title -%}{{ menu_label_html_2 }}{%- endif -%}
+                      {%- if menu_label_handles_3 contains link.title -%}{{ menu_label_html_3 }}{%- endif -%}
+                    {%- endcapture -%}
+                    {%- if _menu_label != blank -%}<span class="labels-wrapper">{{ _menu_label }}</span>{%- endif -%}
+                  </a>
+                  {%- render 'svg', type: 'angle-down' -%}
+                </div>
+                {%- unless request.design_mode -%}<template class="temp-id">{%- endunless -%}{%- render 'header-sublinks' link: link -%}{%- unless request.design_mode -%}</template>{%- endunless -%}
+              {%- else -%}
+                <a href="{{ link.url }}">
+                  <span>{{ link.title }}</span>
+                  {%- capture _menu_label -%}
+                    {%- if menu_label_handles_1 contains link.title -%}{{ menu_label_html_1 }}{%- endif -%}
+                    {%- if menu_label_handles_2 contains link.title -%}{{ menu_label_html_2 }}{%- endif -%}
+                    {%- if menu_label_handles_3 contains link.title -%}{{ menu_label_html_3 }}{%- endif -%}
+                  {%- endcapture %}
+                  {%- if _menu_label != blank -%}<span class="labels-wrapper">{{ _menu_label }}</span>{%- endif -%}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+
+        {%- endfor -%}
+      </ul>
+    </div>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'second-nav' -%}
+    {%- if section.settings.vertical_menu != blank -%}
+      {%- assign vertical_menu = section.settings.vertical_menu-%}
+
+      {%- if section.settings.highlight_menu != blank -%}
+        {%- assign _highlight_menu = section.settings.highlight_menu | split: ';' | uniq -%}
+        {%- assign _work_handles_highlight = "" -%}
+
+        {%- for _handle in _highlight_menu -%}
+          {%- capture _striped_handle -%}{{ _handle }}{%- endcapture -%}
+          {%- if _work_handles_highlight == blank -%}
+              {%- assign _work_handles_highlight = _striped_handle -%}
+          {%- else -%}
+              {%- assign _work_handles_highlight = _work_handles_highlight | append: '[|||]' | append: _striped_handle -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign _highlight_menu = _work_handles_highlight | split: '[|||]' -%}
+      {%- endif -%}
+
+      {%- assign menu_label_html_1 = "" -%}
+      {%- assign menu_label_html_2 = "" -%}
+      {%- assign menu_label_html_3 = "" -%}
+
+      {%- capture menu_label_1 -%}<span class="menu-label label-1">{{ section.settings.menu_label_text_1 }}</span>{%- endcapture -%}
+      {%- capture menu_label_2 -%}<span class="menu-label label-2">{{ section.settings.menu_label_text_2 }}</span>{%- endcapture -%} 
+      {%- capture menu_label_3 -%}<span class="menu-label label-3">{{ section.settings.menu_label_text_3 }}</span>{%- endcapture -%} 
+
+      {%- if section.settings.menu_label_1 != blank -%}
+          {%- assign menu_label_html_1 = menu_label_1 -%}
+      {%- endif -%}
+
+      {%- if section.settings.menu_label_2 != blank -%}
+          {%- assign menu_label_html_2 = menu_label_2 -%}
+      {%- endif -%}
+
+      {%- if section.settings.menu_label_3 != blank -%}
+          {%- assign menu_label_html_3 = menu_label_3-%}
+      {%- endif -%}
+
+      {%- assign menu_label_handles_1 = section.settings.menu_label_1 | split: ';' | uniq -%}
+      {%- assign menu_label_handles_2 = section.settings.menu_label_2 | split: ';' | uniq -%}
+      {%- assign menu_label_handles_3 = section.settings.menu_label_3 | split: ';' | uniq -%}
+
+      {%- assign _work_handles_label_1 = "" -%}
+      {%- for _handle in menu_label_handles_1 -%}
+        {%- capture _striped_handle %}{{ _handle }}{%- endcapture -%}
+          {%- if _work_handles_label_1 == blank -%}
+          {%- assign _work_handles_label_1 = _striped_handle -%}
+        {%- else -%}
+          {%- assign _work_handles_label_1 = _work_handles_label_1 | append: '[|||]' | append: _striped_handle -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign menu_label_handles_1 = _work_handles_label_1 | split: '[|||]' -%}
+
+      {%- assign _work_handles_label_2 = "" -%}
+      {%- for _handle in menu_label_handles_2 -%}
+        {%- capture _striped_handle %}{{ _handle }}{%- endcapture -%}
+          {%- if _work_handles_label_2 == blank -%}
+          {%- assign _work_handles_label_2 = _striped_handle -%}
+        {%- else -%}
+          {%- assign _work_handles_label_2 = _work_handles_label_2 | append: '[|||]' | append: _striped_handle -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign menu_label_handles_2 = _work_handles_label_2 | split: '[|||]' -%}
+
+      {%- assign _work_handles_label_3 = "" -%}
+      {%- for _handle in menu_label_handles_3 -%}
+        {%- capture _striped_handle %}{{ _handle }}{%- endcapture -%}
+          {%- if _work_handles_label_3 == blank -%}
+          {%- assign _work_handles_label_3 = _striped_handle -%}
+        {%- else -%}
+          {%- assign _work_handles_label_3 = _work_handles_label_3 | append: '[|||]' | append: _striped_handle -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign menu_label_handles_3 = _work_handles_label_3 | split: '[|||]' -%}
+
+      <div class="header-bottom_vertical-menu vertical-nav desk-lazy-menu" id="header-second-nav">
+        <div class="wrapper vertical-menu-head head">
+          <span class="icon">{%- render 'svg', type: 'list-1' -%}</span>
+          <span>{{ 'sections.header.all_departments' | t }}</span>
+          {%- render 'svg', type: 'angle-down' -%}
+        </div>
+
+        <div class="header-vertical-menu dropdown-menu">
+          <ul class="menu-list">
+
+            {%- for link in linklists[vertical_menu].links -%}
+              {%- capture mega_capture -%}
+              {%- render 'header-mega', section: section, link_title: link.title -%}
+              {%- endcapture -%}
+
+              {%- if mega_capture != blank -%}
+                <li class="menu-item mega-menu-item{% if _highlight_menu contains link.title %} highlight{% endif %}">
+                  <div class="menu-item_wrapper">
+                    <a href="{{ link.url }}">
+                      <span>{{ link.title }}</span>
+                      {%- capture _menu_label -%}
+                        {%- if menu_label_handles_1 contains link.title -%}{{ menu_label_html_1 }}{%- endif -%}
+                        {%- if menu_label_handles_2 contains link.title -%}{{ menu_label_html_2 }}{%- endif -%}
+                        {%- if menu_label_handles_3 contains link.title -%}{{ menu_label_html_3 }}{%- endif -%}
+                      {%- endcapture -%}
+                      {%- if _menu_label != blank -%}<span class="labels-wrapper">{{ _menu_label }}</span>{%- endif -%}
+                    </a>
+                    <span class="svg_element-ui">
+                      {%- render 'svg', type: 'angle-right' -%}
+                    </span>
+                  </div>
+                  {%- unless request.design_mode -%}<template class="temp-id">{%- endunless -%}{{ mega_capture }}{%- unless request.design_mode -%}</template>{%- endunless -%}
+                </li>
+              {%- else -%}
+                <li class="menu-item{% if link.links != blank %} mega-menu-item{% endif %}{% if _highlight_menu contains link.title %} highlight{% endif %}">
+                  {%- if link.links != blank -%}
+                    <div class="menu-item_wrapper">
+                      <a href="{{ link.url }}">
+                        <span>{{ link.title }}</span>
+                        {%- capture _menu_label -%}
+                          {%- if menu_label_handles_1 contains link.title -%}{{ menu_label_html_1 }}{%- endif -%}
+                          {%- if menu_label_handles_2 contains link.title -%}{{ menu_label_html_2 }}{%- endif -%}
+                          {%- if menu_label_handles_3 contains link.title -%}{{ menu_label_html_3 }}{%- endif -%}
+                        {%- endcapture -%}
+                        {%- if _menu_label != blank -%}<span class="labels-wrapper">{{ _menu_label }}</span>{%- endif -%}
+                      </a>
+                      <span class="svg_element-ui">
+                        {%- render 'svg', type: 'angle-right' -%}
+                      </span>
+                    </div>
+                    {%- unless request.design_mode -%}<template class="temp-id">{%- endunless -%}{%- render 'header-sublinks' link: link -%}{%- unless request.design_mode -%}</template>{%- endunless -%}
+                  {%- else -%}
+                    <a href="{{ link.url }}">
+                      <span>{{ link.title }}</span>
+                      {%- capture _menu_label -%}
+                        {%- if menu_label_handles_1 contains link.title -%}{{ menu_label_html_1 }}{%- endif -%}
+                        {%- if menu_label_handles_2 contains link.title -%}{{ menu_label_html_2 }}{%- endif -%}
+                        {%- if menu_label_handles_3 contains link.title -%}{{ menu_label_html_3 }}{%- endif -%}
+                      {%- endcapture -%}
+                      {%- if _menu_label != blank -%}<span class="labels-wrapper">{{ _menu_label }}</span>{%- endif -%}
+                    </a>
+                  {%- endif -%}
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+    {%- endif -%}
+
+  {%- when 'third-nav' -%}
+    {%- assign toggle_menu = section.settings.toggle_menu -%}
+
+    <div class="off-canvas-navigation-wrapper">
+      <div class="wrapper toggle-menu-head">
+        <div class="off-canvas-navbar-toggle-buttons">
+          <div class="navbar-toggle-hamburger">
+            {%- render 'svg', type: 'hamburger' -%}
+          </div> 
+          <div class="navbar-toggle-close">
+            {%- render 'svg', type: 'close' -%}
+          </div>
+        </div>
+
+        <div class="header-toggle-menu">
+          <ul class="menu-list">
+            {%- for link in linklists[toggle_menu].links -%}
+              <li class="menu-item third-menu-item">
+                {%- if link.links != blank -%}
+                  <div class="menu-item_wrapper third-miw">
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                    {%- render 'svg', type: 'angle-down' -%}
+                  </div>
+                  {%- render 'header-sublinks' link: link -%}
+                {%- else -%}
+                  <a href="{{ link.url }}">{{ link.title }}</a>
+                {%- endif -%}
+              </li>
+
+            {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+    (() => {
+      [...document.getElementsByClassName('third-miw')].forEach(button => {
+        button.addEvent('click', function() {
+          if(this.closest('.menu-item').classList.contains('active')){
+            let allbutton = document.getElementsByClassName('third-menu-item');
+              for (let i = 0; i < allbutton.length; i++) {
+                allbutton[i].classList.remove('active');
+            }
+          }else{
+            let allbutton = document.getElementsByClassName('third-menu-item');
+              for (let i = 0; i < allbutton.length; i++) {
+                allbutton[i].classList.remove('active');
+            }
+            this.closest('.menu-item').classList.add('active');
+          }
+        })
+      })
+    })()
+    </script>
+
+  {%- when 'dropdown-cart' -%}
+    {%- if template.name != 'cart' or settings.cart_type != 'page' -%}
+      <template id="dropdown-cart-template">
+        <div class="dropdown-cart js-header-dropdown-cart" data-cart-item-count="{{ cart.item_count }}">
+          <form action="{{ routes.cart_url }}" method="post" class="cart-form">
+            <header class="dropdown-cart_title dropdown-cart_border-bottom d-flex justify-content-between align-items-center">
+              <span>{{ 'sections.dropdown_cart.title' | t }}</span>
+              <button type="button" class="btn-close js-btn-close cursor-pointer" title="{{ 'sections.dropdown_cart.close' | t }}">{%- render 'svg', type: 'close' -%}</button>
+            </header>
+
+            <main class="dropdown-cart_body cart-item-list js-cart-line-item-list dropdown-cart_border-bottom position-relative">
+              {%- for line_item in cart.items -%}
+                <div class="cart-item-list_line-item cart-line-item js-cart-line-item" data-key="{{ line_item.key }}" data-id="{{ line_item.id }}">
+                  <div class="cart-line-item_info d-flex justify-content-between align-items-center">
+                    <a href="{{ line_item_.url }}" class="cart-line-item_img">
+                      {%- render 'image-style-lazy', image: line_item.image, limit: 100 -%}
+                    </a>
+                  </div>
+                  <div class="cart-line-item_info_content">
+                    <a href="{{ line_item.url }}" class="cart-line-item_title">{{ line_item.product.title }}</a>
+                    <div class="cart-line-item_wrapper">
+                      <span class="cart-line-item_variant{% if line_item.variant.title == 'Default Title' %} d-none{% endif %}">{{ line_item.variant.title }}</span>
+                      <span class="cart-line-item_qty">{{ 'sections.dropdown_cart.qty' | t }} <span class="js-line-item-qty">{{ line_item.quantity }}</span></span>
+                      <div class="art-line-item_price_remove">
+                        <span class="cart-line-item_price js-line-item-price">{{ line_item.price | money }}</span>
+                        <a href="{{ routes.cart_change_url }}?quantity=0&id={{ line_item.id }}" class="btn btn-remove js-btn-remove">{{ 'sections.dropdown_cart.remove' | t }}</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </main>
+            <footer class="dropdown-cart_footer">
+              <div class="cart-total dropdown-cart_border-bottom d-flex align-items-center justify-content-between">
+                <span class="cart-total_label">{{ 'sections.dropdown_cart.cart_total' | t }}</span>
+                <div class="cart-total_price js-cart-total">{{ cart.total_price | money }}</div>
+              </div>
+              <div class="cart-buttons d-flex align-items-center justify-content-between">
+                <a href="{{ routes.cart_url }}" class="btn btn-2 btn-review-cart">{{ 'sections.dropdown_cart.review_cart' | t }}</a>
+                <button type="submit" name="checkout" class="btn btn-1 btn-submit">{{ 'sections.dropdown_cart.checkout' | t }}</button>
+              </div>
+            </footer>
+          </form>
+          <div class="cart-empty text-center">
+            {%- if settings.cart_type == 'drawer' -%}
+            <div class="dropdown-cart_title drawer-cart_title_empty">
+              <span>{{ 'sections.dropdown_cart.title' | t }}</span>
+              <button type="button" class="btn-close btn-close-cart cursor-pointer" title="{{ 'sections.dropdown_cart.close' | t }}">{%- render 'svg', type: 'close' -%}</button>
+            </div>
+            {%- endif -%}
+            <div class="text">{{ 'sections.dropdown_cart.empty' | t }}</div>
+          </div>
+        </div>
+      </template>
+    {%- endif -%}
+  {% comment %} comm {% endcomment %}
+{%- endcase -%}

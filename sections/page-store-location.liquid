@@ -1,0 +1,213 @@
+{{ 'mapbox-gl.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign country_options = section.blocks | map: 'settings' | map: 'country' | join: ',' | split: ',' | uniq
+  assign location_list_json = ""
+-%}
+
+{%- capture location_list_html -%}
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign title = block.settings.title
+      assign country = block.settings.country
+      assign city = block.settings.city
+      assign full_address = block.settings.full_address
+      assign lat = block.settings.lat
+      assign long = block.settings.long
+    -%}
+
+    <li class="store-location-item cursor-pointer {% if forloop.first %} active {% endif %}" data-country="{{ country }}" data-city="{{ city }}" data-lat="{{ lat | escape }}" data-long="{{ long | escape }}">
+      {%- render 'svg', type: 'location' -%}
+      <div class="store-location-item_info">
+        <b class="store-location-item_store-name">{{ title }}</b>
+        <div class="store-location-item_full-address">{{ full_address }}</div>
+      </div>
+    </li>
+    {%- capture location_item_json -%}
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            {{ long }},
+            {{ lat }}
+          ]
+        },
+        "properties": {
+          "Store Name": "{{ title }}",
+          "City": "{{ city }}",
+          "Country": "{{ country }}",
+          "Full Address": "{{ full_address }}",
+          "Latitude": {{ lat }},
+          "Longitude": {{ long }}
+        }
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endcapture -%}
+
+    {%- assign location_list_json = location_list_json | append: location_item_json -%}
+
+  {%- endfor -%}
+{%- endcapture -%}
+
+
+<div class="section-store-location" id="section-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="store-location"
+  data-map-key="{{ section.settings.store_location_map_key }}">
+  <div class="container">
+    <div class="section-wrapper">
+      <div class="section-header text-center">
+        <h1>{{ page.title }}</h1>
+        {%- if section.settings.subheading != blank -%}
+          <div class="text">{{ section.settings.subheading }}</div>
+        {%- endif -%}
+      </div>
+
+      <div class="section-body row">
+        <div class="col-12 col-lg-4">
+          <div class="find-store-location">
+            <h2 class="find-store-location_heading h5">{{ 'store-location.general.find_store_location' | t }}</h2>
+            <form class="find-store-location_form">
+              <div class="form-group">
+                <label for="country">{{ 'store-location.general.country' | t }}</label>
+                <div class="select-group postion-relative">
+                  <select name="country" class="js-find-store-location-country w-100 select-country">
+                    <option value="">{{ 'store-location.general.select_country' | t }}</option>
+                    {%- for country in country_options -%}
+                      <option value="{{ country }}" data-cities="{{ section.blocks | map: 'settings' | where: 'country', country | map: 'city'| join: ',' | split: ',' | json | escape }}">{{ country }}</option>
+                    {%- endfor -%}
+                  </select>
+                  {%- render 'svg', type: 'angle-down' -%}
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="city">{{ 'store-location.general.city' | t }}</label>
+                <div class="select-group postion-relative">
+                  <select name="city" class="js-find-store-location-city w-100 select-city">
+                    <option value="">{{ 'store-location.general.select_city' | t }}</option>
+                  </select>
+                  {%- render 'svg', type: 'angle-down' -%}
+                </div>
+              </div>
+            </form>
+            <ul class="find-store-location_list store-location-list js-find-store-location-list">
+              {{ location_list_html }}
+            </ul>
+          </div>
+        </div>
+        <div class="col-12 col-lg-8">
+          <div id="map" style="height: 490px;"></div>
+        </div>
+      </div>
+      <div class="d-none marker template">
+        {%- render 'svg', type: 'location' -%}
+      </div>
+
+      <script type="application/json" data-location-list-json>
+        {
+          "type": "FeatureCollection",
+          "features": [ {{ location_list_json }} ]
+        }
+      </script>
+
+      {%- if request.design_mode and section.settings.generate_json -%}
+        <script>
+          document.addEventListener('global.js loaded', () => {
+            AT.loadPopupMessage().then(() => {
+              document.getElementById('popup-clipborad-content').open(" ");
+            });
+          });
+
+          document.addEventListener("shopify:section:load", () => {
+            AT.loadPopupMessage().then(() => {
+              document.getElementById('popup-clipborad-content').open(" ");
+            });
+          });
+
+          function copyToClipBoard(){
+            let content = document.getElementById('clipborad-content');
+            content.focus();
+            content.select();
+            return document.execCommand('copy');
+          }
+        </script>
+
+        <popup-message id="popup-clipborad-content" class="popup-component popup-message">
+          <div class="popup-component_overlay js-popup-close"></div>
+          <div class="popup-component_box text-center">
+            <button type="button" class="btn-close js-popup-close">{%- render 'svg', type: 'close' -%}</button>
+            <p class="js-message"></p>
+            <textarea id="clipborad-content">
+              {"type": "FeatureCollection","features": [ {{ location_list_json | strip_newsline }} ]}
+            </textarea>
+            <button class="btn btn-1 js-popup-close" onclick="copyToClipBoard()">Copy</button>
+          </div>
+        </popup-message>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- schema -%}
+{
+  "name": "t:sections.store-location.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "t:sections.common.subheading",
+      "default": "Visit us and discover your vehicle essentials parts."
+    },
+    {
+      "type": "textarea",
+      "id": "store_location_map_key",
+      "label": "t:sections.store-location.settings.api_key.label",
+      "info": "Please see [intrucstion](https:\/\/www.google.com\/) before using."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "location",
+      "name": "Location",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.store-location.blocks.location.settings.store_name.label",
+          "default": "Store Name"
+        },
+        {
+          "type": "text",
+          "id": "country",
+          "label": "t:sections.store-location.blocks.location.settings.country.label"
+        },
+        {
+          "type": "text",
+          "id": "city",
+          "label": "t:sections.store-location.blocks.location.settings.city.label"
+        },
+        {
+          "type": "text",
+          "id": "full_address",
+          "label": "t:sections.store-location.blocks.location.settings.full_address.label"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.store-location.blocks.location.settings.paragraph_1.content"
+        },
+        {
+          "type": "text",
+          "id": "lat",
+          "label": "t:sections.store-location.blocks.location.settings.latitude.label"
+        },
+        {
+          "type": "text",
+          "id": "long",
+          "label": "t:sections.store-location.blocks.location.settings.longitude.label"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

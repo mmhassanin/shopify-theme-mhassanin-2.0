@@ -1,0 +1,430 @@
+{{ 'section-image-gallery-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign items_spacing = section.settings.items_spacing
+  if items_spacing == 0
+    assign items_spacing_row = 'no-padding'
+  endif
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+-%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading', type:'render-html', config: section.settings -%}
+{%- endcapture -%}
+
+{%- capture content -%}
+  {%- if section.blocks.size < 1 -%}
+    <div class="block-column col-xl-8 col-lg-8 col-md-12 col-12">
+      <div class="row">
+        <div class="image-gallery_item col-12">
+          <div class="image-gallery_item-inner">
+            {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="block-column col-xl-4 col-lg-4 col-md-12 col-12">
+      <div class="row">
+        {%- for i in (1..2) -%}
+          <div class="image-gallery_item col-12">
+            <div class="image-gallery_item-inner">
+              {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- else -%}
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'open-column' -%}
+          {%- case block.settings.width -%}
+            {%- when '25' -%}
+              {%- assign block_column_width = 'col-xl-3 col-lg-3 col-md-12 col-12' -%}
+            {%- when '33' -%}
+              {%- assign block_column_width = 'col-xl-4 col-lg-4 col-md-12 col-12' -%}
+            {%- when '41' -%}
+              {%- assign block_column_width = 'col-xl-5 col-lg-5 col-md-12 col-12' -%}
+            {%- when '50' -%}
+              {%- assign block_column_width = 'col-xl-6 col-lg-6 col-md-12 col-12' -%}
+            {%- when '59' -%}
+              {%- assign block_column_width = 'col-xl-7 col-lg-7 col-md-12 col-12' -%}
+            {%- when '66' -%}
+              {%- assign block_column_width = 'col-xl-8 col-lg-8 col-md-12 col-12' -%}
+            {%- when '75' -%}
+              {%- assign block_column_width = 'col-xl-9 col-lg-9 col-md-12 col-12' -%}
+            {%- when '100' -%}
+              {%- assign block_column_width = 'col-xl-12 col-lg-12 col-md-12 col-12' -%}
+          {%- endcase -%}
+
+          <div class="block-column {{ block_column_width }}">
+            <div class="row">
+              {%- for block in section.blocks offset: forloop.index -%}
+                {%- if block.type == 'open-column' -%}{%- break -%}{%- endif -%}
+                {%- liquid
+                  assign image = block.settings.image
+                  assign text = block.settings.text
+                  assign link = block.settings.link
+                -%}
+
+                {%- case block.settings.width -%}
+                  {%- when '25' -%}
+                    {%- assign block_width = 'col-xl-3 col-lg-3 col-md-6 col-6' -%}
+                  {%- when '33' -%}
+                    {%- assign block_width = 'col-xl-4 col-lg-4 col-md-6 col-6' -%}
+                  {%- when '41' -%}
+                    {%- assign block_width = 'col-xl-5 col-lg-5 col-md-6 col-6' -%}
+                  {%- when '50' -%}
+                    {%- assign block_width = 'col-xl-6 col-lg-6 col-md-6 col-6' -%}
+                  {%- when '59' -%}
+                    {%- assign block_width = 'col-xl-7 col-lg-7 col-md-6 col-6' -%}
+                  {%- when '66' -%}
+                    {%- assign block_width = 'col-xl-8 col-lg-8 col-md-6 col-6' -%}
+                  {%- when '75' -%}
+                    {%- assign block_width = 'col-xl-9 col-lg-9 col-md-6 col-12' -%}
+                  {%- when '100' -%}
+                    {%- assign block_width = 'col-xl-12 col-lg-12 col-md-12 col-12' -%}
+                {%- endcase -%}
+
+                <div class="image-gallery_item {{ block_width }} text-position__{{ block.settings.text_position }}">
+                  <div class="image-gallery_item-inner">
+                    {%- if text != blank -%}
+                      <div class="image-gallery_item-text">{{ text }}</div>
+                    {%- endif -%}
+                    <a href="{{ link | default: 'javascript:void(0)' }}" aria-label="Image gallery">
+                      {%- render 'image-style', image: image, limit: 992 -%}
+                    </a>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+
+        {%- else -%}
+      {%- endcase -%}
+
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="section-image-gallery-v2" id="section-{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper {{ items_spacing_row }}">
+
+      {%- if section_heading != blank -%}
+        {%- capture heading_css -%}
+          {%- render 'snippet-heading', type: 'render-css', config: heading_style_block.settings, classID: section_id -%}
+        {%- endcapture -%}
+        <div class="section-header">{{ section_heading }}</div>
+      {%- endif -%}
+
+      <div class="section-body">
+        <div class="image-gallery row">
+          {{ content }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+  {%- unless items_spacing == 0 -%}
+    {%- assign items_spacing = items_spacing | divided_by: 2.0 -%}
+    .section-image-gallery-v2#section-{{ section.id }} .section-wrapper:not(.no-padding) .image-gallery{
+      margin: -{{ items_spacing }}px;
+    }
+    .section-image-gallery-v2#section-{{ section.id }} .section-wrapper:not(.no-padding) .image-gallery .block-column {
+      padding: {{ items_spacing }}px;
+    }
+    .section-image-gallery-v2#section-{{ section.id }} .section-wrapper:not(.no-padding) .image-gallery .row{
+      margin: -{{ items_spacing }}px; 
+    }
+    .section-image-gallery-v2#section-{{ section.id }} .section-wrapper:not(.no-padding) .image-gallery .row .image-gallery_item{
+      padding: {{ items_spacing }}px;
+    }
+  {%- endunless -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%} 
+
+{%- schema -%}
+{
+  "name": "t:sections.image-gallery-v2.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading"
+    },
+    {
+      "type": "range",
+      "id": "items_spacing",
+      "label": "t:sections.common.items_spacing",
+      "min": 0,
+      "max": 30,
+      "step": 5,
+      "default": 15,
+      "unit": "px" 
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "select",
+          "id": "section_heading_container_align",
+          "label": "t:sections.common.alignment",
+          "options": [
+            {
+              "value": "start",
+              "label": "t:sections.common.left"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.common.center"
+            },
+            {
+              "value": "end",
+              "label": "t:sections.common.right"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "section_heading_margin",
+          "label": "t:sections.common.margin",
+          "info": "t:sections.common.order_info"
+        },
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        }
+      ]
+    },
+    {
+      "type": "open-column",
+      "name": "t:sections.image-gallery-v2.settings.open_column.label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.block_label",
+          "default": "Open column"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "t:sections.common.width",
+          "default": "66",
+          "options": [
+            {
+              "value": "25",
+              "label": "25%"
+            },
+            {
+              "value": "33",
+              "label": "33%"
+            },
+            {
+              "value": "41",
+              "label": "41%"
+            },
+            {
+              "value": "50",
+              "label": "50%"
+            },
+            {
+              "value": "59",
+              "label": "59%"
+            },
+            {
+              "value": "66",
+              "label": "66%"
+            },
+            {
+              "value": "75",
+              "label": "75%"
+            },
+            {
+              "value": "100",
+              "label": "100%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "block-item",
+      "name": "t:sections.common.block_item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "width",
+          "label": "t:sections.common.width",
+          "default": "100",
+          "options": [
+            {
+              "value": "25",
+              "label": "25%"
+            },
+            {
+              "value": "33",
+              "label": "33%"
+            },
+            {
+              "value": "41",
+              "label": "41%"
+            },
+            {
+              "value": "50",
+              "label": "50%"
+            },
+            {
+              "value": "59",
+              "label": "59%"
+            },
+            {
+              "value": "66",
+              "label": "66%"
+            },
+            {
+              "value": "75",
+              "label": "75%"
+            },
+            {
+              "value": "100",
+              "label": "100%"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "t:sections.common.text"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "t:sections.common.position",
+          "options": [
+            {
+              "value": "top-left",
+              "label": "t:sections.slideshow.blocks.slide.box_align.options__1.label"
+            },
+            {
+              "value": "top-center",
+              "label": "t:sections.slideshow.blocks.slide.box_align.options__2.label"
+            },
+            {
+              "value": "top-right",
+              "label": "t:sections.slideshow.blocks.slide.box_align.options__3.label"
+            },
+            {
+              "value": "middle-left",
+              "label": "t:sections.slideshow.blocks.slide.box_align.options__4.label"
+            },
+            {
+              "value": "middle-center",
+              "label": "t:sections.slideshow.blocks.slide.box_align.options__5.label"
+            },
+            {
+              "value": "middle-right",
+              "label": "t:sections.slideshow.blocks.slide.box_align.options__6.label"
+            },
+            {
+              "value": "bottom-left",
+              "label": "t:sections.slideshow.blocks.slide.box_align.options__7.label"
+            },
+            {
+              "value": "bottom-center",
+              "label": "t:sections.slideshow.blocks.slide.box_align.options__8.label"
+            },
+            {
+              "value": "bottom-right",
+              "label": "t:sections.slideshow.blocks.slide.box_align.options__9.label"
+            }
+          ],
+          "default": "middle-center"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image-gallery-v2.name",
+      "blocks": [
+      ]
+    }
+  ]
+}
+{%- endschema -%}

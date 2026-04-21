@@ -1,0 +1,315 @@
+{{ 'section-list-collections-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign style = section.settings.style
+  assign gallery_blocks = section.blocks | where: 'type', 'block-item'
+  assign brand_blocks = section.blocks | where: 'type', 'brand'
+-%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading', type:'render-html', config: section.settings -%}
+{%- endcapture -%}
+
+{%- capture grid_class -%}{%- render 'set-item-per-row', value: section.settings.items_resp -%}{%- endcapture -%}
+
+{%- if section.settings.section_layout == 'container-fluid' or section.settings.full_background -%}
+<div class="section-list-collections-v2 style-{{ style }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    {%- else -%}
+    <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+      <div class="section-list-collections-v2 style-{{ style }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+    {%- endif -%}
+
+    <div class="section-wrapper no-padding">
+      <div class="section-body">
+        {%- if section.settings.enable_brands and brand_blocks.size > 0 -%}
+          <div class="list-brands">
+            {%- if section_heading != blank -%}
+              <div class="section-header">{{ section_heading }}</div>
+            {%- endif -%}
+
+            <ul class="list-brands-inner">
+              {%- for block in brand_blocks -%}
+                <li>
+                  <a href="{{ block.settings.link | default: 'javascript:void(0)' }}">
+                    {%- render 'image-style', image: block.settings.image, limit: 768 -%}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+
+            {%- if section.settings.subtext != blank -%}
+              <a href="{{ section.settings.link | default: 'javascript:void(0)' }}" class="subtext">
+                {{ section.settings.subtext }}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.enable_list_collections and gallery_blocks.size > 0 -%}
+          <div class="list-collection">
+            <div class="row">
+              {%- for block in gallery_blocks -%}
+                {%- assign _collection = block.settings.collection -%} 
+                {%- assign collection = collections[_collection] -%}
+                {%- assign sub_collection = collections[collection.handle].metafields.c_f.sub_collection -%}
+                {%- assign image = block.settings.image -%}
+                {%- assign text = block.settings.text -%}
+
+                <div class="collection-item {{ grid_class }}">
+                  <div class="item">
+                    {%- if style == '1' -%}
+                      <div class="image">
+                        <a href="{{ collection.url | default: 'javascript:void(0)' }}">
+                          {%- render 'image-style', image: image, limit: 768 -%}
+                          <span class="icon" style="color: {{ section.settings.text_color }};">
+                            {%- render 'svg', type: 'angle-right' -%}
+                          </span>
+                        </a>
+                      </div>
+
+                      <div class="text-box">
+                        <h6>
+                          <a href="{{ collection.url }}">
+                            {%- if text == blank -%}{{ collection.title }}{%- else -%}{{ text }}{%- endif -%}
+                          </a>
+                        </h6>
+
+                        {%- if sub_collection != blank -%}
+                          {%- assign _collection_sub = sub_collection | split: "|" -%}
+                          <ul class="sub-collections">
+                            {%- for _sub_col in _collection_sub -%}
+                              <li>
+                                <a href="{{ collections[_sub_col].url }}" style="color: {{ section.settings.text_color }};">
+                                  {{ collections[_sub_col].title }}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </div>
+
+                    {%- else -%}
+                      <div class="image">
+                        <a href="{{ collection.url | default: 'javascript:void(0)' }}">
+                          {%- render 'image-style', image: image, limit: 768, padding_top: 0 -%}
+                        </a>
+                      </div>
+
+                      <div class="text-box">
+                        <a href="{{ collection.url }}">
+                          <h6>{%- if text == blank -%}{{ collection.title }}{%- else -%}{{ text }}{%- endif -%}</h6>
+                          {%- if _collection != blank and collection.all_products_count  > 0 -%}
+                            <span>{{ collection.all_products_count }} {{ 'pages.collection.products' | t }}</span>
+                          {%- endif -%}
+                        </a>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+
+          <style type="text/css">
+            .section-list-collections-v2.style-2#section-{{ section.id }} .item {
+              background: {{ section.settings.item_bg_color }};
+            }
+          </style>
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.list-collections-v2.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "4,2"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_background",
+      "label": "t:sections.common.full_background",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.list-collections-v2.blocks.brand.name"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_brands",
+      "label": "t:sections.common.enable_widget"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Brands"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "t:sections.common.subtext",
+      "default": "+ More Brands"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.common.link"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.list-collections.name"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_list_collections",
+      "label": "t:sections.common.enable_widget",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:sections.common.style",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.common.style_1"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.common.style_2"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:sections.common.text_color",
+      "default": "#0062bd"
+    },
+    {
+      "type": "color",
+      "id": "item_bg_color",
+      "label": "t:sections.list-brands.settings.item_background_color.label",
+      "info": "t:sections.list-collections-v2.settings.only_style_2",
+      "default": "#E9E9F2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block-item",
+      "name": "t:sections.common.collection",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.common.collection"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.common.text",
+          "default": "Collection title"
+        }
+      ]
+    },
+    {
+      "type": "brand",
+      "name": "t:sections.list-collections-v2.blocks.brand.name",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.list-collections-v2.name",
+      "blocks": [
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

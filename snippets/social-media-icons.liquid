@@ -1,0 +1,23 @@
+<ul class="widget-social-icons list-inline d-flex align-items-center">
+  {%- for i in (1..6) -%}
+    {%- assign social_type = 'social_icon_type_' | append: i -%}
+
+    {%- unless settings[social_type] == 'none' -%}
+      {%- liquid
+        assign social_title = 'social_icon_title_' | append: i
+        assign social_image = 'social_image_' | append: i
+        assign social_icon_svg = 'social_icon_svg_' | append: i
+        assign social_link = 'social_icon_link_' | append: i
+      -%}
+      <li>
+        <a target="_blank" rel="noopener" href="{{ settings[social_link] }}" title="{{ settings[social_title] }}">
+          {%- if settings[social_type] == 'svg' -%}
+            {{- settings[social_icon_svg] -}}
+          {%- else -%}
+            <img src="{{ settings[social_image] | image_url: width: 24 }}" class="lazyload" data-srcset="{{ settings[social_image] | image_url: width: 24 }}" alt="{{ settings[social_title].alt | default: social_title }}"/>
+          {%- endif -%}
+        </a>
+      </li>
+    {%- endunless -%}
+  {%- endfor -%}
+</ul>

@@ -1,0 +1,74 @@
+{% comment %}
+---- Params ----
+	image
+	limit
+{% endcomment %}
+
+{%- if image != blank or default_image -%}
+	{%- if image.src contains 'no-image' or image == blank -%}{%- assign image = 'default-image' -%}{%- endif -%}
+	{%- if image_size == blank -%}
+		{%- if image.width > 100  and limit_size != true -%}{%- if 100 > limit -%} {%- assign limit_size = true -%} {%- else -%}{%- assign image_widths = image_widths | append: ',' | append: '100' -%}{%- endif -%}{%- endif -%}
+		{%- if image.width > 180  and limit_size != true -%}{%- if 180 > limit -%} {%- assign limit_size = true -%} {%- else -%}{%- assign image_widths = image_widths | append: ',' | append: '180' -%}{%- endif -%}{%- endif -%}
+		{%- if image.width > 360  and limit_size != true -%}{%- if 360 > limit -%} {%- assign limit_size = true -%} {%- else -%}{%- assign image_widths = image_widths | append: ',' | append: '360' -%}{%- endif -%}{%- endif -%}
+		{%- if image.width > 540  and limit_size != true -%}{%- if 540 > limit -%} {%- assign limit_size = true -%} {%- else -%}{%- assign image_widths = image_widths | append: ',' | append: '540' -%}{%- endif -%}{%- endif -%}
+		{%- if image.width > 720  and limit_size != true -%}{%- if 720 > limit -%} {%- assign limit_size = true -%} {%- else -%}{%- assign image_widths = image_widths | append: ',' | append: '720' -%}{%- endif -%}{%- endif -%}
+		{%- if image.width > 900  and limit_size != true -%}{%- if 900 > limit -%} {%- assign limit_size = true -%} {%- else -%}{%- assign image_widths = image_widths | append: ',' | append: '900' -%}{%- endif -%}{%- endif -%}
+		{%- if limit == blank or image.width < limit -%}{%- assign image_widths = image_widths | append: ',' | append: image.width -%}{%- endif -%}
+
+		{%- assign image_widths = image_widths | remove_first: ',' | split: ',' | uniq | join: ',' | prepend: '['| append: ']' -%}
+	{%- endif -%}
+
+	{%- capture imageUrl -%}
+		{%- if image.width > 100  and limit_size != true -%}{%- if 100 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 100 }} 100w,{%- endif -%}{%- endif -%}
+		{%- if image.width > 180  and limit_size != true -%}{%- if 180 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 180 }} 180w,{%- endif -%}{%- endif -%}
+		{%- if image.width > 360  and limit_size != true -%}{%- if 360 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 360 }} 360w,{%- endif -%}{%- endif -%}
+	    {%- if image.width > 540  and limit_size != true -%}{%- if 540 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 540 }} 540w,{%- endif -%}{%- endif -%}
+	    {%- if image.width > 720  and limit_size != true -%}{%- if 720 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 720 }} 720w,{%- endif -%}{%- endif -%}
+	    {%- if image.width > 900  and limit_size != true -%}{%- if 900 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 900 }} 900w{%- endif -%}{%- endif -%}
+	    {{ image | image_url }} {{ image.width }}w
+	{%- endcapture -%}
+
+	{%- liquid
+		assign image_ratio = image.aspect_ratio
+		assign image_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.'
+		assign default_padding =  1 | divided_by: image_ratio | times: 100 | append: '%'
+	-%}
+
+	{%- case image -%}
+		{%- when 'default-image' -%}
+			{%- liquid
+				assign image_url = image | append: '.jpg' | asset_img_url: '1x1' | replace: '_1x1.', '_{width}x.'
+				assign image_ratio = 1
+				assign default_padding =  1 | divided_by: image_ratio | times: 100 | append: '%'
+				assign image_widths = '[100,180,360,540,720,900]'
+			-%}
+		{% comment %} end {% endcomment %}
+	{%- endcase -%}
+
+	{%- capture style_inline -%}
+		padding-top: {{ padding_top | default: default_padding }};
+		{{ css }}
+		{%- if width != blank -%}
+			max-width: {{ width }}px;width: {{ width }}px;
+		{%- endif -%}
+	{%- endcapture -%}
+
+	<span class="image__style position-relative {{ class }}" style="{{ style_inline | strip | strip_newlines }}">
+		<img class="overlay-ui w-100 h-100 lazyload"
+			loading="lazy"
+			src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+			data-srcset="{{ imageUrl }}"
+			data-widths="{{ image_widths }}"
+			data-aspectratio="{{ image_ratio }}"
+			width="{{ image.width }}"
+			height="{{ image.height }}"
+			data-sizes="auto"
+			data-optimumx="1.5"
+			data-expand="30"
+			data-parent-fit="cover"
+			alt="{{ alt | default: image.alt }}"
+			title="{{ alt | default: image.alt }}"/>
+	</span>
+{%- else -%}
+	{{- 'image' | placeholder_svg_tag | replace: '<svg', '<svg class="placeholder-svg"' -}}
+{%- endif -%}

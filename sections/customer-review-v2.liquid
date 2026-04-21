@@ -1,0 +1,235 @@
+{{ 'section-customer-review-v2.css' | asset_url | stylesheet_tag }}
+
+{%- assign section_id = '#section-' | append: section.id -%}
+
+<div class="customer-review-v2" id="section-{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper">
+      <div class="section-body">
+        
+        {%- if section.settings.logo_image != blank -%}
+          {%- liquid
+            assign logo_image = section.settings.logo_image
+            assign logo_max_width = section.settings.logo_max_width | remove: 'px' | abs
+            assign logo_max_1x = logo_max_width | append: 'x'
+            assign logo_max_2x = logo_max_width | times: 2 | append: 'x'
+            assign logo_1x = logo_image | img_url: logo_max_1x
+            assign logo_2x = logo_image | img_url: logo_max_2x
+          -%}
+          <div class="elementor-element elementor-logo">
+            <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+              <img class="logo-desk w-100"
+                src="{{ logo_1x }}"
+                srcset="{{ logo_1x }} 1x, {{ logo_2x }} 2x"
+                width="{{ logo_image.width }}"
+                height="{{ logo_image.height }}"
+                style="height: auto; width: {{ logo_max_width }}px"
+                alt="{{ shop.name }}"/>
+            </a>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.rating_rate != blank or section.settings.rating_rate_2 != blank -%}
+          <div class="elementor-element elementor-rating">
+            <div class="elementor-rating-rate">
+              {%- if section.settings.rating_rate != blank -%}
+                <span class="highlighted-text">{{ section.settings.rating_rate }}</span>
+              {%- endif -%}
+              {%- if section.settings.rating_rate_2 != blank -%}
+                <span>{{ section.settings.rating_rate_2 }}</span>
+              {%- endif -%}
+            </div>
+
+            <div class="elementor-star">
+              {%- case section.settings.star -%}
+                {%- when 1 -%}
+                  {%- render 'svg', type: "star-1" -%}
+                {%- when 2 -%}
+                  {%- render 'svg', type: "star-2" -%}
+                {%- when 3 -%}
+                  {%- render 'svg', type: "star-3" -%}
+                {%- when 4 -%}
+                  {%- render 'svg', type: "star-4" -%}
+                {%- else -%}
+                  {%- render 'svg', type: "star-5" -%}
+              {%- endcase -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank or section.settings.subtext != blank -%}
+          <div class="elementor-element elementor-text">
+            {%- if section.settings.text != blank -%}
+              <div class="elementor-text__title">
+                {{ section.settings.text }}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.subtext != blank -%}
+              <div class="elementor-text__subtext">
+                {{ section.settings.subtext }}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.image_1 != blank or section.settings.image_2 != blank -%}
+          <div class="elementor-element elementor-image">
+            {%- if section.settings.image_1 != blank -%}
+              <div class="elementor-image__item">
+                {%- render 'image-style', image: section.settings.image_1, limit: 100 -%} 
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.image_2 != blank -%}
+              <div class="elementor-image__item">
+                {%- render 'image-style', image: section.settings.image_2, limit: 100 -%} 
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.button != blank -%}
+          <div class="elementor-element elementor-button">
+            <a href="{{ section.settings.button_link | default: 'javascript:void(0)' }}" class="btn btn-2">
+              {{ section.settings.button }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.customer-review-v2.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer-widget.blocks.information.settings.header_1.content"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "t:sections.common.image"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "label": "t:sections.header.settings.logo_max_width.label",
+      "step": 5,
+      "min": 100,
+      "max": 400,
+      "unit": "px",
+      "default": 320
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.content"
+    },
+    {
+      "type": "text",
+      "id": "rating_rate",
+      "label": "t:sections.customer-review-v2.settings.rating_rate.label",
+      "default": "4.9"
+    },
+    {
+      "type": "text",
+      "id": "rating_rate_2",
+      "label": "t:sections.customer-review-v2.settings.rating_rate.label",
+        "default": "/5.0"
+    },
+    {
+      "type": "range",
+      "id": "star",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5,
+      "label": "t:sections.customer-review.blocks.settings.star.label"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "t:sections.common.text",
+      "default": "Shop Overview Rating Electro.com"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subtext",
+      "label": "t:sections.common.subtext",
+      "default": "Based On Over 15 000 + Customer Reviews"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "t:sections.common.image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "t:sections.common.image"
+    },
+    {
+      "type": "text",
+      "id": "button",
+      "label": "t:sections.common.button_label",
+      "default": "READ ALL REVIEWS"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:sections.common.button_link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.customer-review-v2.name"
+    }
+  ]
+}
+{%- endschema -%}

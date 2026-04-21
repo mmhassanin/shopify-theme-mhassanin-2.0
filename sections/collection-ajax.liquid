@@ -1,0 +1,29 @@
+
+{%- paginate collection.products by settings.collection_page_limit -%}
+  <div id="collection-product-grid">
+    {%- if collection_tool_bar != blank -%}
+      <div class="collection-tool-bar d-flex justify-content-between align-items-center">
+        {{ collection_tool_bar }}
+      </div>
+    {%- endif -%}
+
+    <div id="main-collection-product-grid" class="{% render 'grid-class', value: items_resp %}">
+      {%- render 'product-item' for collection.products as product -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      {%- if enable_load_infinite -%}
+        <button class="btn btn-1 w-100 btn-load-infinite" data-page="1">{{ 'pages.collection.load_more' | t }}</button>
+      {%- else -%}
+        {%- render 'pagination', paginate: paginate -%}
+      {%- endif -%}
+    {%- endif -%}
+
+  </div>
+{%- endpaginate -%}
+{%- schema -%}
+{
+  "name": "Collection Ajax",
+  "tag": "section"
+}
+{%- endschema -%}

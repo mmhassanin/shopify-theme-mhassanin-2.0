@@ -1,0 +1,24 @@
+{%- if image_desk != blank or image_mobi != blank -%}
+  {%- liquid
+    assign image_mobi_widths = '360x,375x,414x,600x,768x,810x,962x' | split: ','
+    assign image_desk_widths = '1024x,1280x,1366x,1440x,1536x,1440x,1920x' | split: ','
+  -%}
+  {%- if image_mobi != blank -%}
+    {%- for width in image_mobi_widths -%}
+      {%- capture url -%}
+        {{ image_mobi | img_url: width }} {{ width | replace: 'x', 'w' }}
+      {%- endcapture -%}
+      {%- assign image_urls = image_urls | append: ',' | append: url -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if image_desk != blank -%}
+    {%- for width in image_desk_widths -%}
+      {%- capture url -%}
+        {{ image_desk | img_url: width }} {{ width | replace: 'x', 'w' }}
+      {%- endcapture -%}
+      {%- assign image_urls = image_urls | append: ',' | append: url -%}
+    {%- endfor -%}
+  {%- endif -%}
+  lazyload" data-bgset="{{ image_urls | remove_first: ',' | strip_newlines }}
+{%- endif -%}

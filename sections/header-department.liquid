@@ -1,0 +1,135 @@
+{{ 'section-header-department.css' | asset_url | stylesheet_tag }}
+
+{%- if section.settings.visibility != 'disable' -%}
+  {%- if section.settings.visibility == 'mobile' -%}
+    {%- assign visibility_class = 'd-lg-none' -%}
+  {%- elsif section.settings.visibility == 'desktop' -%}
+    {%- assign visibility_class = 'd-none d-lg-block' -%}
+  {%- else -%}
+    {%- assign visibility_class = 'show-both' -%}
+  {%- endif -%}
+
+  <div class="section-header-department{% if section.settings.box_shadow %} box-shadow{% endif %} {{ visibility_class }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+    <div class="{{ section.settings.section_layout }}">
+      <div class="section-wrapper">
+         
+        <div class="header-department-inner">
+          <ul class="hd-list">
+            {%- for block in section.blocks -%}
+              <li class="item">
+                <a href="{{ block.settings.link | default: 'javascript:void(0)' }}">
+                  {%- if block.settings.svg != blank -%}
+                    {{ block.settings.svg }}
+                  {%- else -%}
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="laptop" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="svg-inline--fa fa-laptop fa-w-20 fa-2x"><path fill="currentColor" d="M624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z" class=""></path></svg>
+                  {%- endif -%}
+                  {%- if block.settings.text != blank -%}
+                    <span class="text">{{ block.settings.text }}</span>
+                  {%- endif -%}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.header-department.name",
+  "tag": "section",
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "visibility",
+      "label": "Visibility",
+      "default": "both",
+      "options": [
+        { "label": "Mobile", "value": "mobile" },
+        { "label": "Desktop", "value": "desktop" },
+        { "label": "Both",  "value": "both" },
+        { "label": "Disable",  "value": "disable" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "box_shadow",
+      "label": "t:sections.common.box_shadow",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block-item",
+      "name": "t:sections.common.block_item.",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "svg",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.common.text",
+          "default": "Item"
+        }, 
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link",
+          "default": "/"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.header-department.name",
+      "blocks": [
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

@@ -1,0 +1,7 @@
+[environments.env1]
+store = "al-voip-1.myshopify.com"
+theme = "159876939992"
+
+[environments.production]
+store = "al-voip-1.myshopify.com"
+theme = "159876939992"

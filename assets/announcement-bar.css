@@ -1,0 +1,8 @@
+.announcement-bar .tns-outer .tns-ovh {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.announcement-bar .announcement-item p:last-child {
+  margin: 0;
+}

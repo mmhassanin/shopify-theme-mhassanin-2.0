@@ -1,0 +1,75 @@
+{{ 'pages.css' | asset_url | stylesheet_tag }}
+
+<div class="page-account account-register">
+	<div class="page-body d-grid grid-1 grid-md-2">
+
+		<div class="form-wrapper">
+			<h2 class="form-title">{{ 'customer.register.create_an_account' | t }}</h2>
+	        <p>{{ 'customer.register.subtext' | t }}</p>
+			{%- form 'create_customer', class: 'account-form register-form' -%}
+				{%- if form.errors -%}
+		          <div class="alert alert-error">
+		            {{ form.errors | default_errors }}
+		          </div>
+		        {%- endif -%}
+				<div class="form-group">
+					<label for="register-first-name">{{ 'customer.register.first_name' | t }}<span class="req">*</span></label>
+					<input type="text" name="customer[first_name]" id="register-first-name" required{% if form.first_name %} value="{{ form.first_name }}"{% endif %}>
+				</div>
+				<div class="form-group">
+					<label for="register-last-name">{{ 'customer.register.last_name' | t }}<span class="req">*</span></label>
+					<input type="text" name="customer[last_name]" id="register-last-name" required{% if form.last_name %} value="{{ form.last_name }}"{% endif %}>
+				</div>
+				<div class="form-group{% if form.errors contains 'email' %} has-error{% endif %}">
+					<label for="register-email">{{ 'customer.register.email' | t }}<span class="req">*</span></label>
+					<input type="text" name="customer[email]" id="register-email" required value="{{ form.email }}">
+				</div>
+				<div class="form-group{% if form.errors contains 'password' %} has-error{% endif %}">
+					<label for="register-password">{{ 'customer.register.password' | t }}<span class="req">*</span></label>
+					<input type="password" name="customer[password]" id="register-password" required>
+				</div>
+				<button type="submit" class="btn btn-1 btn-submit">{{ 'customer.register.submit' | t }}</button>
+
+				<div class="register-benefit">
+		          <h5 class="semi-bold">{{ 'customer.login.benefit_heading' | t }}</h5>
+
+		          <ul class="benefit-list">
+		            <li>
+		              {%- render 'svg', type: 'customer-check' -%}
+		              <span>{{ 'customer.login.benefit_1' | t }}</span>
+		            </li>
+		            <li>
+		              {%- render 'svg', type: 'customer-check' -%}
+		              <span>{{ 'customer.login.benefit_2' | t }}</span>
+		            </li>
+		            <li>
+		              {%- render 'svg', type: 'customer-check' -%}
+		              <span>{{ 'customer.login.benefit_3' | t }}</span>
+		            </li>
+		          </ul>
+		        </div>
+			{%- endform -%}
+		</div>
+
+		<div class="form-wrapper">
+			<h2 class="form-title">{{ 'customer.login.sign_in' | t }}</h2>
+			<p>{{ 'customer.register.have_already_account' | t }}</p>
+			<div class="account-form login-form">
+				<a class="btn btn-1" href="{{ routes.account_login_url }}">{{ 'customer.login.sign_in' | t }}</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  let formRecoverContainer = document.getElementById("recover-password");
+  let formLoginContainer = document.getElementById("customer-login");
+  function showRecoverPasswordForm(){
+    formRecoverContainer.style.display = "";
+    formLoginContainer.style.display = "none";
+  }
+  function hideRecoverPasswordForm(){
+    formRecoverContainer.style.display = "none";
+    formLoginContainer.style.display = "";
+  }
+</script>

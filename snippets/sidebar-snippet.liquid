@@ -1,0 +1,295 @@
+{%- case type -%}
+  {%- when 'menu' -%}
+    <div class="sb-widget d-none d-lg-block">
+      <div class="sb-menu">
+        {%- if block.settings.heading != blank -%}
+          <h5 class="sb-title">{{ block.settings.heading }}</h5>
+        {%- endif -%}
+
+        {%- if block.settings.menu != blank -%}
+          <div class="sb-menu-inner">
+            <ul class="sb-menu-list">
+              {%- for _menu_link in linklists[block.settings.menu].links -%}
+                {%- assign submenu = _menu_link.title | handleize -%}
+
+                {%- if linklists[submenu].links.size > 0 -%}
+                  <li class="item menu-item-dropdown">
+                    <div class="dropdown-inner">
+                      <a href="{{ _menu_link.url }}"><span>{{ _menu_link.title }}</span></a>
+                      <span class="expand mi-expand">{%- render 'svg', type: 'angle-right' -%}</span>
+                    </div>
+                    <ul class="child-list">
+                      {%- for l in linklists[submenu].links -%}
+                        <li class="child-item">
+                          <a href="{{ l.url }}">
+                            <span>{{ l.title }}</span>
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </li>
+                {%- else -%}
+                  <li class="item">
+                    <a href="{{ _menu_link.url }}">
+                      <span>{{ _menu_link.title }}</span>
+                    </a>
+                  </li>
+                {%- endif -%}
+
+              {%- endfor -%}
+            </ul>
+          </div>
+
+          <script type="text/javascript">
+            let _menu_elements = document.querySelectorAll(".mi-expand");
+            _menu_elements.forEach((e) => {
+                e.addEvent("click", () => {
+                  if(e.closest(".menu-item-dropdown").classList.contains("active")){
+                    e.closest(".menu-item-dropdown").classList.remove('active');
+                  }
+                  else{
+                    e.closest(".menu-item-dropdown").classList.add('active');
+                  }
+                });
+            }); 
+          </script>
+        {%- endif -%}
+      </div>
+    </div>
+
+  {%- when 'banner' -%}
+    <div class="sb-widget d-none d-lg-block">
+      <div class="sb-banner">
+        <a href="{{ block.settings.link | default: 'javascript:void(0)' | default: 'javascript:void(0)' }}">
+          {%- render 'image-style', image: block.settings.image, padding_top: image_padding -%}
+        </a>
+      </div>
+    </div>
+
+  {%- when 'products-listing' -%}
+    {%- unless block.settings.sb_latest_product_col == blank -%}
+      {%- liquid
+        assign listing_title = block.settings.sb_latest_product_title
+        assign listing_col = block.settings.sb_latest_product_col
+        assign listing_collection = collections[listing_col]
+        assign limit = block.settings.limit
+        assign dots = false
+        assign controls = true
+        assign loop = false
+        assign section_id = '#section-sb-products-listing'
+        assign items_resp = '1'
+        assign controls_id = '#controls-sb-products-listing'
+        assign slider_id = '#slider-sb-products-listing'
+      -%}
+
+      <div class="sb-widget" id="section-sb-products-listing" data-section-id="section-sb-products-listing" data-section-type="featured-collection">
+        <div class="sb-product">
+
+          {%- unless listing_title == blank -%}<h5 class="sb-title">{{ listing_title }}</h5>{%- endunless -%}
+
+          <slider-component>
+            <div class="slider-container js-slider-container">
+              <div class="slider-wrapper">
+                <div class="slider-list" id="slider-sb-products-listing">
+                  {%- for product in listing_collection.products limit: limit -%}
+                    {%- capture mod -%}{{ forloop.index | modulo: 4 }}{%- endcapture -%}
+
+                    {%- if mod == '1' -%}
+                    <div class="latest-product-item">
+                      {%- endif -%}
+                      {%- render 'product-listing-item', product: product -%}
+                      {%- if mod == '0' or forloop.last -%}
+                    </div>
+                    {%- endif -%}
+
+                  {%- endfor -%}
+                </div>
+
+                {%- render 'set-tns-config'
+                  slider_id: slider_id,
+                  classID: section_id,
+                  loop: loop,
+                  dots: dots,
+                  controls: true,
+                  controls_id: controls_id,
+                  items_resp: items_resp,
+                  total_item: limit
+                -%}
+              </div>
+            </div>
+          </slider-component>
+
+        </div>
+      </div>
+
+      <script>
+        window.theme = window.theme || {};
+        if(!!window.theme.sectionRegister){
+          !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
+        }else{
+          window.theme.sectionRegister = ["featured-collection"];
+        }
+      </script>
+
+      <script>
+        window.theme = window.theme || {};
+        if(!!window.theme.customElementsList){
+          !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
+        }else{
+          window.theme.customElementsList = ["slider-component"];
+        }
+      </script>
+    {%- endunless -%}
+
+  {%- when 'service' -%}
+    <div class="sb-widget">
+      <div class="sb-service">
+
+        {%- for i in (1..5) -%}
+          {%- assign show = 'enable_sb_services_' | append: i -%}
+
+          {%- if block.settings[show] -%}
+            {%- assign icon = 'sb_services_icon_' | append: i -%}
+            {%- assign title = 'sb_services_title_' | append: i -%}
+            {%- assign caption = 'sb_services_caption_' | append: i -%}
+
+            <div class="sb-service-item">
+              <ul class="list-si">
+                {%- unless block.settings[icon] == blank -%}
+                  <li class="icon">{{ block.settings[icon] }}</li>
+                {%- endunless -%}
+
+                <li class="text">
+                  {%- unless block.settings[title] == blank -%}
+                    <span class="text-1">{{ block.settings[title] }}</span><br />
+                  {%- endunless -%}
+                  {%- unless block.settings[caption] == blank -%}
+                    <span class="text-2">{{ block.settings[caption] }}</span>
+                  {%- endunless -%}
+                </li>
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+      </div>
+    </div>
+
+  {%- when 'products-grid' -%}
+    {%- unless block.settings.grid_collection == blank -%}
+      {%- liquid
+        assign grid_title = block.settings.grid_title
+        assign grid_col = block.settings.grid_collection
+        assign grid_collection = collections[grid_col]
+        assign limit = block.settings.limit
+        assign dots = false
+        assign controls = true
+        assign loop = false
+        assign section_id = '#section-sb-products-grid'
+        assign items_resp = '1'
+        assign controls_id = '#controls-sb-products-grid'
+        assign slider_id = '#slider-sb-products-grid'
+      -%}
+
+      <div class="sb-widget" id="section-sb-products-grid" data-section-id="section-sb-products-grid" data-section-type="featured-collection">
+        <div class="sb-product">
+
+          {%- unless grid_title == blank -%}<h5 class="sb-title">{{ grid_title }}</h5>{%- endunless -%}
+
+          <slider-component>
+            <div class="slider-container js-slider-container">
+              <div class="slider-wrapper">
+                <div class="slider-list" id="slider-sb-products-grid">
+                  {%- for product in grid_collection.products limit: limit -%}
+                    {%- render 'product-item', product: product -%}
+                  {%- endfor -%}
+                </div>
+
+                {%- render 'set-tns-config'
+                  slider_id: slider_id,
+                  classID: section_id,
+                  loop: loop,
+                  dots: dots,
+                  controls: true,
+                  controls_id: controls_id,
+                  items_resp: items_resp,
+                  total_item: limit
+                -%}
+              </div>
+            </div>
+          </slider-component>
+        </div>
+      </div>
+    {%- endunless -%}
+
+  {%- when 'blog-post' -%}
+    {%- unless block.settings.blog == blank -%}
+      {%- liquid
+        assign blog_title = block.settings.blog_title
+        assign blog = blogs[block.settings.blog]
+        assign limit = block.settings.limit
+        assign dots = false
+        assign controls = true
+        assign loop = false
+        assign section_id = '#section-sb-blog'
+        assign items_resp = '1'
+        assign controls_id = '#controls-sb-blog'
+        assign slider_id = '#slider-sb-blog'
+      -%}
+
+      <div class="sb-widget" id="section-sb-blog" data-section-id="section-sb-blog" data-section-type="featured-collection">
+        <div class="sb-blog">
+
+          {%- unless blog_title == blank -%}<h5 class="sb-title">{{ blog_title }}</h5>{%- endunless -%}
+
+          <slider-component>
+            <div class="slider-container js-slider-container">
+              <div class="slider-wrapper">
+                <div class="slider-list" id="slider-sb-blog">
+                  {%- for article in blog.articles limit: _limit -%}
+
+                    <div class="post-item">
+                      <div class="post-item-inner">
+                        {%- if article.image -%}
+                          <div class="post-image">
+                            <a href="{{ article.url }}">
+                              {%- render 'image-style', image: article.image, limit: 330 -%}       
+                            </a>
+                          </div>
+                        {%- endif -%}
+
+                        <div class="post-content">
+                          <div class="meta-data">
+                            <span class="date">{{ article.published_at | date: "%d %b, %Y" }}</span>
+                          </div>
+
+                          <div class="info">
+                            <h6><a href="{{ article.url }}">{{ article.title }}</a></h6>
+                          </div>
+                        </div>
+                      </div>         
+                    </div>
+
+                  {%- endfor -%}
+                </div>
+
+                {%- render 'set-tns-config'
+                  slider_id: slider_id,
+                  classID: section_id,
+                  loop: loop,
+                  dots: dots,
+                  controls: controls,
+                  controls_id: controls_id,
+                  items_resp: items_resp,
+                  total_item: limit
+                -%}
+              </div>
+            </div>
+          </slider-component>
+
+        </div>
+      </div>
+    {%- endunless -%}
+
+  {%- else -%}
+{%- endcase -%}

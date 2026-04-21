@@ -1,0 +1,54 @@
+{%- for block in section.blocks -%}
+  {%- if block.type != 'mega-trigger' -%}{%- continue -%}{%- endif -%}
+
+  {%- liquid
+    assign link_title_downcase = link_title | downcase
+    assign mega_trigger_title = block.settings.title
+    assign mega_trigger_title_downcase = mega_trigger_title | downcase
+  -%}
+  {%- if mega_trigger_title_downcase != link_title_downcase -%}{%- continue -%}{%- endif -%}
+
+  <div class="drawer drawer-left drawer-sub-menu menu-mobile-list--lv1" {{ block.shopify_attributes }}>
+    <div class="drawer-wrapper">
+      <label for="[menu-panel-id]" class="btn-back">
+        {%- render 'svg', type: 'angle-left' -%}
+        {{ 'sections.header.back' | t }}
+      </label>
+
+      <ul class="menu-list menu-list--lv1">
+        {%- for block_widget in section.blocks offset: forloop.index -%}
+          {%- if block_widget.type == 'mega-trigger' -%}{%- break -%}{%- endif -%}
+          {%- if block_widget.type == 'mega-product' -%}
+            {%- liquid
+              assign mega_product = block_widget.settings.product
+              assign product = all_products[mega_product]
+            -%}
+            {%- assign block_widget_heading = product.title -%}
+          {%- else -%}
+            {%- assign block_widget_heading = block_widget.settings.heading -%}
+          {%- endif -%}
+          {%- assign block_widget_heading_handle = block_widget_heading | handleize -%}
+          <li class="menu-item menu-mobile-item-2">
+            <div class="menu-item_wrap">
+              <a href="javascript:void(0);">
+                {{ block_widget_heading }}
+              </a>
+              <label for="dropdown-menu-{{ block_widget_heading_handle }}-{{ forloop.index }}-{{ block_widget.id }}">
+                {%- render 'svg', type: 'angle-right' -%}
+              </label>
+            </div>
+            <input type="checkbox" class="d-none menu-checkbox-mobile-2" id="dropdown-menu-{{ block_widget_heading_handle }}-{{ forloop.index }}-{{ block_widget.id }}">
+            <div class="drawer-wrapper drawer-sub-menu">
+              <label for="dropdown-menu-{{ block_widget_heading_handle }}-{{ forloop.index }}-{{ block_widget.id }}" class="btn-back">
+                {%- render 'svg', type: 'angle-left' -%}
+                {{ 'sections.header.back' | t }}
+              </label>
+              {%- render 'header-mega-widget', block: block_widget, type: block_widget.type, device: 'mobile' -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+    </div>
+  </div>
+{%- endfor -%}

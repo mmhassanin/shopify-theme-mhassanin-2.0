@@ -1,0 +1,251 @@
+{{ 'section-menu-with-sidebar.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+-%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading', type:'render-html', config: section.settings -%}
+{%- endcapture -%}
+
+<div class="section-categories-banner" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper">
+
+      {%- if section_heading != blank -%}
+        {%- capture heading_css -%}
+          {%- render 'snippet-heading', type: 'render-css', config: heading_style_block.settings, classID: section_id -%}
+        {%- endcapture -%}
+        <div class="section-header">{{ section_heading }}</div>
+      {%- endif -%}
+
+      <div class="section-body">
+        {%- if section.blocks.size > 0 -%}
+          {%- unless section.settings.menu == blank -%}
+            <div class="box-menu">
+              <ul class="box-menu-list">
+                {%- for _menu_link in linklists[section.settings.menu].links -%}
+                  {%- assign submenu = _menu_link.title | handleize -%}
+
+                  {%- if linklists[submenu].links.size > 0 -%}
+                    <li class="item">
+                      <a href="{{ _menu_link.url }}">
+                        <span>{{ _menu_link.title }}</span>
+                      </a>
+                      <ul class="child-list">
+                        {%- for l in linklists[submenu].links -%}
+                          <li class="child-item">
+                            <a href="{{ l.url }}">
+                              <span>{{ l.title }}</span>
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </li>
+                  {%- else -%}
+                    <li class="item">
+                      <a href="{{ _menu_link.url }}">
+                        <span>{{ _menu_link.title }}</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endunless -%}
+
+          <div class="tab-heading-container">
+            <ul class="tab-heading">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'link' -%}
+                  {%- if block.settings.heading != blank -%}
+                    <li>
+                      <a href="{{ block.settings.link | default: 'javascript:void(0)' | default: 'javascript:void(0)' }}"{%- if block.type == 'block-item' -%} class="active"{% endif %}>
+                        {{ block.settings.heading }}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+
+          <div class="tab-content">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'block-item' -%}
+                <div class="tab-content-inner">
+                  <div class="tab-items-row">
+                    <div class="block-image">
+                      <a href="{{ block.settings.link | default: 'javascript:void(0)' }}">
+                        {%- render 'image-style', image: block.settings.image, limit: 992 -%}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {%- break -%}
+              {%- endif -%}
+            {%- endfor -%} 
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.menu-with-banner.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Computers & Laptops"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:sections.common.menu_item",
+      "default": "main-menu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        }
+      ]
+    },
+    {
+      "type": "block-item",
+      "name": "t:sections.common.block_image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "t:sections.common.block_link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading",
+          "default": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.menu-with-banner.name",
+      "blocks": [
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "link"
+        },
+        {
+          "type": "link"
+        },
+        {
+          "type": "link"
+        },
+        {
+          "type": "link"
+        },
+        {
+          "type": "link"
+        },
+        {
+          "type": "link"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

@@ -1,0 +1,131 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div.page-template.page-faqs",
+  "sections": {
+    "multicolumn_frXbDm": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_hMVTKW": {
+          "type": "column",
+          "settings": {
+            "heading": "<strong>What Shipping Methods Are Available?<\/strong>",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sapien lorem, consectetur et turpis id, blandit interdum metus. Morbi sed ligula id elit mollis efficitur ut nec ligula. Proin erat magna, pellentesque at elementum at, eleifend a tortor.<\/p>"
+          }
+        },
+        "column_bCwPF7": {
+          "type": "column",
+          "settings": {
+            "heading": "<strong>How Long Will it Take To Get My Package?<\/strong>",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sapien lorem, consectetur et turpis id, blandit interdum metus. Morbi sed ligula id elit mollis efficitur ut nec ligula. Proin erat magna, pellentesque at elementum at, eleifend a tortor.<\/p>"
+          }
+        },
+        "column_AdwA4P": {
+          "type": "column",
+          "settings": {
+            "heading": "<strong>How Do I Track My Order?<\/strong>",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sapien lorem, consectetur et turpis id, blandit interdum metus. Morbi sed ligula id elit mollis efficitur ut nec ligula. Proin erat magna, pellentesque at elementum at, eleifend a tortor.<\/p>"
+          }
+        },
+        "column_rB8UcD": {
+          "type": "column",
+          "settings": {
+            "heading": "<strong>Do I Need A Account To Place Order?<\/strong>",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sapien lorem, consectetur et turpis id, blandit interdum metus. Morbi sed ligula id elit mollis efficitur ut nec ligula. Proin erat magna, pellentesque at elementum at, eleifend a tortor.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "column_hMVTKW",
+        "column_bCwPF7",
+        "column_AdwA4P",
+        "column_rB8UcD"
+      ],
+      "settings": {
+        "section_layout": "container",
+        "margin": "",
+        "padding": "",
+        "heading": "Shipping Information",
+        "column_alignment": "left"
+      }
+    },
+    "main": {
+      "type": "section-faqs",
+      "blocks": {
+        "1f7cf10b-74e8-4fa5-b1f0-ea7d6feb88dc": {
+          "type": "faq-item",
+          "settings": {
+            "question": "What Shipping Methods Are Available?",
+            "answer": "<p>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor. Aliquam eget convallis eros, varius sagittis nulla. Suspendisse potenti. Aenean consequat ex sit amet metus ultrices tristique. Nam ac nunc augue. Suspendisse finibus in dolor eget volutpat.<\/p><ul><li>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor.<\/li><li>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor.In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor.<\/li><li>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor.<\/li><li>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor.<\/li><li>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor.<\/li><\/ul>"
+          }
+        },
+        "8a1c6ac4-1453-4669-ad8c-3d713ebabc4c": {
+          "type": "faq-item",
+          "settings": {
+            "question": "How Long Will it Take To Get My Package?",
+            "answer": "<p>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor. Aliquam eget convallis eros, varius sagittis nulla. Suspendisse potenti. Aenean consequat ex sit amet metus ultrices tristique. Nam ac nunc augue. Suspendisse finibus in dolor eget volutpat.<\/p>"
+          }
+        },
+        "9c467618-b76c-4767-89d9-1893391de067": {
+          "type": "faq-item",
+          "settings": {
+            "question": "How Do I Track My Order?",
+            "answer": "<p>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor. Aliquam eget convallis eros, varius sagittis nulla. Suspendisse potenti. Aenean consequat ex sit amet metus ultrices tristique. Nam ac nunc augue. Suspendisse finibus in dolor eget volutpat.<\/p>"
+          }
+        },
+        "16644864-ed44-4b28-a3f7-58d168a26d0c": {
+          "type": "faq-item",
+          "settings": {
+            "question": "How Do I Place an Order?",
+            "answer": "<p>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor. Aliquam eget convallis eros, varius sagittis nulla. Suspendisse potenti. Aenean consequat ex sit amet metus ultrices tristique. Nam ac nunc augue. Suspendisse finibus in dolor eget volutpat.<\/p>"
+          }
+        },
+        "c8b3061d-a762-4777-b23b-6c615ea65a7d": {
+          "type": "faq-item",
+          "settings": {
+            "question": "How Should I to Contact if I Have Any Queries?",
+            "answer": "<p>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor. Aliquam eget convallis eros, varius sagittis nulla. Suspendisse potenti. Aenean consequat ex sit amet metus ultrices tristique. Nam ac nunc augue. Suspendisse finibus in dolor eget volutpat.<\/p>"
+          }
+        },
+        "343f3a20-233b-4452-89cd-c4a14937d7d6": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Do I Need an Account to Place an Order?",
+            "answer": "<p>In egestas, libero vitae scelerisque tristique, turpis augue faucibus dolor, at aliquet ligula massa at justo. Donec viverra tortor quis tortor pretium, in pretium risus finibus. Integer viverra pretium auctor. Aliquam eget convallis eros, varius sagittis nulla. Suspendisse potenti. Aenean consequat ex sit amet metus ultrices tristique. Nam ac nunc augue. Suspendisse finibus in dolor eget volutpat.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "1f7cf10b-74e8-4fa5-b1f0-ea7d6feb88dc",
+        "8a1c6ac4-1453-4669-ad8c-3d713ebabc4c",
+        "9c467618-b76c-4767-89d9-1893391de067",
+        "16644864-ed44-4b28-a3f7-58d168a26d0c",
+        "c8b3061d-a762-4777-b23b-6c615ea65a7d",
+        "343f3a20-233b-4452-89cd-c4a14937d7d6"
+      ],
+      "settings": {
+        "section_layout": "container",
+        "margin": "50px 0px 0px 0px",
+        "padding": "",
+        "show_left_column": false,
+        "textbox_heading": "",
+        "subtext": "",
+        "button": "",
+        "button_link": "",
+        "show_faqs_item": true,
+        "heading": "Frequently Asked Questions"
+      }
+    }
+  },
+  "order": [
+    "multicolumn_frXbDm",
+    "main"
+  ]
+}

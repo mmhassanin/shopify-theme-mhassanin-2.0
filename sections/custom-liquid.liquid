@@ -1,0 +1,49 @@
+{%- assign section_id = '#section-' | append: section.id -%}
+
+<div class="section-custom-liquid" id="section-{{ section.id }}">
+  <div class="container">
+    <div class="section-wrapper">
+      <div class="section-body">
+        {{ section.settings.custom_liquid }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.custom-liquid.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "t:sections.custom-liquid.settings.custom_liquid.label",
+      "info": "t:sections.custom-liquid.settings.custom_liquid.info"
+    },
+  ],
+  "presets": [
+    {
+      "name": "t:sections.custom-liquid.name"
+    }
+  ]
+}
+{%- endschema -%}

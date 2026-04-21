@@ -1,0 +1,98 @@
+{%- if settings.enable_newsletter_popup -%}
+  <div>
+    <popup-component id="newsletter-popup" class="popup-component popup-newsletter is-open">
+      <div class="popup-component_overlay js-popup-close"></div>
+      <div class="popup-component_box">
+
+        <div class="popup-component_box_content">
+          <button type="button" class="btn-close js-popup-close">{%- render 'svg', type: 'close' -%}</button>
+
+          <div class="popup-component_box_inner">
+            {%- if settings.newsletter_popup_image != blank -%}
+              <div class="popup-newsletter_image">
+                {%- render 'image-style', image: settings.newsletter_popup_image, limit: 992 -%} 
+              </div>
+            {%- endif -%}
+
+            <div class="popup-newsletter_body">
+              {%- form 'customer', id: 'NewsletterPopup',class: 'newsletter-popup-form' -%}
+                {%- if settings.newsletter_popup_heading != blank -%}
+                  <div class="popup-newsletter_heading">{{ settings.newsletter_popup_heading }}</div>
+                {%- endif -%}
+
+                {%- if settings.newsletter_popup_subtext != blank -%}
+                  <div class="popup-newsletter_subtext">{{ settings.newsletter_popup_subtext }}</div>
+                {%- endif -%}
+
+                {%- if settings.newsletter_popup_subtext_2 != blank -%}
+                  <div class="popup-newsletter_subtext_2">{{ settings.newsletter_popup_subtext_2 }}</div>
+                {%- endif -%}
+
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <div class="newsletter-popup-form__field">
+                  <div class="field">
+                    <input type="email" name="contact[email]" placeholder="{{ 'customer.login.your_email' | t }}" aria-required="true" autocorrect="off" autocapitalize="off" required>
+                    {%- if settings.newsletter_popup_buton != blank -%}
+                      <div class="popup-newsletter_actions">
+                        <button class="btn btn-1 btn-action" type="submit" name="subscribe">{{ settings.newsletter_popup_buton }}</button>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+
+                {%- if settings.enable_newsletter_popup_social_icon -%}
+                  <div class="popup-newsletter_social">
+                    {%- render 'social-media-icons' -%}
+                  </div>
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </popup-component>
+
+    <script>
+      var AT_cookie = {
+        get: function (key) {
+          var keyValue = document.cookie.match("(^|;) ?" + key + "=([^;]*)(;|$)");
+          return keyValue ? JSON.parse(keyValue[2]) : null;
+        },
+        set: function (key, value, expiry) {
+          var expires = new Date();
+          expires.setTime(expires.getTime() + expiry * 24 * 60 * 60 * 1000);
+          document.cookie = key + "=" + JSON.stringify(value) + ";expires=" + expires.toUTCString() + ";path=/";
+        },
+        delete: function (key) {
+          var keyValue = this.get(key);
+          this.set(key, keyValue, "-1");
+        },
+      };
+      (() => {
+        if(JSON.parse(AT_cookie.get("newsletterPopup"))){
+          document.body.classList.add('newsletter-popup-modal');
+        }
+      })();
+    </script>
+
+    <script>
+      (() => {
+        let popup = document.getElementById('newsletter-popup');
+        popup.querySelector('.btn-action').addEvent('click', () => {
+          AT_cookie.set('newsletterPopup', true, {{ settings.newsletter_popup_expire }});
+        });}
+      )()
+    </script>
+
+    <script>
+      (() => {
+        let popup = document.getElementById('newsletter-popup');
+        popup.querySelector('.js-popup-close').addEvent('click', () => {
+          AT_cookie.set('newsletterPopup', true, {{ settings.newsletter_popup_expire }});
+        });}
+      )()
+    </script>
+  </div>
+
+{%- endif -%}

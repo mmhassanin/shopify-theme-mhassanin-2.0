@@ -1,0 +1,25 @@
+.section-multicolumn .multicolumn-item__heading {
+  font-size: calc(var(--body-font-size) + 2px);
+  font-family: var(--body-font);
+  font-weight: var(--font-body-weight);
+  line-height: 1.1;
+  margin-bottom: 34px;
+}
+
+.section-multicolumn .column-align-center .list-multicolumn {
+  justify-content: center;
+  text-align: center;
+}
+
+.section-multicolumn .list-multicolumn {
+  padding-top: 52px;
+  row-gap: 70px;
+}
+
+.section-multicolumn .multicolumn-item__text > * {
+  margin: 0 0 12px;
+}
+
+.section-multicolumn .multicolumn-item__text > :last-child {
+  margin-bottom: 0;
+}

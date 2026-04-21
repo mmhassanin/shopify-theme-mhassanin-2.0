@@ -1,0 +1,94 @@
+{%- if product != blank -%}
+	{%- liquid
+		assign item_effect = settings.product_item_hover_effect
+		assign first_variant = product.variants | first
+		assign selected_variant = product.first_available_variant | default: first_variant
+		assign avaiable = selected_variant.available
+		assign price = selected_variant.price
+		assign compare_at_price = selected_variant.compare_at_price
+		assign image_padding = settings.product_image_ratio | replace: 'auto', '100%'
+
+		if settings.product_customize_ratio != blank
+			assign image_padding = 1 | divided_by: settings.product_customize_ratio.aspect_ratio | times: 100 | append: '%'
+		endif
+	-%}
+	
+	{%- capture product_labels -%}
+		{%- if compare_at_price > price and settings.sale_label_style != 'none' -%}
+			<div class="label label-sale">
+				{%- if settings.sale_label_style == 'text' -%}
+					{{- 'general.label.sale' | t -}}
+				{%- else -%}
+					{%- assign percent_off = product.variants.first.compare_at_price | minus : product.variants.first.price -%}
+					{%- capture percent -%}{{ percent_off | times:100.00 | divided_by: product.variants.first.compare_at_price | round }}{%- endcapture -%}
+					{{ percent | append: '%' }}
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		{%- liquid
+	        assign metafield_label = product.metafields.c_f
+	        assign number_metafield_label = metafield_label.product_label.size | minus: 1
+	    -%}
+
+	    {%- for i in (0..number_metafield_label) -%}
+	        {%- if metafield_label.product_label[i] != blank -%}
+	          <div class="label product-label-{{ forloop.index }}">
+	             {{- metafield_label.product_label[i] -}}
+	          </div>
+	        {%- endif -%}
+	    {%- endfor -%}
+	{%- endcapture -%}
+
+	{%- capture product_form -%}
+		<form method="post" action="{{ routes.cart_add_url }}" accept-charset="UTF-8" class="product-form js-form-add-to-cart" enctype="multipart/form-data" novalidate="novalidate">
+			<input type="hidden" name="form_type" value="product"/>
+			<input type="hidden" name="utf8" value="✓"/>
+			<input type="hidden" name="id" value="{{ selected_variant.id }}">
+			{%- if avaiable -%}
+				<a href="{{ product.url }}" class="btn-add-to-cart" aria-label="{{ 'general.product_card.select_options' | t }}">
+					{%- render 'svg', type: 'icon-right' -%}
+					<span class="text">{{ 'general.product_card.select_options' | t }}</span>
+				</a>
+			{%- endif -%}
+		</form>
+	{%- endcapture -%}
+
+	{%- capture product_price -%}
+		<div class="product-price">
+			{%- if avaiable -%}
+				{%- if compare_at_price > price -%}
+					<div class="price-sale">{{ price | money }}</div>
+					<del class="price-compare">{{ compare_at_price | money }}</del>
+				{%- else -%}
+					<div class="price">{{ price | money }}</div>
+				{%- endif -%}
+			{%- else -%}
+				<div class="sold-out">{{ 'general.product_card.sold_out' | t }}</div>
+			{%- endif -%}
+		</div>
+	{%- endcapture -%}
+
+	<product-card>
+		<section class="product-card balance-row-{{ settings.product_title_limit }} effect-{{ item_effect }} {% if settings.product_image_crop -%} object-fit-cover {%- endif -%}">
+			<header class="product-card_header">
+				<div class="product-card_media position-relative">
+					<a href="{{ product.url }}">
+						{%- render 'image-style-lazy' image: product.images[0], limit: 540, padding_top: image_padding -%}
+					</a>
+					{%- if product_labels != blank -%}
+						<div class="product-card_labels">{{ product_labels }}</div>
+					{%- endif -%}
+				</div>
+			</header>
+			<footer class="product-card_footer">
+				<div class="product-card_price_action">
+					{{ product_price }}
+				</div>
+				<div class="product-card_actions d-none">
+					{{ product_form }}
+				</div>
+			</footer>
+		</section>
+	</product-card>
+{%- endif -%}

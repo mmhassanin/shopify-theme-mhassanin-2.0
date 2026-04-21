@@ -1,0 +1,429 @@
+{{ 'section-single-banner-products.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign bg_image = section.settings.bg_image
+  assign section_height = section.settings.section_height
+  assign section_id = '#section-' | append: section.id
+  assign slider_id = '#slider-' | append: section.id
+  assign controls_id = '#controls-' | append: section.id
+  assign items_resp = section.settings.items_resp
+
+  assign collection = collections[section.settings.collection]
+  if section.settings.collection != blank and section.settings.limit > collection.all_products_count
+    assign limit = collection.all_products_count
+  else
+    assign limit = section.settings.limit
+  endif
+
+  if section.settings.items_spacing
+    assign items_spacing_slider = '4px'
+  else
+    assign items_spacing_row = 'no-padding'
+    assign items_spacing_slider = '0'
+  endif
+-%}
+
+{%- if section.settings.section_layout == 'container-fluid' -%}
+  {%- assign bg_class = '' -%}
+  {%- capture bg_wide -%}{%- render 'bg_responsive', image_desk: bg_image, image_mobi: bg_image -%}{%- endcapture -%}
+{%- else -%}
+  {%- assign bg_class = ' .section-wrapper' -%}
+  {%- capture bg_boxed -%}{%- render 'bg_responsive', image_desk: bg_image, image_mobi: bg_image -%}{%- endcapture -%}
+{%- endif -%}
+
+{%- capture content -%}
+  {%- if section.settings.collection == blank or collection.all_products_count < 1 -%}
+    {%- for index in (1..limit) -%}
+      <div class="slider-item">
+        {%- render 'product-item', index0: forloop.index0, product: product -%}
+      </div>
+    {%- endfor -%}
+  {%- else -%}
+    {%- for product in collection.products limit: limit -%}
+      <div class="slider-item">
+        {%- render 'product-item' product: product, collection: collection -%}
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="section-single-banner-products" data-section-id="{{ section.id }}" data-section-type="featured-collection">
+  <div class="section-single-banner-products-inner {{ bg_wide }}" id="section-{{ section.id }}">
+    <div class="{%- if template == 'index' or template contains 'page' -%}container{%- endif -%}">
+      <div class="section-wrapper {{ items_spacing_row }} {{ bg_boxed }}">
+        
+        <div class="section-body">
+          <div class="banners-tabs js-product-tabs-{{ section.id }}">
+
+            <ul class="tab-heading js-nav-controls-{{ section.id }}">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'block-item' -%}
+                  {%- liquid
+                    assign tab_heading = block.settings.tab_heading
+                  -%}
+
+                  {%- if tab_heading != blank -%}
+                    <li class="nav-item{% if forloop.first %} active{% endif %}" data-target="#tab-content-{{ forloop.index }}">{{ tab_heading }}</li>
+                  {%- endif -%}
+
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+
+            <div class="tab-content js-tab-contents-{{ section.id }}">
+              {%- for block in section.blocks -%}
+
+                {%- case block.type -%}
+                  {%- when 'block-item' -%}
+                    {%- capture blockID -%}.tab-item-{{ block.id }}{%- endcapture -%}
+
+                    <div class="tab-item tab-item-{{ block.id }}{% if forloop.first %} active{% endif %}" id="tab-content-{{ forloop.index }}">
+                      <div class="tab-item-content">
+                        <div class="tab-item-content-wrapper">
+                          <div class="textbox">
+                            {%- if block.settings.heading != blank -%}
+                              <span class="image-gallery_title content-text-1">{{ block.settings.heading }}</span>
+                            {%- endif -%}
+                            {%- if block.settings.subtext != blank -%}
+                              <span class="image-gallery_subtext content-text-2">{{ block.settings.subtext }}</span>
+                            {%- endif -%} 
+                            {%- if block.settings.button_label != blank -%}
+                              <a href="{{ block.settings.link | default: 'javascript:void(0)' }}" class="btn btn-1 btn-slideshow content-button">
+                                {{ block.settings.button_label }}
+                              </a>
+                            {%- endif -%}
+                          </div>
+                        </div>
+
+                        <div class="image-layer">
+                          <a href="{{ block.settings.link | default: 'javascript:void(0)' }}">{%- render 'image-style', image: block.settings.image_layout, limit: 768 -%}</a>
+                        </div>
+                      </div>
+
+                      {%- for block in section.blocks offset: forloop.index -%}
+                        {%- if block.type == 'block-item' -%}{%- break -%}{%- endif -%}
+                          {%- assign  blockType = block.type | remove: 'style_' -%}
+                          {%- capture block_css -%}
+                            {%- render 'snippet-slideshow-style', type: blockType, sectionID: section_id, block: block, blockID: blockID -%}
+                          {%- endcapture -%}
+                          {%- unless block_css == blank -%}
+                            <style{{ block.shopify_attributes }}>{{ block_css }}</style>
+                          {%- endunless -%}
+                      {%- endfor -%}
+                    </div>
+
+                  {%- else -%}
+                {%- endcase -%}
+
+              {%- endfor -%}
+          </div>
+
+          <div class="block-slider-component">
+            <slider-component>
+              <div class="slider-container js-slider-container">
+                <div class="slider-wrapper">
+                  <div class="slider-list" id="slider-{{ section.id }}">
+                    {{ content }}
+                  </div>
+
+                  {%- render 'set-tns-config'
+                    slider_id: slider_id,
+                    classID: section_id,
+                    loop: section.settings.loop,
+                    dots: section.settings.dots,
+                    controls: section.settings.controls,
+                    controls_id: controls_id,
+                    customControls: true,
+                    autoplay: section.settings.autoplay,
+                    autoplay_timeout: section.settings.autoplay_timeout,
+                    padding: items_spacing_slider,
+                    items_resp: items_resp,
+                    total_item: limit
+                  -%}
+                </div>
+              </div>
+            </slider-component>
+          </div>
+        </div>
+
+        <script type="text/javascript">
+          let tabControls = document.querySelector(".js-nav-controls-{{ section.id }}");
+          let tabContents = document.querySelector(".js-tab-contents-{{ section.id }}");
+
+          [...tabControls.children].forEach((item) => {
+            let target = tabContents.querySelector(item.dataset.target);
+
+            item.addEvent("click", () => {
+              if (item.hasClass("active")) {
+                return;
+              }
+              tabControls.children.removeClass("active");
+              tabContents.children.removeClass("active");
+              item.addClass("active");
+              target.addClass("active");
+            });
+          });
+        </script>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.sectionRegister){
+    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
+  }else{
+    window.theme.sectionRegister = ["featured-collection"];
+  }
+</script>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.customElementsList){
+    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
+  }else{
+    window.theme.customElementsList = ["slider-component"];
+  }
+</script>
+
+{%- capture section_css -%}
+  {{ section_id }} {{ bg_class }} {position: relative;}
+  {{ section_id }} .position-absolute{left: 50%;top: 50%;transform: translate(-50%, -50%);}
+  {%- render 'css-responsive', preClassID: section_id, classID: bg_class, value_1: section_height, property_1: 'height' -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, classID: bg_class, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.single-banner-with-product.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_height",
+      "label": "t:sections.common.section_height"
+    },
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "t:sections.common.background_image"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.block_product"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.common.collection"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "6,5,3,2"
+    },
+    {
+      "type": "checkbox",
+      "id": "items_spacing",
+      "label": "t:sections.common.items_spacing",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.common.limit",
+      "step": 1,
+      "min": 1,
+      "max": 20,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.slider_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.common.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "t:sections.common.controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "dots",
+      "label": "t:sections.common.dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.common.autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_timeout",
+      "label": "t:sections.common.autoplay_timeout",
+      "step": 0.1,
+      "min": 2,
+      "max": 10,
+      "unit": "s",
+      "default": 4
+    }
+  ],
+  "blocks":[
+    {
+      "type": "block-item",
+      "name": "t:sections.common.block_item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_heading",
+          "label": "t:sections.common.tab_heading",
+          "default": "Tab title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_layout",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "header",
+          "content": "Textbox layout"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "t:sections.common.heading",
+          "default": "END SEASON <br>SMARTPHONES"
+        },
+        {
+          "type": "textarea",
+          "id": "subtext",
+          "label": "t:sections.common.subtext",
+          "default": "LAST CALL FOR UP TO  <label>$</label><span>250</span> OFF!"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:sections.common.button_label",
+           "default": "Start Buying"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    },
+    {
+      "type": "style_paragraph",
+      "name": "[+] Paragraph",
+      "settings": [
+        {
+           "type": "text",
+           "id": "title",
+           "label": "t:sections.common.block_label"
+        },
+        {
+           "type":"paragraph",
+           "content":"[What mean of comma?](https:\/\/support.arenacommerce.com\/a\/solutions\/articles\/6000243911)"
+        },
+        {
+           "type": "header",
+           "content": "Heading"
+        },
+        {
+           "type": "text",
+           "id": "text_fs_1",
+           "label": "Font size",
+           "info": "E.g: 24px"
+        },
+        {
+           "type": "color",
+           "id": "text_cl_1",
+           "label": "Color"
+        },
+        {
+           "type": "header",
+           "content": "Subtext"
+        },
+        {
+           "type": "text",
+           "id": "text_fs_2",
+           "label": "Font size",
+           "info": "E.g: 24px"
+        },
+        {
+           "type": "color",
+           "id": "text_cl_2",
+           "label": "Color"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.single-banner-with-product.name",
+      "blocks": [
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

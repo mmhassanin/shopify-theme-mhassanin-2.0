@@ -1,0 +1,43 @@
+{%- case type -%}
+  {%- when 'splitContent' -%}
+    {% comment %}
+      Params:
+      + key: split content by keyword
+      + firstSection: just split content in the first section
+      + output: which content will be render after split
+    {% endcomment %}
+
+    {%- capture splitstart -%}<!--split:{{key}}[-->{%- endcapture -%}
+    {%- capture splitend -%}<!--split:{{key}}]-->{%- endcapture -%}
+
+    {%- if content contains splitstart -%}
+      {%- assign splitcontent = content | split: splitstart -%}
+
+      {%- for c in splitcontent -%}
+        {%- if c contains splitend -%}
+          {%- assign csplit = c | split: splitend -%}
+          {%- capture maincontent -%}{{ maincontent | append: csplit.last }}{%- endcapture -%}
+
+          {%- if existed != true -%}
+            {%- capture preloadcontent -%}{{ preloadcontent | append: csplit.first }}{%- endcapture -%}
+          {%- endif -%}
+
+          {%- if firstSection and csplit.last contains '</section>' -%}
+            {%- assign existed = true -%}
+          {%- endif -%}
+
+        {%- else -%}
+          {%- capture maincontent -%}{{ maincontent | append: c }}{%- endcapture -%}
+
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- case output -%}
+      {%- when 'value' -%}
+        {{ preloadcontent }}
+      {%- else -%}
+        {{ maincontent | default: content }}
+    {%- endcase -%}
+
+{%- endcase -%}

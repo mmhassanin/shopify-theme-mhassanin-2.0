@@ -1,0 +1,55 @@
+{%- liquid
+	if section_name != 'fc2'
+		assign default_color = ''
+	else
+		assign default_color = '#DDDDDD'
+	endif
+-%}
+{%- case type -%}
+	{%- when 'section-style' -%}
+		{% comment %}
+		---Params---
+		config: section.settings or block.settings
+		preClassID:  selector css
+		classID: selector css
+		nextClassID:  selector css
+		{% endcomment %}
+		{%- liquid
+			assign margin = config.margin
+			assign padding = config.padding
+			assign bg_color = config.bg_color | default: default_color
+			assign bg_image = config.bg_image
+			assign bg_image_mobi = config.bg_image_mobi
+			assign bg_image_desk = config.bg_image_desk
+
+			if bg_image != blank
+				assign bg_size = config.bg_size | default: 'cover'
+				assign bg_repeat = config.bg_repeat | default: 'no-repeat'
+				assign bg_position = config.bg_position | default: 'center center'
+			endif
+
+			if bg_image_desk != blank
+				assign bg_size_desk = config.bg_size_desk | default: 'cover'
+				assign bg_repeat_desk = config.bg_repeat_desk | default: 'no-repeat'
+				assign bg_position_desk = config.bg_position_desk | default: 'center center'
+			endif
+
+			if bg_image_mobi != blank
+				assign bg_size_mobi = config.bg_size_mobi | default: 'cover'
+				assign bg_repeat_mobi = config.bg_repeat_mobi | default: 'no-repeat'
+				assign bg_position_mobi = config.bg_position_mobi | default: 'center center'
+			endif
+		-%}
+
+		{%- render 'css-responsive', preClassID: preClassID, classID: classID, nextClassID: nextClassID,
+			value_1: margin, property_1: 'margin'
+			value_2: padding, property_2: 'padding',
+			value_3: bg_color, property_3: 'background-color',
+			-%}
+
+		{%- if bg_image != blank -%}{{ preClassID }}  {{ classID }}  {{ nextClassID }} { background-repeat:{{ bg_repeat }};background-position:{{ bg_position }};background-size:{{ bg_size }}; }{%- endif -%}
+
+		{%- if bg_image_mobi != blank -%}{{ preClassID }}  {{ classID }}  {{ nextClassID }} { background-repeat:{{ bg_repeat_mobi }};background-position:{{ bg_position_mobi }};background-size:{{ bg_size_mobi }}; }{%- endif -%}
+
+		{%- if bg_image_desk != blank -%}@media screen and (min-width: 768px){ {{ preClassID }}  {{ classID }}  {{ nextClassID }} { background-repeat:{{ bg_repeat_desk }};background-position:{{ bg_position_desk }};background-size:{{ bg_size_desk }}; }}{%- endif -%}
+{%- endcase -%}

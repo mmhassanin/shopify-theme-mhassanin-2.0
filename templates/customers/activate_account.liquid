@@ -1,0 +1,26 @@
+{{ 'pages.css' | asset_url | stylesheet_tag }}
+
+<div class="page-account d-grid grid-1 grid-md-2">
+  <div>
+    <h2 class="form-title">{{- 'customer.active_account.title' | t -}}</h2>
+    <p class="note">{{- 'customer.active_account.subtext' | t -}}</p>
+
+    {%- form 'activate_customer_password', class: 'account-form' -%}
+      {{ form.errors | default_errors }}
+
+      <div id="password" class="form-control">
+        <label class="large" for="password">{{- 'customer.active_account.password' | t -}}</label>
+        <input type="password" value="" name="customer[password]" id="customer_password"/>
+      </div>
+      <div id="password_confirm" class="form-control">
+        <label class="large" for="password_confirmation">{{- 'customer.active_account.password_confirm' | t -}}</label>
+        <input type="password" value="" name="customer[password_confirmation]" id="customer_password_confirmation"/>
+      </div>
+      <div class="action_bottom">
+        <input class="btn btn-1" type="submit" value="{{- 'customer.active_account.activate' | t -}}"/>
+        <span class="note">{{- 'customer.active_account.or' | t -}}</span>
+        <input type="submit" class="btn btn-2 cancel" name="decline" id="customer_decline" value="{{- 'customer.active_account.decline_invitation' | t -}}"/>
+      </div>
+    {%- endform -%}
+  </div>
+</div>

@@ -1,0 +1,232 @@
+{% comment %}
+  @params {
+    slideBy         : number or 'page'
+    items_resp      : array
+    padding         : array
+    controls        : boolean
+    autoplay        : boolean
+    autoplay_timeout: number
+    loop            : boolean
+    dots            : boolean
+    slider_id       : string (selector css)
+    controls_id     : string (selector css)
+    navContainer    : string (selector css)
+    navAsThumbnails : boolean
+    total_item      : number
+    customControls  : boolean
+    customDots      : boolean
+    responsive      : boolean
+  }
+{% endcomment %}
+{%- liquid
+  assign items_resp = items_resp | split: ','
+  assign padding = padding | remove: 'px' | split: ','
+  if total_item < 2
+    assign dots = false
+    assign controls = false
+  endif
+
+  if mouse_drag != false
+    assign mouse_drag = true
+  endif
+-%}
+{%- if responsive != false -%}
+  {%- assign responsive = true -%}
+{%- endif -%}
+{%- case items_resp.size -%}
+  {%- when 1 -%}
+   {%- liquid
+      assign items_xl    = items_resp[0] | abs
+      assign items_lg    = items_resp[0] | abs
+      assign items_md    = items_resp[0] | abs
+      assign items_sm    = items_resp[0] | abs
+      assign items_ex_sm = items_resp[0] | abs
+      assign items       = items_resp[0] | abs
+   -%}
+  {%- when 2 -%}
+    {% liquid
+      assign items_xl    = items_resp[0] | abs
+      assign items_lg    = items_resp[0] | abs
+      assign items_md    = items_resp[0] | abs
+      assign items_sm    = items_resp[1] | abs
+      assign items_ex_sm = items_resp[1] | abs
+      assign items       = items_resp[1] | abs
+    %}
+  {%- when 3 -%}
+    {% liquid
+      assign items_xl    = items_resp[0] | abs
+      assign items_lg    = items_resp[0] | abs
+      assign items_md    = items_resp[1] | abs
+      assign items_sm    = items_resp[2] | abs
+      assign items_ex_sm = items_resp[2] | abs
+      assign items       = items_resp[2] | abs
+    %}
+  {%- when 4 -%}
+    {% liquid
+      assign items_xl    = items_resp[0] | abs
+      assign items_lg    = items_resp[1] | abs
+      assign items_md    = items_resp[2] | abs
+      assign items_sm    = items_resp[3] | abs
+      assign items_ex_sm = items_resp[3] | abs
+      assign items       = items_resp[3] | abs
+    %}
+  {%- when 5 -%}
+    {% liquid
+      assign items_xl    = items_resp[0] | abs
+      assign items_lg    = items_resp[1] | abs
+      assign items_md    = items_resp[2] | abs
+      assign items_sm    = items_resp[3] | abs
+      assign items_ex_sm = items_resp[4] | abs
+      assign items       = items_resp[4] | abs
+    %}
+  {%- else -%}
+    {% liquid
+      assign items_xl    = items_resp[0] | abs
+      assign items_lg    = items_resp[1] | abs
+      assign items_md    = items_resp[2] | abs
+      assign items_sm    = items_resp[3] | abs
+      assign items_ex_sm = items_resp[4] | abs
+      assign items       = items_resp[5] | abs
+    %}
+{%- endcase -%}
+{%- case padding.size -%}
+  {%- when 1 -%}
+    {% liquid
+      assign spacing_xl    = padding[0] | abs
+      assign spacing_lg    = padding[0] | abs
+      assign spacing_md    = padding[0] | abs
+      assign spacing_sm    = padding[0] | abs
+      assign spacing_ex_sm = padding[0] | abs
+      assign spacing       = padding[0] | abs
+    %}
+  {%- when 2 -%}
+    {% liquid
+      assign spacing_xl    = padding[0] | abs
+      assign spacing_lg    = padding[0] | abs
+      assign spacing_md    = padding[0] | abs
+      assign spacing_sm    = padding[1] | abs
+      assign spacing_ex_sm = padding[1] | abs
+      assign spacing       = padding[1] | abs
+    %}
+  {%- when 3 -%}
+    {% liquid
+      assign spacing_xl    = padding[0] | abs
+      assign spacing_lg    = padding[0] | abs
+      assign spacing_md    = padding[1] | abs
+      assign spacing_sm    = padding[2] | abs
+      assign spacing_ex_sm = padding[2] | abs
+      assign spacing       = padding[2] | abs
+    %}
+  {%- when 4 -%}
+    {% liquid
+      assign spacing_xl    = padding[0] | abs
+      assign spacing_lg    = padding[1] | abs
+      assign spacing_md    = padding[2] | abs
+      assign spacing_sm    = padding[3] | abs
+      assign spacing_ex_sm = padding[3] | abs
+      assign spacing       = padding[3] | abs
+    %}
+  {%- when 5 -%}
+    {% liquid
+      assign spacing_xl    = padding[0] | abs
+      assign spacing_lg    = padding[1] | abs
+      assign spacing_md    = padding[2] | abs
+      assign spacing_sm    = padding[3] | abs
+      assign spacing_ex_sm = padding[4] | abs
+      assign spacing       = padding[4] | abs
+    %}
+  {%- else -%}
+    {% liquid
+      assign spacing_xl    = padding[0] | abs
+      assign spacing_lg    = padding[1] | abs
+      assign spacing_md    = padding[2] | abs
+      assign spacing_sm    = padding[3] | abs
+      assign spacing_ex_sm = padding[4] | abs
+      assign spacing       = padding[5] | abs
+    %}
+{%- endcase -%}
+
+{%- if total_item > 1 -%}
+  {%- if dots and customDots and navAsThumbnails != true -%}
+    <div class="slider-dots js-slider-dots" id="{{ dots_id | remove: '#' }}">
+      {%- for i in (1..total_item) -%}
+        <a href="#" onclick="return false">
+          <span class="circle"></span>
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if controls -%}
+    <div class="slider-controls js-slider-controls" id="{{ controls_id | remove: '#' }}">
+      <button type="button" class="slider-prev-button js-prev-button" aria-label="{{ 'general.pagination.next' | t }}"></button>
+      <button type="button" class="slider-next-button js-next-button" aria-label="{{ 'general.pagination.previous' | t }}"></button>
+    </div>
+  {%- else -%}
+  <div class="slider-controls slider-controls-{{ controls }}"></div>
+  {%- endif -%}
+{%- endif -%}
+
+<script type="application/json" data-tns-config>
+  {
+    "container": "{{ slider_id }}",
+    {%- if center -%} "center": true, {%- endif -%}
+    {%- if autoWidth -%} "autoWidth": true, {%- endif -%}
+    {%- unless controls -%} "controls": false, {%- endunless -%}
+    {%- if controls -%} "controlsContainer" : "{{ controls_id }}", {%- endif -%}
+    {%- if dots and customDots -%} "navContainer" : "{{ dots_id }}", {%- endif -%}
+    "autoplay" : {{ autoplay | default: false }},
+    {% if autoplay_timeout != 0 and autoplay_timeout != blank %}"autoplayTimeout": {{ autoplay_timeout | times: 1000 }},{%- endif %}
+    {%- if gutter != blank -%}"gutter" : {{ gutter }},{%- endif %}
+    {%- unless loop -%} "loop": false, {%- endunless -%}
+    {%- unless dots -%} "nav": false, {%- endunless -%}
+    {%- if navAsThumbnails -%} "navAsThumbnails": true, {%- endif -%}
+    "mouseDrag" : {{ mouse_drag }},
+    "swipeAnlge" : 30,
+    "navPosition": "bottom",
+    "autoplayButtonOutput" : false,
+    {%- if responsive -%}
+      "responsive" : {
+        "0": {
+          "items": {{ items }},
+          "gutter":{{ spacing }}
+        },
+        "375": {
+          "items": {{ items_ex_sm }},
+          "gutter":{{ spacing_ex_sm }}
+        },
+        "576": {
+          "items": {{ items_sm }},
+          "gutter":{{ spacing_sm }}
+        },
+        "768": {
+          "items": {{ items_md }},
+          "gutter":{{ spacing_md }}
+        },
+        "992": {
+          "items": {{ items_lg }},
+          "gutter":{{ spacing_lg }}
+        },
+        "1200": {
+          "items": {{ items_xl }},
+          "gutter":{{ spacing_xl }}
+        }
+      },
+    {% endif %}
+    "slideBy": {{ slideBy | default: 1 |  json }}
+  }
+</script>
+{% comment %} {% endcomment %}
+{%- if classID != blank -%}
+  {%- style -%}
+    {{ classID }}{--spacing-between-items: {{spacing}}px;--width-container: {{100.00 | divided_by: items | times: total_item }}%;}
+    {{ classID }} .slider-container:not(.slider-initialized) .slider-wrapper{margin-right: calc(0px - var(--spacing-between-items));}
+    {{ classID }} .slider-container:not(.slider-initialized) {{slider_id}}{width: var(--width-container);}
+    {{ classID }} .slider-container:not(.slider-initialized) {{slider_id}} .slider-item{padding-right: var(--spacing-between-items);width: {{100.00 | divided_by: total_item}}%;}
+    @media screen and (min-width: 375px){ {{ classID }}{--spacing-between-items: {{spacing_ex_sm}}px;--width-container: {{100.00 | divided_by: items_ex_sm | times: total_item }}%;}{%- if total_item <= items_ex_sm -%}{{ classID }} .slider-container:not(.slider-initialized) .js-slider-controls {display: none};{%- endif -%} }
+    @media screen and (min-width: 576px){ {{ classID }}{--spacing-between-items: {{spacing_sm}}px;--width-container: {{100.00 | divided_by: items_sm | times: total_item }}%;}{%- if total_item <= items_sm -%}{{ classID }} .slider-container:not(.slider-initialized) .js-slider-controls {display: none};{%- endif -%} }
+    @media screen and (min-width: 768px){ {{ classID }}{--spacing-between-items: {{spacing_md}}px;--width-container: {{100.00 | divided_by: items_md | times: total_item }}%;}{%- if total_item <= items_md -%}{{ classID }} .slider-container:not(.slider-initialized) .js-slider-controls {display: none};{%- endif -%} }
+    @media screen and (min-width: 992px){ {{ classID }}{--spacing-between-items: {{spacing_lg}}px;--width-container: {{100.00 | divided_by: items_lg | times: total_item }}%;}{%- if total_item <= items_lg -%}{{ classID }} .slider-container:not(.slider-initialized) .js-slider-controls {display: none};{%- endif -%} }
+    @media screen and (min-width: 1200px){ {{ classID }}{--spacing-between-items: {{spacing_xl}}px;--width-container: {{100.00 | divided_by: items_xl | times: total_item }}%;}{%- if total_item <= items_xl -%}{{ classID }} .slider-container:not(.slider-initialized) .js-slider-controls {display: none};{%- endif -%} }
+  {%- endstyle -%}
+{%- endif -%}

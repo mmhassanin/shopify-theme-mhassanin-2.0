@@ -1,0 +1,100 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "default-page",
+      "settings": {}
+    },
+    "1626669443b563f4b7": {
+      "type": "section-logo-list",
+      "blocks": {
+        "1626669443b563f4b7-0": {
+          "type": "block-item",
+          "settings": {
+            "type": "image",
+            "image": "shopify:\/\/shop_images\/logo-1.png",
+            "svg": "",
+            "link": ""
+          }
+        },
+        "1626669443b563f4b7-1": {
+          "type": "block-item",
+          "settings": {
+            "type": "image",
+            "image": "shopify:\/\/shop_images\/logog-2.png",
+            "svg": "",
+            "link": ""
+          }
+        },
+        "1626669443b563f4b7-2": {
+          "type": "block-item",
+          "settings": {
+            "type": "image",
+            "image": "shopify:\/\/shop_images\/logog-3.png",
+            "svg": "",
+            "link": ""
+          }
+        },
+        "1626669443b563f4b7-3": {
+          "type": "block-item",
+          "settings": {
+            "type": "image",
+            "image": "shopify:\/\/shop_images\/logog-4.png",
+            "svg": "",
+            "link": ""
+          }
+        },
+        "1626669443b563f4b7-4": {
+          "type": "block-item",
+          "settings": {
+            "type": "image",
+            "image": "shopify:\/\/shop_images\/logog-2.png",
+            "svg": "",
+            "link": ""
+          }
+        },
+        "1626669443b563f4b7-5": {
+          "type": "block-item",
+          "settings": {
+            "type": "image",
+            "image": "shopify:\/\/shop_images\/logog-4.png",
+            "svg": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "1626669443b563f4b7-0",
+        "1626669443b563f4b7-1",
+        "1626669443b563f4b7-2",
+        "1626669443b563f4b7-3",
+        "1626669443b563f4b7-4",
+        "1626669443b563f4b7-5"
+      ],
+      "settings": {
+        "margin": "",
+        "padding": "25px 0px 25px 0px",
+        "items_resp": "4,4,2.5",
+        "items_spacing": "30px",
+        "bg_color": "#fdb819",
+        "loop": false,
+        "controls": true,
+        "dots": false,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1626669443b563f4b7"
+  ]
+}

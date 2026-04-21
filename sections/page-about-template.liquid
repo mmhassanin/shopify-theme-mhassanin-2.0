@@ -1,0 +1,82 @@
+{%- if section.blocks.size > 0 -%}
+  <div class="section-about-us" id="section-{{ section.id }}"> 
+    <div class="section-wrapper container">
+
+      <div class="section-body">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-12 col-left">
+            {%- for block in section.blocks -%} 
+              {%- if block.type == 'textbox' -%}
+                <div class="text-box-left">
+                  <div class="tbl-item">
+                    {%- if block.settings.heading != blank -%}
+                      <h6>{{ block.settings.heading }}</h6>
+                    {%- endif -%}
+                    {%- if block.settings.subtext != blank -%}
+                      <p>{{ block.settings.subtext }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          
+          <div class="col-lg-4 col-md-5 col-sm-12 col-right">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'policy' -%}
+                <div class="text-box-right">
+                  <div class="item">
+                    <span class="icon">{%- render 'svg', type: 'plus' -%}</span>
+                    {%- if block.settings.text != blank -%}
+                      <h5>{{ block.settings.text }}</h5>
+                    {%- endif -%} 
+                  </div>   
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+  </div>
+{%- endif -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.about-us.name",
+  "tag": "section",
+  "settings": [
+  ],
+  "blocks": [
+    {
+      "type": "textbox",
+      "name": "t:sections.common.textbox",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading"
+        },
+        {
+          "type": "textarea",
+          "id": "subtext",
+          "label": "t:sections.common.subtext"
+        }
+      ]
+    },
+    {
+      "type": "policy",
+      "name": "Policy",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.common.text"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

@@ -1,0 +1,97 @@
+{%- case type -%}
+  {%- when 'render-html' -%}
+    {% comment %}
+      ----Params----
+      config: section.settings or block.settings
+    {% endcomment %}
+    {%- liquid
+      assign heading = config.heading
+      assign subheading = config.subheading
+    -%}
+    {%- if heading != blank -%}
+      <div class="section-heading{% unless settings.section_heading_border_bottom %} remove-border{% endunless %}">
+        <h2 class="heading">{{ heading }}</h2>
+        {%- if style == 'countdown' and position == '1' and expire_time != blank -%}
+          {%- assign due_date = expire_time | split: '/' -%}
+
+          <div class="block-countdown">
+            <div class="block-countdown-inner">
+                {%- unless section.settings.text_1 == blank -%}
+                  <span class="countdown-title">{{ section.settings.text_1 }}</span>
+                {%- endunless -%}
+
+                <div class="product-countdown" data-dueDate-year="{{ due_date[2] }}" data-dueDate-month="{{ due_date[0] | plus:0 }}" data-dueDate-day="{{ due_date[1] | plus:0 }}">
+                  <div class="countdown-html countdown_{{ section.id }}"></div>
+                </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>  
+    {%- endif -%}
+    {%- if subheading != blank -%}
+      <div class="subheading">{{ subheading }}</div>
+    {%- endif -%}
+    
+  {%- when 'render-css' -%}
+    {% comment %}
+      ----Params----
+      config: section.settings or block.settings
+      classID: css selector unique assigned to section or block
+    {% endcomment %}
+
+    {%- liquid
+      assign margin = config.section_heading_margin
+      assign alignment = config.section_heading_container_align
+      assign heading_color = config.section_heading_color
+      assign heading_font_size = config.section_heading_font_size
+      assign heading_font_weight = config.section_heading_font_weight
+    -%}
+    {%- render 'css-responsive', classID: classID, nextClassID: ' .section-heading',
+      value_1: margin,    property_1: 'margin'
+      value_2: alignment, property_2: 'text-align'
+      -%}
+    {%- render 'css-responsive', classID: classID, nextClassID: ' .heading',
+      value_1: heading_color,     property_1: 'color'
+      value_2: heading_font_size, property_2: 'font-size'
+      value_3: heading_font_weight, property_3: 'font-weight'
+      -%}
+  
+  {%- when 'render-sub-css' -%}
+    {% comment %}
+      ----Params----
+      config: section.settings or block.settings
+      classID: css selector unique assigned to section or block
+    {% endcomment %}
+
+    {%- liquid
+      assign margin = config.section_heading_margin
+      assign alignment = config.section_heading_container_align
+      assign heading_color = config.section_heading_color
+      assign heading_font_size = config.section_heading_font_size
+      assign heading_font_weight = config.section_heading_font_weight
+    -%}
+    {%- render 'css-responsive', classID: classID, nextClassID: ' .section-header',
+      value_1: margin,    property_1: 'margin'
+      value_2: alignment, property_2: 'text-align'
+      -%}
+    {%- render 'css-responsive', classID: classID, nextClassID: ' .heading',
+      value_1: heading_color,     property_1: 'color'
+      value_2: heading_font_size, property_2: 'font-size'
+      value_3: heading_font_weight, property_3: 'font-weight'
+      -%}
+      
+  {%- when 'render-search-css' -%}
+    {%- liquid
+      assign heading_color = config.search_section_heading_color
+      assign heading_font_size = config.search_section_heading_font_size
+      assign subtext_font_size = config.search_section_subtext_font_size
+    -%}
+    {%- render 'css-responsive', classID: classID, nextClassID: ' .search-box-heading',
+      value_1: heading_color,     property_1: 'color'
+      value_2: heading_font_size, property_2: 'font-size'
+      -%}
+    {%- render 'css-responsive', classID: classID, nextClassID: ' .search-box-subtext',
+      value_1: heading_color,     property_1: 'color'
+      value_2: subtext_font_size, property_2: 'font-size'
+      -%}
+{%- endcase -%}

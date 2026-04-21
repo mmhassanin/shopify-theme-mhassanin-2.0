@@ -1,0 +1,403 @@
+{%- capture line_items -%}
+  {%- for line_item in cart.items -%}
+    {%- liquid
+      assign options = line_item.variant.options | join: ' / '
+      assign properties = line_item.properties
+    -%}
+
+    <cart-line-item data-key="{{ line_item.key }}" data-id="{{ line_item.id }}" class="cart-table_line-item line-item js-cart-line-item ">
+      <div class="cart-table_column-5 line-item_remove">
+        <a href="{{ routes.cart_change_url }}?quantity=0&id={{ line_item.id }}" class="btn-remove js-remove-btn">
+          <span class="text">{{ 'sections.dropdown_cart.remove' | t }}</span>
+          {%- render 'svg', type: 'close' -%}
+          {%- render 'svg', type: 'card-loading' -%}
+        </a>
+      </div>
+
+      <div class="cart-table_column-1 line-item_info">
+        <a href="{{ line_item.url }}" class="line-item_image">
+          {%- render 'image-style', image: line_item.image, limit: 375, alt: line_item.title -%}
+        </a>
+        <div class="line-item_wrapper">
+          <div class="line-item_title"><a href="{{ line_item.url }}">{{ line_item.product.title }}</a></div>
+          <div class="line-item_options">
+            {%- unless line_item.variant.title contains 'Default' -%}
+              {%- for option in line_item.product.options -%}
+                <span class="item-variant">{{ option }}: <span class="variant-title">{{ line_item.variant.options[forloop.index0] }}</span></span>
+              {%- endfor -%}
+            {%- endunless -%}
+          </div>
+          {%- if properties.size > 0 -%}
+            <div class="line-items_properties">
+              <ul>
+                {%- for property in properties -%}
+                  <li>{{ property.first }}: {{ property.last }}</li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <div class="line-item_price-mobile">
+            {%- if line_item.original_price > line_item.final_price -%}
+              <span class="price-sale">{{ line_item.final_price | money }}</span>
+              <del class="price-compare">{{ line_item.original_price | money }}</del>
+            {%- elsif line_item.variant.compare_at_price > line_item.variant.price -%}
+              <span class="price-sale">{{ line_item.final_price | money }}</span>
+              <del class="price-compare">{{ line_item.variant.compare_at_price | money }}</del>
+            {%- else -%}
+              <span class="price">{{ line_item.final_price | money }}</span>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-table_column-2 line-item_price">
+        {%- if line_item.original_price > line_item.final_price -%}
+          <span class="price-sale">{{ line_item.final_price | money }}</span>
+          <del class="price-compare">{{ line_item.original_price | money }}</del>
+        {%- elsif line_item.variant.compare_at_price > line_item.variant.price -%}
+          <span class="price-sale">{{ line_item.final_price | money }}</span>
+          <del class="price-compare">{{ line_item.variant.compare_at_price | money }}</del>
+        {%- else -%}
+          <span class="price">{{ line_item.final_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="cart-table_column-3 line-item_quantity">
+        {%- if line_item.variant.available -%}
+          {%- if line_item.variant.inventory_management -%}
+            {%- if line_item.variant.inventory_policy == 'continue' -%}
+              {%- assign qty_max = 1000 -%}
+            {%- else -%}
+              {%- assign qty_max = line_item.variant.inventory_quantity -%}
+            {%- endif -%}
+          {%- else -%}
+            {%- assign qty_max = 1000 -%}
+          {%- endif -%}
+        {%- endif -%}
+        
+        <div class="input-group">
+          <quantity-input>
+            <input type="number" name="quantity" readonly min="1" max="{{ qty_max }}" value="{{ line_item.quantity }}" pattern="[0-9]+" inputmode="numeric" name="updates[]">
+            <div class="qty-wrapper">
+              <quantity-input-plus class="cursor-pointer">{%- render 'svg', type: 'plus' -%}</quantity-input-plus>
+              <quantity-input-minus class="cursor-pointer">{%- render 'svg', type: 'minus' -%}</quantity-input-minus>
+            </div>
+          </quantity-input>
+        </div>
+      </div>
+
+      <div class="cart-table_column-4 line-item_total-price js-total-price">
+        {{ line_item.final_line_price | money }}
+      </div>
+    </cart-line-item>
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- capture line_items_page -%}
+  {%- for line_item in cart.items -%}
+    {%- liquid
+      assign options = line_item.variant.options | join: ' / '
+      assign properties = line_item.properties
+    -%}
+
+    <cart-line-item data-key="{{ line_item.key }}" data-id="{{ line_item.id }}" class="cart-table_line-item line-item js-cart-line-item ">
+      <div class="cart-table_column-5 line-item_remove">
+        <a href="{{ routes.cart_change_url }}?quantity=0&id={{ line_item.id }}" class="btn-remove js-remove-btn">
+          <span class="text">{{ 'sections.dropdown_cart.remove' | t }}</span>
+          {%- render 'svg', type: 'close' -%}
+          {%- render 'svg', type: 'card-loading' -%}
+        </a>
+      </div>
+
+      <div class="cart-table_column-1 line-item_info">
+        <a href="{{ line_item.url }}" class="line-item_image">
+          {%- render 'image-style', image: line_item.image, limit: 375, alt: line_item.title -%}
+        </a>
+
+        <div class="line-item_wrapper">
+          <div class="line-item_title"><a href="{{ line_item.url }}">{{ line_item.product.title }}</a></div>
+          <div class="line-item_options">
+            {%- unless line_item.variant.title contains 'Default' -%}
+              {%- for option in line_item.product.options -%}
+                <span class="item-variant">{{ option }}: <span class="variant-title">{{ line_item.variant.options[forloop.index0] }}</span></span>
+              {%- endfor -%}
+            {%- endunless -%}
+          </div>
+          {%- if properties.size > 0 -%}
+            <div class="line-items_properties">
+              <ul>
+                {%- for property in properties -%}
+                  <li>{{ property.first }}: {{ property.last }}</li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <div class="line-item_price-mobile">
+            {%- if line_item.original_price > line_item.final_price -%}
+              <span class="price-sale">{{ line_item.final_price | money }}</span>
+              <del class="price-compare">{{ line_item.original_price | money }}</del>
+            {%- elsif line_item.variant.compare_at_price > line_item.variant.price -%}
+              <span class="price-sale">{{ line_item.final_price | money }}</span>
+              <del class="price-compare">{{ line_item.variant.compare_at_price | money }}</del>
+            {%- else -%}
+              <span class="price">{{ line_item.final_price | money }}</span>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-table_column-2 line-item_price">
+        {%- if line_item.original_price > line_item.final_price -%}
+          <span class="price-sale">{{ line_item.final_price | money }}</span>
+          <del class="price-compare">{{ line_item.original_price | money }}</del>
+        {%- elsif line_item.variant.compare_at_price > line_item.variant.price -%}
+          <span class="price-sale">{{ line_item.final_price | money }}</span>
+          <del class="price-compare">{{ line_item.variant.compare_at_price | money }}</del>
+        {%- else -%}
+          <span class="price">{{ line_item.final_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="cart-table_column-3 line-item_quantity">
+        {%- if line_item.variant.available -%}
+          {%- if line_item.variant.inventory_management -%}
+            {%- if line_item.variant.inventory_policy == 'continue' -%}
+              {%- assign qty_max = 1000 -%}
+            {%- else -%}
+              {%- assign qty_max = line_item.variant.inventory_quantity -%}
+            {%- endif -%}
+          {%- else -%}
+            {%- assign qty_max = 1000 -%}
+          {%- endif -%}
+        {%- endif -%}
+
+        <div class="input-group">
+          <quantity-input>
+            <input type="number" name="quantity" readonly min="1" max="{{ qty_max }}" value="{{ line_item.quantity }}" pattern="[0-9]+" inputmode="numeric" name="updates[]">
+            <div class="qty-wrapper">
+              <quantity-input-plus class="cursor-pointer">{%- render 'svg', type: 'plus' -%}</quantity-input-plus>
+              <quantity-input-minus class="cursor-pointer">{%- render 'svg', type: 'minus' -%}</quantity-input-minus>
+            </div>
+          </quantity-input>
+        </div>
+      </div>
+
+      <div class="cart-table_column-4 line-item_total-price js-total-price d-none">
+        {{ line_item.final_line_price | money }}
+      </div>
+
+      <div class="cart-table_column-4 cart-table_page__column-4 line-item_total-price">
+        {{ line_item.final_line_price | money }}
+      </div>
+    </cart-line-item>
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if template.name == 'cart' -%}
+  <div class="section-cart-template" id="section-{{ section.id }}">
+    <div class="section-header text-center">
+      <h1 class="page-title">{{ 'pages.cart.page_title' | t }}</h1>
+    </div>
+
+    {%- if settings.cart_type == 'page' -%}
+      <div class="section-body">
+        <div class="cart-wrapper" data-status="{{ cart.item_count }}" data-section-id="{{ section.id }}" data-section-type="cart-template">
+          <div class="cart-form">
+            <form action="{{ routes.cart_url }}" method="post" id="cart-form">
+              <textarea name="note" maxlength="1200" value="{{ cart.note }}" class="d-none"></textarea>
+
+              <div class="cart-table">
+                <div class="cart-table_head">
+                  <div class="cart-table_column-5 cart-table_head-remove"></div>
+                  <div class="cart-table_column-1 cart-table_head-product">{{ 'pages.cart.product' | t }}</div>
+                  <div class="cart-table_column-2 cart-table_head-price">{{ 'pages.cart.price' | t }}</div>
+                  <div class="cart-table_column-3 cart-table_head-quantity">{{ 'pages.cart.quantity' | t }}</div>
+                  <div class="cart-table_column-4 cart-table_head-total">{{ 'pages.cart.total' | t }}</div>
+                </div>
+                <div class="cart-table_body" id="cart-line-items">
+                  {{ line_items_page }}
+                </div>
+              </div>
+
+              <input type="submit" name="update" class="d-none update-cart-action" value="{{ 'pages.cart.update_cart' | t }}">
+              <button class="d-none" name="checkout" type="submit"></button>
+              
+              <div class="cart-btn-wrapper">
+                <a href="{{ routes.all_products_collection_url }}" class="btn btn-2">{{ 'pages.cart.continue_shopping' | t }}</a>
+                <button class="btn btn-2 btn-update-cart btn-continue-action">
+                  <span>{{ 'pages.cart.update_cart' | t }}</span>
+                </button>
+                <a class="btn btn-2 btn-clear" href="{{ routes.cart_clear_url }}">{{ 'pages.cart.clear_cart' | t }}</a>
+              </div>
+            </form>
+
+            <div class="cart-form_wrapper cart-form_bottom">
+              <div class="cart-right">
+                <div class="cart-form_group note-and-shipping">
+                  {%- if section.settings.show_estimated_shipping -%}
+                    <div class="cart-shipping-calculator">
+                      {%- render 'shipping-calculator', section: section -%}
+                    </div>
+                  {%- endif -%}
+                  {%- if section.settings.show_order_notes -%}
+                    <div class="cart-note" id="cart-note">
+                      <div class="cart-note_title d-flex justify-content-between align-items-center">
+                        <span>{{ 'pages.cart.add_note' | t }}</span>
+                      </div>
+                      <textarea name="note" spellcheck="false" value="{{ cart.note }}" maxlength="1200"></textarea>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+
+              <div class="cart-left">
+                <div class="cart-summary">
+                  <div class="cart-summary_wrapper">
+                    <div class="cart-summary_footer">
+                      <div class="cart-summary_total">
+                        <div class="cart-summary_label total">{{ 'pages.cart.subtotal' | t }}</div>
+                        <div class="cart-summary_price js-cart-total-price d-none">{{ cart.total_price | money }}</div>
+                        <div class="cart-summary_price">{{ cart.total_price | money }}</div>
+                        <div class="cart-summary_price js-cart-subtotal-price d-none">{{ cart.original_total_price | money }}</div>
+                      </div>
+                      <button class="btn btn-1 btn-checkout" id="checkout-submit-button">
+                        <span>{{ 'pages.cart.proceed_checkout' | t }}</span>
+                        {%- render 'svg', type: 'is-loading' -%}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-empty">
+            <div class="cart-empty text-center">
+              <p>{{ 'pages.cart.empty' | t }}</p>
+              <a href="{{ routes.all_products_collection_url }}" class="btn btn-2">{{ 'pages.cart.continue_shopping' | t }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        let updateCart = document.querySelector('.btn-update-cart');
+
+        updateCart.addEventListener("click", (e) => { 
+          document.querySelector('.update-cart-action').click();
+        });
+      </script>
+
+    {%- else -%}
+      <div class="section-body">
+        <div class="cart-wrapper" data-status="{{ cart.item_count }}" data-section-id="{{ section.id }}" data-section-type="cart-template">
+          <div class="cart-form">
+            <form action="{{ routes.cart_url }}" method="post" id="cart-form">
+              <textarea name="note" maxlength="1200" value="{{ cart.note }}" class="d-none"></textarea>
+
+              <div class="cart-table">
+                <div class="cart-table_head">
+                  <div class="cart-table_column-5 cart-table_head-remove"></div>
+                  <div class="cart-table_column-1 cart-table_head-product">{{ 'pages.cart.product' | t }}</div>
+                  <div class="cart-table_column-2 cart-table_head-price">{{ 'pages.cart.price' | t }}</div>
+                  <div class="cart-table_column-3 cart-table_head-quantity">{{ 'pages.cart.quantity' | t }}</div>
+                  <div class="cart-table_column-4 cart-table_head-total">{{ 'pages.cart.total' | t }}</div>
+                </div>
+                <div class="cart-table_body" id="cart-line-items">
+                  {{ line_items }}
+                </div>
+              </div>
+
+              <button class="d-none" name="checkout" type="submit"></button>
+              <div class="cart-btn-wrapper">
+                <a href="{{ routes.all_products_collection_url }}" class="btn btn-2">{{ 'pages.cart.continue_shopping' | t }}</a>
+                <a class="btn btn-1 btn-clear" href="{{ routes.cart_clear_url }}">{{ 'pages.cart.clear_cart' | t }}</a>
+              </div>
+            </form>
+
+            <div class="cart-form_wrapper cart-form_bottom">
+              <div class="cart-right">
+                <div class="cart-form_group note-and-shipping">
+                  {%- if section.settings.show_estimated_shipping -%}
+                    <div class="cart-shipping-calculator">
+                      {%- render 'shipping-calculator', section: section -%}
+                    </div>
+                  {%- endif -%}
+                  {%- if section.settings.show_order_notes -%}
+                    <div class="cart-note" id="cart-note">
+                      <div class="cart-note_title d-flex justify-content-between align-items-center">
+                        <span>{{ 'pages.cart.add_note' | t }}</span>
+                      </div>
+                      <textarea name="note" spellcheck="false" value="{{ cart.note }}" maxlength="1200"></textarea>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+              
+              <div class="cart-left">
+                <div class="cart-summary">
+                  <div class="cart-summary_wrapper">
+                    <div class="cart-summary_footer">
+                      <div class="cart-summary_total">
+                        <div class="cart-summary_label total">{{ 'pages.cart.subtotal' | t }}</div>
+                        <div class="cart-summary_price js-cart-total-price">{{ cart.total_price | money }}</div>
+                        <div class="cart-summary_price js-cart-subtotal-price d-none">{{ cart.original_total_price | money }}</div>
+                      </div>
+                      <button class="btn btn-1 btn-checkout" id="checkout-submit-button">
+                        <span>{{ 'pages.cart.proceed_checkout' | t }}</span>
+                        {%- render 'svg', type: 'is-loading' -%}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-empty">
+            <div class="cart-empty text-center">
+              <p>{{ 'pages.cart.empty' | t }}</p>
+              <a href="{{ routes.all_products_collection_url }}" class="btn btn-2">{{ 'pages.cart.continue_shopping' | t }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+{%- else -%}
+  {{ line_items }}
+{%- endif -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.cart-template.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_order_notes",
+      "label": "t:sections.cart-template.settings.show_order_notes.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.cart-template.settings.estimated_shipping.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_estimated_shipping",
+      "label": "t:sections.cart-template.settings.show_estimated_shipping.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "estimate_shipping_default_country",
+      "label": "t:sections.cart-template.settings.estimate_shipping_default_country.label",
+      "info": "t:sections.cart-template.settings.estimate_shipping_default_country.info",
+      "default": "United States"
+    }
+  ]
+}
+{%- endschema -%}

@@ -1,0 +1,25 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div.page-template.page-contact-us",
+  "sections": {
+    "main": {
+      "type": "section-contact-us",
+      "settings": {
+        "heading": "Leave A Message",
+        "subtext": "If you have any questions please send us a message using the adjacent form and we will get back to you as soon as possible",
+        "embed_map": "<iframe src=\"https:\/\/www.google.com\/maps\/embed?pb=!1m18!1m12!1m3!1d2881.1507308614528!2d-79.3341591849897!3d43.76972985290642!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4d25ef313d221%3A0x519a94099352214f!2s243%20Consumers%20Rd%2C%20North%20York%2C%20ON%20M2J%204W8%2C%20Canada!5e0!3m2!1sen!2s!4v1639401509230!5m2!1sen!2s\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"><\/iframe>"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

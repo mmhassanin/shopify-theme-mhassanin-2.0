@@ -1,0 +1,211 @@
+<form id="{{ id }}" class="collection-filters_form">
+    {%- assign product_rating_count =  'pages.product.reviews' | t -%}
+
+    {%- if enable_filter -%}
+        {%- for filter in collection.filters -%}
+            {%- case filter.type -%}
+                {%- when 'list' -%}
+                    <details class="filter-group js-filter-group {{ labelClass }}" open data-param-name="{{ filter.param_name }}">
+                        <summary class="filter-group_title">
+                            <div class="filter-group_title_inner">
+                                <span>{{ filter.label | replace: 'Product rating count', product_rating_count }}</span>
+                                <div class="filter-group_wrapper">{%- render 'svg', type: 'angle-down' -%}</div>
+                            </div>
+                        </summary>
+
+                        <div class="filter-group_inner">
+                            {%- assign filter_limit = section.settings.filter_limit -%}
+                            {%- if filter_limit != blank -%}
+                                {%- assign filter_limit = section.settings.filter_limit -%}
+                            {%- else -%}
+                                {%- assign filter_limit = 10 -%}
+                            {%- endif -%}
+
+                            {%- assign ind_value = 0 -%}
+
+                            {%- for value in filter.values -%}
+                                {%- if value.count == 0 and value.active == false -%}
+                                    {%- assign ind_value = ind_value -%}
+                                {%- else -%}
+                                    {%- assign ind_value = ind_value | plus: 1 -%}
+                                {%- endif -%}
+
+                                {%- capture filter_show_more -%}
+                                    {%- if value.count == 0 and value.active == false -%}
+                                        d-none
+                                    {%- else -%}
+                                        {%- if ind_value > filter_limit -%}ind-hide{%- endif -%}
+                                    {%- endif -%}
+                                {%- endcapture -%}
+
+                                <div class="filter-group_item input-group {{ filter_show_more }}">
+                                    <input type="checkbox"
+                                        class="filter filter-group-display__list-item_checkbox"
+                                        name="{{ value.param_name }}"
+                                        id="filter-{{ filter.label }}-{{ forloop.index }}"
+                                        {% if filter.active_values contains value -%} checked {% endif %}
+                                        value="{{ value.value }}">
+
+                                    <label for="filter-{{ filter.label }}-{{ forloop.index }}">
+                                        <span class="no-js-hidden">{{ value.label }} (<span class="js-count">{{ value.count }}</span>)</span>
+                                        <noscript>
+                                            {%- if filter.active_values contains value -%}
+                                                <a href="{{ value.url_to_remove }}">{{ value.labe }} ({{ value.count }})</a>
+                                            {%- else -%}
+                                                <a href="{{ value.url_to_add }}">{{ value.label }} ({{ value.count }})</a>
+                                            {%- endif -%}
+                                        </noscript>
+                                    </label>
+                                </div>
+                            {%- endfor -%}
+
+                            {%- if ind_value > filter_limit -%}
+                                <div class="filter-maxlist">
+                                    <span class="maxlist-more">{{ 'pages.collection.filter_show_more' | t }}</span>
+                                    <span class="maxlist-less d-none">{{ 'pages.collection.filter_show_less' | t }}</span>
+                                </div>
+                            {%- endif -%}
+                        </div>
+                    </details>
+                {% comment %} end {% endcomment %}
+
+                {%- when 'price_range' -%}
+                    {% liquid
+                        assign currencies_using_comma_decimals = 'ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,TRY,UYU,VES,VND' | split: ','
+                        assign uses_comma_decimals = false
+                        if currencies_using_comma_decimals contains cart.currency.iso_code
+                            assign uses_comma_decimals = true
+                        endif
+                    %}
+
+                    {%- capture range_min -%}
+                        {%- if uses_comma_decimals -%}value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                    {%- endcapture -%}
+
+                    {%- capture range_max -%}
+                        {%- if uses_comma_decimals -%}value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                    {%- endcapture -%}
+
+                    {%- capture range_value_max -%}
+                        {%- if uses_comma_decimals -%}
+                            {{- filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' | round -}}
+                        {%- else -%}
+                            {{- filter.range_max | money_without_currency | replace: ',', '' | round -}}
+                        {%- endif -%}
+                    {%- endcapture -%}
+
+                    <details class="filter-group" open data-param-name="{{ filter.param_name }}">
+                        <summary class="filter-group_title">
+                            <div class="filter-group_title_inner">
+                                <span>{{ filter.label }}</span>
+                                <div class="filter-group_wrapper">{%- render 'svg', type: 'angle-down' -%}</div>
+                            </div>
+                        </summary>
+
+                        <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="facets__display range-slider {{ class }}">
+                            <svg width="100%" height="24"><line x1="4" y1="0" x2="480" y2="0" stroke="#444" stroke-width="12" stroke-dasharray="1 28"></line></svg>
+                            <div class="input-price-range">
+                                <input {% if filter.min_value.value %}{{ range_min }}{% else %}value="0"{% endif %} min="0" max="{{ range_value_max }}" step="10" type="range">
+                                <input {% if filter.max_value.value %}{{ range_max }}{% else %}value="{{ range_value_max }}"{%- endif -%} min="0" max="{{ range_value_max }}" step="10" type="range">
+                            </div>
+
+                            <price-range class="facets__price">
+                                <span class="field-currency">{{ cart.currency.symbol }}</span>
+                                <div class="field">
+                                    <input class="field__input field__input-min" readonly
+                                    step="10"
+                                    name="{{ filter.min_value.param_name }}"
+                                    id="Filter-{{ filter.label | escape }}-GTE"
+                                    {%- if filter.min_value.value -%}{{ range_min }}{%- else -%}placeholder="0"{%- endif -%}
+                                    type="number"
+                                    min="0"
+                                    max="{{ range_value_max }}"
+                                    >
+                                </div>
+                                <span>—</span>
+                                <span class="field-currency">{{ cart.currency.symbol }}</span>
+                                <div class="field">
+                                    <input class="field__input field__input-max" readonly
+                                    step="10"
+                                    name="{{ filter.max_value.param_name }}"
+                                    id="Filter-{{ filter.label | escape }}-LTE"
+                                    {%- if filter.max_value.value -%}{{ range_max }}{% else %}placeholder="{{ range_value_max }}"{%- endif -%}
+                                    type="number"
+                                    min="0"
+                                    max="{{ range_value_max }}"
+                                    >
+                                </div>
+                            </price-range>
+                        </div>
+
+                        <div class="filter-group-display__submit">
+                            {%- if class == 'js-range-slider' -%}
+                                <input class="filter-price-button" type="button" value="{{ 'pages.collection.apply' | t }}">
+                                <script type="text/javascript">
+                                    (function() {
+
+                                        const parent = document.querySelector('.range-slider');
+
+                                        if (!parent) {
+                                            return;
+                                        }
+
+                                        const rangeS = parent.querySelectorAll('input[type="range"]'),
+                                            numberS = parent.querySelectorAll('input[type="number"]');
+
+                                        rangeS.forEach((el) => {
+                                            if(el.value){
+                                                el.setAttribute("value", Number(el.getAttribute("value")));
+                                            }
+                                            else{
+                                                el.setAttribute("placeholder", Number(el.getAttribute("placeholder")));
+                                            }
+
+                                            el.setAttribute("max", Number(el.getAttribute("max")));
+                                            el.oninput = () => {
+                                                let slide1 = parseFloat(rangeS[0].value),
+                                                    slide2 = parseFloat(rangeS[1].value);
+                                                if (slide1 > slide2) {
+                                                    [slide1, slide2] = [slide2, slide1];
+                                                }
+
+                                                numberS[0].value = slide1;
+                                                numberS[1].value = slide2;
+                                            }
+                                        });
+
+                                        numberS.forEach((el) => {
+                                            if(el.value){
+                                                el.setAttribute("value", Number(el.getAttribute("value")));
+                                            }
+                                            else{
+                                                el.setAttribute("placeholder", Number(el.getAttribute("placeholder")));
+                                            }
+                                            
+                                            el.setAttribute("max", Number(el.getAttribute("max")));
+                                            el.oninput = () => {
+                                                let number1 = parseFloat(numberS[0].value),
+                                                    number2 = parseFloat(numberS[1].value);
+
+                                                if (number1 > number2) {
+                                                    let tmp = number1;
+                                                    numberS[0].value = number2;
+                                                    numberS[1].value = tmp;
+                                                }
+
+                                                rangeS[0].value = number1;
+                                                rangeS[1].value = number2;
+                                            }
+                                        });
+                                    })();
+                                </script>
+                            {%- else -%}
+                                <input class="filter-price-submit" type="submit" value="{{ 'pages.collection.apply' | t }}">
+                            {%- endif -%}
+                        </div>
+                    </details>
+                {% comment %} end {% endcomment %}
+            {% endcase %}
+        {%- endfor -%}
+    {%- endif -%}
+</form>

@@ -1,0 +1,91 @@
+{{ 'section-search-box-menu.css' | asset_url | stylesheet_tag }}
+
+{%- assign section_id = '#section-' | append: section.id -%}
+
+<div class="section-search-box-menu" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}container{%- endif -%}">
+    <div class="section-wrapper">
+      {%- if section.settings.search_box_heading != blank -%}
+        <div class="search-box-heading">{{ section.settings.search_box_heading }}</div>
+      {%- endif -%}
+
+      <div class="section-body">
+        <div class="block-search">
+          <form action="{{ routes.search_url }}" class="search-form" methos="get">
+            <input type="hidden" value="{{ settings.search_type }}" name="type">
+            <input type="hidden" value="{{ settings.search_unavailable_products }}" name="options[unavailable_products]">
+            <input type="hidden" value="last" name="options[prefix]">
+
+            <input type="text" name="q" placeholder="{{ 'sections.header.search_placeholder' | t }}" autocomplete="off">
+            <button type="submit" class="btn btn-1" aria-label="Search">
+              {%- render 'svg', type: 'search' -%}
+            </button>
+          </form>
+        </div>
+
+        {%- if section.settings.search_box_menu != blank -%}
+          <ul class="block-menu">
+            {%- for link in linklists[section.settings.search_box_menu].links -%}
+              <li class="menu-item">
+                <a href="{{ link.url }}">{{ link.title }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.search-box-with-menu.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "search_box_heading",
+      "label": "t:sections.common.heading",
+      "default": "Looking for something else"
+    },
+    {
+      "type": "link_list",
+      "id": "search_box_menu",
+      "label": "t:sections.common.menu_item",
+      "default": "main-menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.search-box-with-menu.name"
+    }
+  ]
+}
+{%- endschema -%}

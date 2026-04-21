@@ -1,0 +1,250 @@
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign slider_id = '#slider-' | append: section.id
+  assign controls_id = '#controls-' | append: section.id
+  assign limit = section.settings.limit
+  assign items_resp = section.settings.items_resp
+  assign items_spacing = section.settings.items_spacing
+  assign source_from = section.settings.source_from
+  assign heading_style_block = section.blocks | where: 'type', 'heading-style'  | first
+-%}
+
+{%- capture heading_section -%}
+  {%- render 'snippet-heading', type: 'render-html',config: section.settings -%}
+{%- endcapture -%}
+
+{%- capture items_list -%}
+  {%- liquid
+    if source_from == 'current-collection'
+      assign collection = product.collections | first
+    else
+      assign collection = section.settings.static_collection
+    endif
+    assign total_item = limit
+  -%}
+  {%- for p in collection.products limit: limit -%}
+    {%- if p == product -%}{%- continue -%}{%- endif -%}
+    <div class="slider-item">
+      {%- render 'product-item', product: p -%}
+    </div>
+  {%- endfor -%}
+{%- endcapture -%}
+
+<div class="secion-related-products{% if items_list == blank -%} d-none {%- endif -%}" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="related-products" data-source="{{ source_from }}">
+  <div class="section-wrapper">
+    {%- if heading_section != blank -%}
+      {%- capture heading_css -%}
+        {%- render 'snippet-heading', type: 'render-css', classID: section_id, config: heading_style_block.settings -%}
+      {%- endcapture -%}
+      <div class="section-header">{{ heading_section }}</div>
+    {%- endif -%}
+
+    <div class="section-body">
+      <slider-component>
+        <div class="slider-container js-slider-container">
+          <div class="slider-wrapper">
+            <div class="slider-list" id="slider-{{ section.id }}">
+              {{ items_list }}
+            </div>
+
+            {%- render 'set-tns-config'
+              slider_id: slider_id,
+              classID: section_id,
+              loop: section.settings.loop,
+              dots: section.settings.dots,
+              controls_id: controls_id,
+              controls: section.settings.controls,
+              autoplay: section.settings.autoplay,
+              autoplay_timeout: section.settings.autoplay_timeout,
+              padding: items_spacing,
+              items_resp: items_resp,
+              total_item: total_item
+             -%}
+          </div>
+        </div>
+      </slider-component>
+    </div>
+  </div>
+</div>
+<script>
+  (() => {
+    window.theme = window.theme || {};
+    (window.theme.sectionRegister = window.theme.sectionRegister || []).push("related-products");
+    (window.theme.customElementsList = window.theme.customElementsList || []).push('slider-component');
+  })();
+</script>
+
+{%- style -%}
+  {{ heading_css }}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.related-products.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    }, 
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "4,3,2,1"
+    },
+    {
+      "type": "text",
+      "id": "items_spacing",
+      "label": "t:sections.common.items_spacing",
+      "default": "30px"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.related-products.settings.header_3.content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Related products"
+    },
+    {
+      "type": "select",
+      "id": "source_from",
+      "label": "t:sections.related-products.settings.source_from.label",
+      "options": [
+        {
+          "value": "current-collection",
+          "label": "t:sections.related-products.settings.source_from.option_2.label"
+        },
+        {
+          "value": "static-collection",
+          "label": "t:sections.related-products.settings.source_from.option_1.label"
+        }
+      ],
+      "default": "current-collection"
+    },
+    {
+      "type": "collection",
+      "id": "static_collection",
+      "label": "t:sections.related-products.settings.static_collection.label"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.common.limit",
+      "step": 1,
+      "min": 4,
+      "max": 20,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.slider_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.common.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "t:sections.common.controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "dots",
+      "label": "t:sections.common.dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.common.autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_timeout",
+      "label": "t:sections.common.autoplay_timeout",
+      "step": 0.1,
+      "min": 2,
+      "max": 10,
+      "unit": "s",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "select",
+          "id": "section_heading_container_align",
+          "label": "t:sections.common.alignment",
+          "options": [
+            {
+              "value": "start",
+              "label": "t:sections.common.left"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.common.center"
+            },
+            {
+              "value": "end",
+              "label": "t:sections.common.right"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "section_heading_margin",
+          "label": "t:sections.common.margin",
+          "info": "t:sections.common.order_info"
+        },
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

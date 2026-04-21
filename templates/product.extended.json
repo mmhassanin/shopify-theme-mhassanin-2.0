@@ -1,0 +1,58 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div.page-template.page-product-template",
+  "sections": {
+    "main": {
+      "type": "product-extended-template",
+      "settings": {
+        "show_dynamic_checkout": true,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_short_des": true,
+        "show_countdown_timer": true,
+        "show_bundle_product": true,
+        "status_variant_picker": "default",
+        "show_inventory_quantity": true,
+        "inventory_threshold": 10,
+        "enable_notifications_subscribe": true,
+        "notifications_subscribe_label": "Notify me when available",
+        "notifications_subscribe_email_placeholder": "Enter your email",
+        "notifications_subscribe_button_submit": "NOTIFY ME",
+        "notification_subcribe_message_heading": "Notify me When Available",
+        "notification_subcribe_message_subheading": "You will receive an email when the product is available.",
+        "multi_tabs": "heading"
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "bg_color": "",
+        "margin": "0",
+        "padding": "",
+        "items_resp": "6,5,4,3,2",
+        "items_spacing": "0",
+        "heading": "Related products",
+        "source_from": "current-collection",
+        "static_collection": "accessories",
+        "limit": 10,
+        "loop": false,
+        "controls": true,
+        "dots": false,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related-products"
+  ]
+}

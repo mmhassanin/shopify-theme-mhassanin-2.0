@@ -1,0 +1,50 @@
+{%- if value != blank -%}
+  {%- case type -%}
+    {%- when 'value-prepare' -%}
+      {%- liquid
+        assign value = value | split: ' '
+        assign size = value | size
+        assign new_value = ''
+      -%}
+      {%- for item in value -%}
+        {%- assign new_value = new_value | append: 'minmax(auto, [+=+])' | replace: '[+=+]', item -%}
+      {%- endfor -%}
+      {{-new_value-}}
+    {%- else -%}
+      {%- liquid
+        assign value = value | split: ','
+        assign size = value | size
+      -%}
+      {%- capture class -%}{{ preClassID }}  {{ classID }}  {{ nextClassID }}{%- endcapture -%}
+      {%- case size -%}
+        {%- when 1 -%}
+          {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[0], type: 'value-prepare' -%};}{{--}}
+        {%- when 2 -%}
+          {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[1], type: 'value-prepare' -%};}{{--}}
+          @media screen and (min-width: 768px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[0], type: 'value-prepare' -%};}}{{--}}
+        {%- when 3 -%}
+          {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[2], type: 'value-prepare' -%};}{{--}}
+          @media screen and (min-width: 768px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[1], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 992px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[0], type: 'value-prepare' -%};}}{{--}}
+        {%- when 4 -%}
+          {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[3], type: 'value-prepare' -%};}{{--}}
+          @media screen and (min-width: 576px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[2], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 768px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[1], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 992px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[0], type: 'value-prepare' -%};}}{{--}}
+        {%- when 5 -%}
+          {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[4], type: 'value-prepare' -%};}{{--}}
+          @media screen and (min-width: 576px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[3], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 768px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[2], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 992px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[1], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 1200px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[0], type: 'value-prepare' -%};}}{{--}}
+        {%- when 6 -%}
+          {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[5], type: 'value-prepare' -%};}{{--}}
+          @media screen and (min-width: 375px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[4], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 576px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[3], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 768px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[2], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 992px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[1], type: 'value-prepare' -%};}}{{--}}
+          @media screen and (min-width: 1200px){ {{-class}}{grid-template-columns: {%- render 'grid-template-columns' value: value[0], type: 'value-prepare' -%};}}{{--}}
+      {%- endcase -%}
+
+  {%- endcase -%}
+{%- endif -%}

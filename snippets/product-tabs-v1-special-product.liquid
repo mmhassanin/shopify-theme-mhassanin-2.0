@@ -1,0 +1,148 @@
+{%- liquid
+  assign collection = collections[block.settings.collection]
+  if block.settings.collection != blank and section.settings.limit > collection.all_products_count
+    assign limit = collection.all_products_count
+  else
+    assign limit = section.settings.limit
+  endif
+-%}
+
+{%- capture content -%}
+  {%- if block.settings.collection == blank or collection.all_products_count < 1 -%}
+    {%- for index in (1..limit) -%}
+      <div class="slider-item {{ grid_class }}">
+        {%- render 'product-item', index0: forloop.index0, product: product -%}
+      </div>
+    {%- endfor -%}
+  {%- else -%}
+    {%- for product in collection.products limit: limit -%}
+      <div class="slider-item {{ grid_class }}">
+        {%- render 'product-item', product: product, collection: collection -%}
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="hp-tabs-list-wrapper position-{{ special_product_position }}">
+  {%- assign produc_text = block.settings.product_text -%}
+
+  {%- case special_product_position -%}
+    {%- when 'left-2' -%}
+      <div class="special-item special-item-v2 special-item-{{ block.id }}">
+        {%- render 'special-product-item-v2', product: product -%}
+      </div>
+
+      <div class="block-slider-component">
+        <div class="slider-list row">
+          {{ content }}
+        </div>
+      </div>
+
+    {%- when 'middle' -%}
+      <div class="hp-tabs-list">
+        <div class="row">
+          <div class="tab-items col-lg-4 col-md-12 col-sm-12 col-12">
+            <div class="row">
+              {%- if block.settings.collection == blank or collection.all_products_count < 1 -%}
+                {%- for index in (1..4) -%}
+                  <div class="product-grid-item col-lg-6 col-md-3 col-sm-6 col-6">
+                    {%- render 'product-item', index0: forloop.index0, product: product -%}
+                  </div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for product in collection.products limit: 4 -%}
+                  <div class="product-grid-item col-lg-6 col-md-3 col-sm-6 col-6">
+                    {%- render 'product-item', product: product, collection: collection -%}
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          </div>
+          
+          <div class="tab-special-item col-lg-4 col-md-12 col-sm-12 col-12">
+            <div class="special-item special-item-{{ block.id }}">
+              {%- render 'special-product-item-tabs-v1', product: product, produc_text: produc_text -%}
+            </div>
+          </div>
+
+          <div class="tab-items col-lg-4 col-md-12 col-sm-12 col-12">
+            <div class="row">
+              {%- if block.settings.collection == blank or collection.all_products_count < 1 -%}
+                {%- for index in (1..4) -%}
+                  <div class="product-grid-item col-lg-6 col-md-3 col-sm-6 col-6">
+                    {%- render 'product-item', index0: forloop.index0, product: product -%}
+                  </div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for product in collection.products offset: 4 limit: 4 -%}
+                  <div class="product-grid-item col-lg-6 col-md-3 col-sm-6 col-6">
+                    {%- render 'product-item', product: product, collection: collection -%}
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    {%- when 'middle-2' -%}
+      <div class="hp-tabs-list">
+        <div class="row">
+          <div class="tab-items col-lg-3 col-md-3 col-sm-12 col-12">
+            <div class="row">
+              {%- if block.settings.collection == blank or collection.all_products_count < 1 -%}
+                {%- for index in (1..2) -%}
+                  <div class="product-grid-item col-lg-12 col-md-12 col-sm-6 col-12">
+                    {%- render 'product-item', index0: forloop.index0, product: product -%}
+                  </div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for product in collection.products limit: 2 -%}
+                  <div class="product-grid-item col-lg-12 col-md-12 col-sm-6 col-12">
+                    {%- render 'product-item', product: product, collection: collection -%}
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          </div>
+          
+          <div class="tab-special-item col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="special-item special-item-{{ block.id }}">
+              {%- render 'special-product-item-tabs-v1', product: product, produc_text: produc_text -%}
+            </div>
+          </div>
+
+          <div class="tab-items col-lg-3 col-md-3 col-sm-12 col-12">
+            <div class="row">
+              {%- if block.settings.collection == blank or collection.all_products_count < 1 -%}
+                {%- for index in (1..2) -%}
+                  <div class="product-grid-item col-lg-12 col-md-12 col-sm-6 col-12">
+                    {%- render 'product-item', index0: forloop.index0, product: product -%}
+                  </div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for product in collection.products offset: 2 limit: 2 -%}
+                  <div class="product-grid-item col-lg-12 col-md-12 col-sm-6 col-12">
+                    {%- render 'product-item', product: product, collection: collection -%}
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    {%- else -%}
+      <div class="special-item special-item-{{ block.id }}">
+        {%- render 'special-product-item-tabs-v1', product: product, produc_text: produc_text -%}
+      </div>
+
+      <div class="block-slider-component">
+        <div class="slider-list row">
+          {{ content }}
+        </div>
+      </div>
+  {%- endcase -%}
+</div>

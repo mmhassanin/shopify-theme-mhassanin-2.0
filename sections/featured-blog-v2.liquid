@@ -1,0 +1,311 @@
+{{ 'section-featured-blog-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+
+  assign blog = blogs[section.settings.blog]
+  if section.settings.blog != blank and section.settings.limit > blog.articles_count
+    assign limit = blog.articles_count
+  else
+    assign limit = section.settings.limit
+  endif
+
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+-%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading', type:'render-html', config: section.settings -%}
+{%- endcapture -%}
+
+{%- capture content -%}
+  {%- if section.settings.blog == blank or blog.articles_count < 1 -%}
+    {%- for index in (1..limit) -%}
+      {%- assign placeholder_image_index = index | minus: 1 | modulo: 3 | plus: 1 -%}
+      <article class="featured_blog__item">
+        <div class="featured_blog__item-inner">
+          <div class="featured_blog__item-image">
+            {{ 'blog-apparel-' | append: placeholder_image_index | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+          <div class="featured_blog__item-info">
+            <h6 class="featured_blog__item-title">
+              {{ 'general.onboarding.blog_post' | t }}
+            </h6>
+          </div>
+        </div>
+      </article>
+    {%- endfor -%}
+
+  {%- else -%}
+    {%- for article in blog.articles limit: limit -%}
+      <article class="featured_blog__item">
+        <div class="featured_blog__item-inner">
+          <div class="featured_blog__item-image">
+            <a href="{{ article.url }}">
+              {%- render 'image-style', image: article.image -%}
+            </a>
+          </div>
+          
+          <div class="featured_blog__item-info">
+            <h6 class="featured_blog__item-title">
+              <a href="{{ article.url }}">{{ article.title }}</a>
+            </h6>
+
+            {%- if section.settings.show_excerpt and article.excerpt_or_content != blank -%}
+              <div class="featured_blog__item-excerpt">{{ article.excerpt_or_content }}</div>
+            {%- endif -%}
+            
+            {%- if section.settings.read_more_btn -%}
+              <a class="featured_blog__item-btn" href="{{ article.url }}">
+                <span>{{ 'general.button.read_more' | t }}</span>
+                {%- render 'svg', type: 'arrow-right' -%}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </article>
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="section-featured-blog-v2" id="section-{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper row">
+
+      {%- if section.settings.show_left_column -%}
+        <div class="featured-blog__left-column col-md-4 col-12">
+          <div class="featured-blog__left-column-content">
+            {%- if section.settings.lc_heading != blank -%}
+              <div class="section-header">
+                <div class="section-heading remove-border">
+                  <h2 class="heading">{{ section.settings.lc_heading }}</h2>
+                </div>  
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.lc_subtext != blank -%}
+              <div class="subtext">{{ section.settings.lc_subtext }}</div>
+            {%- endif -%}
+
+            {%- if section.settings.lc_button != blank -%}
+              <div class="lc-button">
+                <a href="{{ section.settings.lc_link | default: 'javascript:void(0)' }}" class="btn btn-1">
+                  {{ section.settings.lc_button }}
+                </a>
+              </div>
+            {%- endif -%}
+
+            <div class="lc-image">
+              {%- if section.settings.blog == blank or blog.articles_count < 1 -%}
+                {%- render 'image-style',image: section.settings.lc_image, limit: 767 -%}
+              {%- else -%}
+                {%- render 'image-style',image: section.settings.lc_image, limit: 767, disable_svgset: true -%}
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="section-body col-md-8 col-12">
+        {%- if section_heading != blank -%}
+          {%- capture heading_css -%}
+            {%- render 'snippet-heading', type: 'render-css', config: heading_style_block.settings, classID: section_id -%}
+          {%- endcapture -%}
+          <div class="section-header">{{ section_heading }}</div>
+        {%- endif -%}
+
+        <div class="featured-blog__list">
+          {{ content }}
+        </div>
+
+        <div class="read-more-articles">
+          <a href="{{ blog.url }}" class="btn btn-1">{{ 'general.button.read_more_articles' | t }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.featured-blog-v2.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.featured-blog-v2.settings.left_column.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_left_column",
+      "label": "t:sections.featured-blog-v2.settings.show_left_column.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "lc_heading",
+      "label": "t:sections.common.heading",
+      "default": "Collect points"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "lc_subtext",
+      "label": "t:sections.common.subtext",
+      "default": "For each order you receive a reward in the form of points for the purchase, which are then converted into a financial discount. You can use this amount on your next order!"
+    },
+    {
+      "type": "text",
+      "id": "lc_button",
+      "label": "t:sections.common.button_label",
+      "default": "READ MORE"
+    },
+    {
+      "type": "url",
+      "id": "lc_link",
+      "label": "t:sections.common.button_link"
+    },
+    {
+      "type": "image_picker",
+      "id": "lc_image",
+      "label": "t:sections.common.image"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.blog_post"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Featured blog"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "t:sections.common.blog_post"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "t:sections.featured-blog.settings.show_excerpt",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "read_more_btn",
+      "label": "t:sections.featured-blog.settings.read_more_button",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.common.limit",
+      "step": 1,
+      "min": 1,
+      "max": 6,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "select",
+          "id": "section_heading_container_align",
+          "label": "t:sections.common.alignment",
+          "options": [
+            {
+              "value": "start",
+              "label": "t:sections.common.left"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.common.center"
+            },
+            {
+              "value": "end",
+              "label": "t:sections.common.right"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "section_heading_margin",
+          "label": "t:sections.common.margin",
+          "info": "t:sections.common.order_info"
+        },
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured-blog-v2.name"
+    }
+  ]
+}
+{%- endschema -%}

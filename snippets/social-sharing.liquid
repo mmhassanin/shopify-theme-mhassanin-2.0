@@ -1,0 +1,28 @@
+{%- if template contains 'article' or template contains 'blog' -%}
+  {%- capture permalink_url -%}{{ shop.url }}{{ article.url }}{%- endcapture -%}
+  {%- capture share_handle -%}{{ article.handle }}{%- endcapture -%}
+{%- elsif template == 'password' -%}
+  {%- capture permalink_url -%}{{ shop.url }}{%- endcapture -%}
+{%- endif -%}
+
+<div class="share-links social-sharing" data-permalink="{{ permalink_url }}">
+  <ul class="list-inline">
+    {%- if section.settings.share_facebook -%}
+      <li>
+        <a class="facebook" target="_blank" rel="noopener" href="//www.facebook.com/sharer.php?u={{ permalink_url }}" title="Facebook">
+          {%- render 'svg', type: 'facebook' -%}
+          <span>{{ 'pages.product.share' | t }}</span>
+        </a>
+      </li>
+    {%- endif -%} 
+    
+    {%- if section.settings.share_x -%}
+      <li>
+        <a class="twitter" target="_blank" rel="noopener" href="//twitter.com/share?url={{ permalink_url }}&amp;text={{ share_handle }}" title="X">
+          {%- render 'svg', type: 'x' -%}
+          <span>{{ 'pages.product.tweet' | t }}</span>
+        </a>
+      </li>
+    {%- endif -%}  
+  </ul>
+</div>

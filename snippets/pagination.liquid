@@ -1,0 +1,50 @@
+<div class="pagination-holder{%- if paginate.pages > 1 %} check-pagination{% endif -%}">
+  <ul class="pagination">
+    <li{% unless paginate.previous %} class="disabled"{% endunless %}>
+      <a href="{{ paginate.previous.url | append: id }}" class="prev">
+        {{ 'general.pagination.previous' | t }}
+      </a>
+    </li>
+
+    {%- for part in paginate.parts -%}
+      {%- if part.is_link -%}
+        <li><a href="{{ part.url | append: id }}">{{ part.title }}</a></li>
+      {%- else -%}
+        {%- if part.title == '&hellip;' -%}
+        <li class="ellipsis"><span>{{ part.title }}</span></li>
+        {%- else -%}
+        <li class="active"><a href="javascript:;">{{ part.title }}</a></li>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <li{% unless paginate.next %} class="disabled"{% endunless %}>
+      <a href="{{ paginate.next.url | append: id }}" class="next">
+        {{ 'general.pagination.next' | t }}
+      </a>
+    </li>
+  </ul>
+
+  <div class="showing-items{% unless template == 'collection' or template == 'search' %} d-none{% endunless %}">
+    {%- if paginate.pages > 1 -%}
+      {%- if pagination_type == 'infinite' -%}
+        {%- assign from = 1 -%}
+      {%- else -%}
+        {%- assign from = paginate.current_offset | plus : 1 -%}
+      {%- endif -%}
+      {%- if paginate.next -%}
+        {%- assign to = paginate.current_offset | plus: paginate.page_size -%}
+      {%- else -%}
+        {%- assign to = paginate.items -%}
+      {%- endif -%}
+      {%- assign count = paginate.items -%}
+      {{ 'pages.collection.products_showing_items' | t: count: count, from: from, to: to }}
+    {%- else -%}
+      {%- if paginate.items > 1 -%}
+        {{ 'pages.collection.products_showing_all' | t: count: paginate.items }} {{ 'pages.collection.items' | t }}
+      {%- else -%}
+        {{ 'pages.collection.products_showing_all' | t: count: paginate.items }} {{ 'pages.collection.item' | t }}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>

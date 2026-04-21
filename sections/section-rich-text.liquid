@@ -1,0 +1,149 @@
+{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign heading_text_fs_mobile = 0.6 | times: section.settings.heading_text_fs
+  assign subheading_text_fs_mobile = 0.6 | times: section.settings.subheading_text_fs
+-%}
+
+<div class="section-rich-text" id="section-{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper">
+
+      <div class="section-body">
+        <div class="block-widget-inner">
+          {%- if section.settings.heading_text != blank -%}
+            <div class="block-widget_title">{{ section.settings.heading_text }}</div>
+          {%- endif -%}
+
+          {%- if section.settings.subheading_text != blank -%}
+            <div class="block-widget_text">{{ section.settings.subheading_text }}</div>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+  {{ section_id }} .block-widget-inner .block-widget_title{
+    font-size: {{ section.settings.heading_text_fs }}px;
+    color: {{ section.settings.heading_text_color }};
+  }
+  {{ section_id }} .block-widget-inner .block-widget_text{
+    font-size: {{ section.settings.subheading_text_fs }}px;
+    color: {{ section.settings.subheading_text_color }};
+  }
+  @media (max-width: 767px) {
+    {{ section_id }} .block-widget-inner .block-widget_title{
+      font-size: {{ heading_text_fs_mobile }}px;
+    }
+    {{ section_id }} .block-widget-inner .block-widget_text{
+      font-size: {{ subheading_text_fs_mobile }}px;
+    }
+  }
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.rich-text.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading_text",
+      "label": "t:sections.common.text",
+      "default": "Sails through work and play."
+    },
+    {
+      "type": "range",
+      "id": "heading_text_fs",
+      "label": "t:sections.common.font_size",
+      "min": 16,
+      "max": 60,
+      "default": 42,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "heading_text_color",
+      "label": "t:sections.common.text_color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.subheading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading_text",
+      "label": "t:sections.common.text",
+      "default": "<strong>Designed to go places.</strong>"
+    },
+    {
+      "type": "range",
+      "id": "subheading_text_fs",
+      "label": "t:sections.common.font_size",
+      "min": 16,
+      "max": 60,
+      "default": 42,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "subheading_text_color",
+      "label": "t:sections.common.text_color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.rich-text.name"
+    }
+  ]
+}
+{%- endschema -%}

@@ -1,0 +1,156 @@
+{% comment %} CSS Responsive Snippets Version 2.0 {% endcomment %}
+
+{%- case type -%}
+	{%- when 'value' -%}
+		{%- if css_value.size > 0 -%}
+			{%- if css_revert_value -%}{%- assign css_revert = '-'-%}{%- endif -%}
+
+			{%- liquid
+				if showFirst
+					assign css_split = css_split | default: ','
+					assign css_value = css_value | split: css_split | first | strip
+				endif
+				if css_value_before != blank
+					assign css_value_before 	= css_value_before | append: '('
+					assign css_value_after  	= ')'
+				endif
+				assign value_out = css_value | strip | prepend: css_revert | prepend: css_value_before | append: css_value_after
+			-%}
+
+			{%- unless css_property != 'grid-template-columns' or value_out contains 'repeat' -%}
+				{%- assign value_out = value_out | remove: ';' | split: ' ' -%}
+
+				{%- capture value_out -%}
+					{%- for item in value_out -%}
+						{%- capture _item -%}{{ item | strip }}{%- endcapture -%}
+						{%- unless _item == blank -%}|minmax(auto, {{ _item }}){%- endunless -%}
+					{%- endfor -%}
+				{%- endcapture -%}
+				{%- assign value_out = value_out | split: '|' | join: ' ' -%}
+			{%- endunless -%}
+			{{ css_property }}:{{- value_out -}};
+		{%- endif -%}
+
+	{%- when 'media' -%}
+
+		{%- capture __css_value -%}{{ value | remove: 'null' | strip }}{%- endcapture -%}
+		{%- if __css_value.size > 0 -%}@media({{- media_screen -}}){ {{- _classID -}}{ {%- render 'css-resp', type: 'value', css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, css_value: __css_value -%} }}{%- endif -%}
+
+	{%- when 'position' -%}
+		{%- capture _classID -%}{{ preClassID }}{{ classID }}{{ nextClassID }}{%- endcapture -%}
+		{% comment %} css split: "," value character: ":" {% endcomment %}
+		{%- liquid
+			unless css_value == blank
+				assign _pos = css_value | strip | remove: ' '
+
+				if _pos contains ','
+					assign ar_pos = _pos | split: ','
+					for i_pos in ar_pos
+						assign _x_temp 	= i_pos | split: ':' | first
+						assign _y_temp 	= i_pos | split: ':' | last
+						assign _pos_x 	= _pos_x | append: ',' | append: _x_temp
+						assign _pos_y 	= _pos_y | append: ',' | append: _y_temp
+
+						if _x_temp != 'null' and _y_temp != 'null'
+							assign _pos_tempt = ';-' | append: _x_temp | append: ',-' | append: _y_temp
+							assign _pos_tran = _pos_tran | append: _pos_tempt
+						else
+							assign _pos_tran = _pos_tran | append: ';null'
+						endif
+					endfor
+
+					assign _pos_x 		= _pos_x 	| remove_first: ','
+					assign _pos_y 		= _pos_y 	| remove_first: ','
+					assign _pos_tran 	= _pos_tran | remove_first: ';'
+				else
+					assign _pos_x 		= _pos | split: ':' | first
+					assign _pos_y 		= _pos | split: ':' | last
+					assign _pos_tran    = _pos | replace: ':', ',-' | replace: '--', '' | prepend: '-'
+				endif
+				assign _pos_tran 	= _pos_tran  | replace: '--', ''
+				capture firstValues
+					render 'css-resp', type: 'value', showFirst: true, css_property: 'left', css_value: _pos_x
+					render 'css-resp', type: 'value', showFirst: true, css_property: 'top',  css_value: _pos_y
+					render 'css-resp', type: 'value', showFirst: true, css_property: 'transform', css_value: _pos_tran, css_value_before: 'translate', css_split: ';'
+				endcapture
+				render 'css-resp', classID: _classID, css_values: firstValues
+				render 'css-resp', classID: _classID, showLast: true, css_property: 'left', css_value: _pos_x
+				render 'css-resp', classID: _classID, showLast: true, css_property: 'top',  css_value: _pos_y
+				render 'css-resp', classID: _classID, showLast: true, css_property: 'transform', css_value: _pos_tran, css_value_before: 'translate', css_split: ';'
+			endunless
+		-%}
+
+	{%- else -%}
+		{%- capture _classID -%}{{ preClassID }}{{ classID }}{{ nextClassID }}{%- endcapture -%}
+		{%- unless css_value == blank -%}
+
+			{%- liquid
+				assign css_split = css_split | default: ','
+				if showFirst
+					assign css_value = css_value | split: css_split | first | strip
+				endif
+				if showLast
+					assign f_css_value 	= css_value | split: css_split | first | strip
+				 	assign css_value 	= css_value | replace_first: f_css_value, 'null'
+				endif
+				assign arr_css_value 	= css_value | split: css_split
+				assign css_property 	= css_property | default: 'padding'
+			-%}
+
+			{%- case arr_css_value.size -%}
+				{%- when 1 -%}
+					{%- unless css_value contains 'null' -%}
+						{{- _classID -}}{ {%- render 'css-resp', type: 'value', css_value: css_value, css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before -%} }
+					{%- endunless -%}
+
+				{%- when 2 -%}{%- liquid
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[0], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 768px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[1], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'max-width: 767px'
+					-%}
+
+				{%- when 3 -%}{%- liquid
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[1], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 768px) and (max-width: 991px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[0], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 992px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[2], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'max-width: 767px'
+					-%}
+
+				{%- when 4 -%}{%- liquid
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[1], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 768px) and (max-width: 991px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[0], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 992px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[2], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'max-width: 767px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[3], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'max-width: 575px'
+					-%}
+
+				{%- when 5 -%}{%- liquid
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[2], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 768px) and (max-width: 991px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[1], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 992px) and (max-width: 1199px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[0], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 1200px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[3], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'max-width: 767px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[4], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'max-width: 575px'
+					-%}
+
+				{%- else -%}{%- liquid
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[2], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 768px) and (max-width: 991px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[1], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 992px) and (max-width: 1199px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[0], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'min-width: 1200px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[3], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'max-width: 767px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[4], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'max-width: 575px'
+						render 'css-resp', type: 'media', _classID: _classID, value: arr_css_value[5], css_property: css_property, css_revert_value: css_revert_value, css_value_before: css_value_before, media_screen: 'max-width: 374px'
+					-%}
+			{%- endcase -%}
+
+		{%- elsif css_values != blank -%}
+			{%- assign css_ar = css_values | strip_newlines | split: ';' -%}
+			{{- _classID -}}{
+				{%- for css_item in css_ar -%}
+					{%- liquid
+						assign css_content  = css_item | split: ':'
+						assign css_property = css_content[0] | strip
+						assign css_value 	= css_content[1] | strip
+					-%}
+					{%- if css_value.size > 0 -%}{{ css_property }}:{{ css_value }};{%- endif -%}
+				{%- endfor -%}
+			}
+		{%- endunless -%}
+
+{%- endcase -%}

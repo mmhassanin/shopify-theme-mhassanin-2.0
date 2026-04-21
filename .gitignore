@@ -1,0 +1,21 @@
+# OS Metadata
+.DS_Store
+Thumbs.db
+Icon?
+
+# Shopify Specific
+config.yml
+.env
+.shopify-cli.yml
+.shopify/
+*.log
+
+# Dependencies
+node_modules/
+dist/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo

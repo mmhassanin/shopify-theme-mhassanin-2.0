@@ -1,0 +1,186 @@
+<script type="application/javascript">
+  EventTarget.prototype.addEvent = EventTarget.prototype.addEventListener;
+  EventTarget.prototype.removeEvent = EventTarget.prototype.removeEventListener;
+
+  window.theme = Object.assign( window.theme || {}, {
+    {%- case template.name -%}
+      {%- when 'product' -%}
+        product: {{ product | json }},
+    {%- endcase -%}
+    routes: {
+      rootUrl: "{{ routes.root_url }}",
+      searchUrl: "{{ routes.search_url }}",
+      collectionAllUrl: "{{ routes.all_products_collection_url }}",
+      collectionsUrl: "{{ routes.collections_url }}",
+      cartAdd: "{{ routes.cart_add_url }}.js",
+      cartGet: "{{ routes.cart_url }}.js",
+      cartChange: "{{ routes.cart_change_url }}.js",
+      cartUpdate: "{{ routes.cart_update_url }}.js",
+      cartClear: "{{ routes.cart_clear_url }}.js"
+    },
+    settings: {
+      shop: {
+        reviewApp: "{{ settings.product_review_app }}"
+      }
+    },
+    template: "{{ template.name }}",
+    strings: {
+      allItemsAreInCart: "{{ 'pages.product.all_items_are_in_cart' | t }}",
+      header: {
+        dropdownCart: {
+          removing: "{{ 'sections.dropdown_cart.removing' | t }}"
+        }
+      },
+      shipping: {
+        oneRate: "{{ 'pages.cart.one_shipping_rate' | t }}",
+        manyRates: "{{ 'pages.cart.many_shipping_rates' | t }}",
+        notFoundRate: "{{ 'pages.cart.not_found_shipping_rate' | t }}"
+      },
+      product: {
+        itemsLowStock: "{{ 'pages.product.items_low_stock' | t }}",
+        itemLowStock: "{{ 'pages.product.item_low_stock' | t }}",
+        itemsStock: "{{ 'pages.product.items_in_stock' | t }}",
+        itemStock: "{{ 'pages.product.item_in_stock' | t }}",
+        addToCart: "{{ 'pages.product.add_to_cart' | t }}",
+        unavailable: "{{ 'pages.product.unavailable' | t }}",
+        soldOut: "{{ 'pages.product.sold_out' | t }}",
+        preorder: "{{ 'pages.product.preorder_button' | t }}",
+        order_until: "{{ 'pages.product.order_until' | t }}",
+        order_today_until: "{{ 'pages.product.order_today_until' | t }}",
+        tomorrow: "{{ 'pages.product.tomorrow' | t }}"
+      },
+      address: {
+        addTitle: "{{ 'customer.addresses.add_new' | t }}",
+        editTitle: "{{ 'customer.addresses.edit_address' | t }}",
+        update: "{{ 'customer.addresses.update' | t }}",
+        add: "{{ 'customer.addresses.add' | t }}"
+      },
+      date_formats: {
+        hours: "{{- 'pages.date_formats.hours' | t -}}",
+        minutes: "{{- 'pages.date_formats.minutes' | t -}}",
+        seconds: "{{- 'pages.date_formats.seconds' | t -}}",
+        sunday: "{{ 'pages.date_formats.sunday' | t }}",
+        monday: "{{ 'pages.date_formats.monday' | t }}",
+        tuesday: "{{ 'pages.date_formats.tuesday' | t }}",
+        wednesday: "{{ 'pages.date_formats.wednesday' | t }}",
+        thursday: "{{ 'pages.date_formats.thursday' | t }}",
+        friday: "{{ 'pages.date_formats.friday' | t }}",
+        saturday: "{{ 'pages.date_formats.saturday' | t }}",
+        january: "{{ 'pages.date_formats.january' | t }}",
+        february: "{{ 'pages.date_formats.february' | t }}",
+        march: "{{ 'pages.date_formats.march' | t }}",
+        april: "{{ 'pages.date_formats.april' | t }}",
+        may: "{{ 'pages.date_formats.may' | t }}",
+        june: "{{ 'pages.date_formats.june' | t }}",
+        july: "{{ 'pages.date_formats.july' | t }}",
+        august: "{{ 'pages.date_formats.august' | t }}",
+        september: "{{ 'pages.date_formats.september' | t }}",
+        october: "{{ 'pages.date_formats.october' | t }}",
+        november: "{{ 'pages.date_formats.november' | t }}",
+        december: "{{ 'pages.date_formats.december' | t }}"
+      }
+    },
+    currency: {
+      current: "{{ cart.currency.iso_code }}",
+      pattern: "money_format",
+      symbol: "{{ cart.currency.symbol }}",
+      format: "{{ shop.money_format }}"
+    },
+    search: {
+      "config" : {
+        "resources[type]": "{{ settings.search_type }}",
+        "resources[limit]": "{{ settings.search_limit }}",
+        "resources[options][unavailable_products]": "{{ settings.search_unavailable_products }}"
+      }
+    },
+    assets: {
+      search: "{{ 'search.js' | asset_url }}",
+      popupQuickView: "{{ 'quick-view-popup.js' | asset_url }}",
+      storeLocationPopup: "{{ 'store-location-popup.js' | asset_url }}",
+      mapboxJs: "{{ 'mapbox-gl.js' | asset_url }}",
+      mapboxCss: "{{ 'mapbox-gl.css' | asset_url }}"
+    },
+    customElementsList: [],
+    sectionRegister: [],
+  });
+
+  {%- if template.name == 'product' -%}
+    {%- for variant in product.variants -%}
+      Object.assign(window.theme.product.variants[{{ forloop.index0 }}], {
+        inventory_policy: {{ variant.inventory_policy | json }},
+        inventory_quantity : {{ variant.inventory_quantity }}
+      });
+    {%- endfor -%}
+  {%- endif -%} 
+
+  let jsResources = [
+    "{{ 'lazysizes.min.js' | asset_url }}",
+    {%- if settings.direction == 'RTL' -%}
+    "{{ 'tiny-slider-rtl.js' | asset_url }}",
+    {%- else -%}
+    "{{ 'tiny-slider.min.js' | asset_url }}",
+    {%- endif -%}
+    "{{ 'common.js' | asset_url }}",
+    {%- case template.name -%}
+      {%- when 'product' -%}
+        {%- case template.suffix -%}
+          {%- else -%}
+            "{{ 'product-page.js' | asset_url }}",
+        {%- endcase -%}
+      {%- when 'collection' -%}
+        "{{ 'collection-page.js' | asset_url }}",
+      {%- when 'search' -%}
+        "{{ 'collection-page.js' | asset_url }}",
+      {%- when 'cart' -%}
+        "{{ 'cart-page.js' | asset_url }}",
+      {%- when 'addresses' -%}
+        "{{ 'account-address.js' | asset_url }}",
+      {%- when 'page' -%}
+        {%- case template.suffix -%}
+          {%- when 'store-location' -%}
+            "{{ 'mapbox-gl.js' | asset_url }}",
+            "{{ 'store-location-page.js' | asset_url }}",
+        {%- endcase -%}
+    {%- endcase -%}
+  ];
+
+  jsPreload();
+
+  document.addEvent('DOMContentLoaded', jsLoad, {once: true});
+
+  window.addEvent('load', () => {
+    [
+      "{{ 'search.js' | asset_url }}",
+      "{{ 'quick-view-popup.js' | asset_url }}",
+    ].forEach( url => {
+      let link = document.createElement("link");
+      link.as = "script";
+      link.href = url;
+      link.rel = "preload";
+      document.head.append(link);
+    });
+  })
+
+  function jsPreload(){
+    jsResources.forEach( resource =>{
+      let link = document.createElement('link');
+      link.href = resource;
+      link.rel = 'preload';
+      link.as = 'script';
+      document.head.append(link);
+    })
+  }
+
+  async function jsLoad(){
+    for (const resource of jsResources) {
+      await new Promise((reslove, rejcet) => {
+        let script = document.createElement("script");
+        script.src = resource;
+        script.onload = () => {reslove(1);};
+        document.body.append(script);
+      })
+    }
+  }
+</script>
+{% comment %} compress {% endcomment %}
+

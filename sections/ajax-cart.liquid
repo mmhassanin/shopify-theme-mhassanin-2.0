@@ -1,0 +1,25 @@
+{% layout none %}
+<script data-cart-json type="application/json">
+  {{ cart | json }}
+</script>
+
+{%- for line_item in cart.items -%}
+  <div class="cart-item-list_line-item cart-line-item js-cart-line-item" data-key="{{ line_item.key }}" data-id="{{ line_item.id }}">
+    <div class="cart-line-item_info d-flex justify-content-between align-items-center">
+      <a href="{{ line_item.url }}" class="cart-line-item_img">
+        {%- render 'image-style-lazy', image: line_item.image, limit: 100 -%}
+      </a>
+    </div>
+    <div class="cart-line-item_info_content">
+      <a href="{{ line_item.url }}" class="cart-line-item_title">{{ line_item.product.title }}</a>
+      <div class="cart-line-item_wrapper">
+        <span class="cart-line-item_variant{% if line_item.variant.title == 'Default Title' %} d-none{% endif %}">{{ line_item.variant.title }}</span>
+        <span class="cart-line-item_qty">{{ 'sections.dropdown_cart.qty' | t }} <span class="js-line-item-qty">{{ line_item.quantity }}</span></span>
+        <div class="art-line-item_price_remove">
+          <span class="cart-line-item_price js-line-item-price">{{ line_item.price | money }}</span>
+          <a href="{{ routes.cart_change_url }}?quantity=0&id={{ line_item.id }}" class="btn btn-remove js-btn-remove">{{ 'sections.dropdown_cart.remove' | t }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endfor -%}

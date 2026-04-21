@@ -1,0 +1,98 @@
+{%- for line_item in cart.items -%}
+  {%- liquid
+    assign vendor = line_item.product.vendor
+    assign options = line_item.variant.options | join: ' / '
+    assign properties = line_item.properties
+  -%}
+  <cart-line-item data-key="{{ line_item.key }}" data-id="{{ line_item.id }}" class="cart-table_line-item line-item js-cart-line-item">
+    <div class="cart-table_column-1 line-item_info">
+      <a href="{{ line_item.url }}" class="line-item_image">
+        {%- render 'image-style', image: line_item.image, limit: 375, alt: line_item.title -%}
+      </a>
+      <div class="line-item_wrapper">
+        {%- if section.settings.show_vendor -%}
+          <div class="line-item_vendor">
+            <a href="{{ vendor | url_for_vendor }}">{{ vendor }}</a>
+          </div>
+        {%- endif -%}
+
+        <div class="line-item_title"><a href="{{ line_item.url }}">{{ line_item.product.title }}</a></div>
+        <div class="line-item_sku">{{ line_item.sku }}</div>
+        {%- if section.settings.show_options -%}
+          <div class="line-item_options">{{ options }}</div>
+        {%- endif -%}
+        {%- if properties.size > 0 and section.settings.show_properties -%}
+          <div class="line-items_properties">
+            <ul>
+              {%- for property in properties -%}
+                <li>{{ property.first }}: {{ property.last }}</li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="cart-table_column-2 line-item_price">
+      {%- if line_item.original_price > line_item.final_price -%}
+        {%- if line_item.final_price == 0 -%}
+          <span class="price-sale">{{ 'pages.cart.free' | t }}</span>
+        {%- else -%}
+          <span class="price-sale">{{ line_item.final_price | money }}</span>
+        {%- endif -%}
+
+        <del class="price-compare">{{ line_item.original_price | money }}</del>
+      {%- elsif line_item.variant.compare_at_price > line_item.variant.price -%}
+        {%- if line_item.final_price == 0 -%}
+          <span class="price-sale">{{ 'pages.cart.free' | t }}</span>
+        {%- else -%}
+          <span class="price-sale">{{ line_item.final_price | money }}</span>
+        {%- endif -%}
+
+        <del class="price-compare">{{ line_item.variant.compare_at_price | money }}</del>
+      {%- else -%}
+        {%- if line_item.final_price == 0 -%}
+          <span class="price">{{ 'pages.cart.free' | t }}</span>
+        {%- else -%}
+          <span class="price">{{ line_item.final_price | money }}</span>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    <div class="cart-table_column-3 line-item_quantity">
+      {%- if line_item.variant.available -%}
+        {%- if line_item.variant.inventory_management -%}
+          {%- if line_item.variant.inventory_policy == 'continue' -%}
+            {%- assign qty_max = 1000 -%}
+          {%- else -%}
+            {%- assign qty_max = line_item.variant.inventory_quantity -%}
+          {%- endif -%}
+        {%- else -%}
+          {%- assign qty_max = 1000 -%}
+        {%- endif -%}
+      {%- endif -%}
+      
+      <div class="input-group">
+        <quantity-input>
+          <quantity-input-minus class="cursor-pointer">{%- render 'svg', type: 'minus' -%}</quantity-input-minus>
+          <input type="number" name="quantity" readonly min="1" max="{{ qty_max }}" value="{{ line_item.quantity }}" pattern="[0-9]+" inputmode="numeric" name="updates[]">
+          <quantity-input-plus class="cursor-pointer">{%- render 'svg', type: 'plus' -%}</quantity-input-plus>
+        </quantity-input>
+      </div>
+    </div>
+
+    <div class="cart-table_column-4 line-item_total-price js-total-price">
+      {%- if line_item.final_line_price == 0 -%}
+        {{- 'pages.cart.free' | t -}}
+      {%- else -%}
+        {{ line_item.final_line_price | money }}
+      {%- endif -%}
+    </div>
+
+    <div class="cart-table_column-5 line-item_remove">
+      <a href="{{ routes.cart_change_url }}?quantity=0&id={{ line_item.id }}" class="btn-remove js-remove-btn">
+        {%- render 'svg', type: 'close' -%}
+        {%- render 'svg', type: 'card-loading' -%}
+      </a>
+    </div>
+  </cart-line-item>
+{%- endfor -%}

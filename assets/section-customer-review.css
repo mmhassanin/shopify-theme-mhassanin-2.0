@@ -1,0 +1,33 @@
+.customer-review .textbox {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.customer-review .textbox .svg-star-solid {
+  color: var(--main-color);
+}
+
+.customer-review .cr_title {
+  font-size: calc(var(--heading-size-h2)*0.8);
+  margin-top: 15px;
+}
+
+@media (min-width: 992px) {
+  .customer-review .cr_title {
+    font-size: var(--heading-size-h2);
+    margin-top: 17px;
+  }
+}
+
+.customer-review .cr_author {
+  font-size: calc(var(--body-font-size) + 2px);
+  margin-top: 49px;
+}
+
+.customer-review .cr_date {
+  margin-top: 3px;
+}
+
+.customer-review .tns-nav {
+  margin-top: 43px;
+}

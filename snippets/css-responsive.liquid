@@ -1,0 +1,119 @@
+
+{%- capture content -%}
+  {%- case type -%}
+    {%- when 'prepare-value' -%}
+      {%- if value != blank -%}
+        {%- liquid
+          assign value = value | split: ','
+          assign size = value | size
+        -%}
+        {%- case size -%}
+          {%- when 1 -%} {{value[0]}},,,,,{{--}}
+          {%- when 2 -%} {{value[0]}},,,{{value[1]}},,{{--}}
+          {%- when 3 -%} {{value[0]}},,{{value[1]}},{{value[2]}},,{{--}}
+          {%- when 4 -%} {{value[0]}},,{{value[1]}},{{value[2]}},{{value[3]}},{{--}}
+          {%- when 5 -%} {{value[0]}},{{value[1]}},{{value[2]}},{{value[3]}},{{value[4]}},{{--}}
+          {%- when 6 -%} {{value[0]}},{{value[1]}},{{value[2]}},{{value[3]}},{{value[4]}},{{value[5]}}{{--}}
+        {%- endcase -%}
+      {%- endif -%}
+
+    {%- else -%}
+      {%- liquid
+        assign value = value | split: ','
+        assign size = value | size
+      -%}
+      {%- capture prepare_value_1 -%}{%- render 'css-responsive' type: 'prepare-value', value: value_1 -%}{%- endcapture -%}
+      {%- capture prepare_value_2 -%}{%- render 'css-responsive' type: 'prepare-value', value: value_2 -%}{%- endcapture -%}
+      {%- capture prepare_value_3 -%}{%- render 'css-responsive' type: 'prepare-value', value: value_3 -%}{%- endcapture -%}
+      {%- capture prepare_value_4 -%}{%- render 'css-responsive' type: 'prepare-value', value: value_4 -%}{%- endcapture -%}
+      {%- capture prepare_value_5 -%}{%- render 'css-responsive' type: 'prepare-value', value: value_5 -%}{%- endcapture -%}
+
+      {%- assign value_1 = prepare_value_1 | strip | split: ',' -%}
+      {%- assign value_2 = prepare_value_2 | strip | split: ',' -%}
+      {%- assign value_3 = prepare_value_3 | strip | split: ',' -%}
+      {%- assign value_4 = prepare_value_4 | strip | split: ',' -%}
+      {%- assign value_5 = prepare_value_5 | strip | split: ',' -%}
+
+      {%- capture class -%}{{preClassID}}  {{classID}}  {{nextClassID}}{%- endcapture -%}
+
+      {%- for i in (1..6) -%}
+        {%- case i -%}
+          {%- when 1 -%}
+            {%- capture css -%}
+              {%- if value_1[0] != blank -%}{{-property_1}}:{{-value_1[0]}};{{--}}{%- endif -%}
+              {%- if value_2[0] != blank -%}{{-property_2}}:{{-value_2[0]}};{{--}}{%- endif -%}
+              {%- if value_3[0] != blank -%}{{-property_3}}:{{-value_3[0]}};{{--}}{%- endif -%}
+              {%- if value_4[0] != blank -%}{{-property_4}}:{{-value_4[0]}};{{--}}{%- endif -%}
+              {%- if value_5[0] != blank -%}{{-property_5}}:{{-value_5[0]}};{{--}}{%- endif -%}
+            {%- endcapture -%}
+
+            {%- if css != blank -%}{{-class}}{ {{-css-}} }{%- endif -%}
+          {% comment %} end {% endcomment %}
+
+          {%- when 2 -%}
+            {%- capture css -%}
+              {%- if value_1[1] != blank -%}{{property_1}}:{{value_1[1]}};{%- endif -%}
+              {%- if value_2[1] != blank -%}{{property_2}}:{{value_2[1]}};{%- endif -%}
+              {%- if value_3[1] != blank -%}{{property_3}}:{{value_3[1]}};{%- endif -%}
+              {%- if value_4[1] != blank -%}{{property_4}}:{{value_4[1]}};{%- endif -%}
+              {%- if value_5[1] != blank -%}{{property_5}}:{{value_5[1]}};{%- endif -%}
+            {%- endcapture -%}
+
+            {%- if css != blank -%}@media screen and (max-width: 1199px){ {{-class}}{ {{-css-}} }}{%- endif -%}
+          {% comment %} end {% endcomment %}
+
+          {%- when 3 -%}
+            {%- capture css -%}
+              {%- if value_1[2] != blank -%}{{property_1}}:{{value_1[2]}};{%- endif -%}
+              {%- if value_2[2] != blank -%}{{property_2}}:{{value_2[2]}};{%- endif -%}
+              {%- if value_3[2] != blank -%}{{property_3}}:{{value_3[2]}};{%- endif -%}
+              {%- if value_4[2] != blank -%}{{property_4}}:{{value_4[2]}};{%- endif -%}
+              {%- if value_5[2] != blank -%}{{property_5}}:{{value_5[2]}};{%- endif -%}
+            {%- endcapture -%}
+
+            {%- if css != blank -%}@media screen and (max-width: 991px){ {{-class}}{ {{-css-}} } }{%- endif -%}
+          {% comment %} end {% endcomment %}
+
+          {%- when 4 -%}
+            {%- capture css -%}
+              {%- if value_1[3] != blank -%}{{property_1}}:{{value_1[3]}};{%- endif -%}
+              {%- if value_2[3] != blank -%}{{property_2}}:{{value_2[3]}};{%- endif -%}
+              {%- if value_3[3] != blank -%}{{property_3}}:{{value_3[3]}};{%- endif -%}
+              {%- if value_4[3] != blank -%}{{property_4}}:{{value_4[3]}};{%- endif -%}
+              {%- if value_5[3] != blank -%}{{property_5}}:{{value_5[3]}};{%- endif -%}
+            {%- endcapture -%}
+
+            {%- if css != blank -%}@media screen and (max-width: 767px){ {{-class}}{ {{-css-}} }}{%- endif -%}
+          {% comment %} end {% endcomment %}
+
+          {%- when 5 -%}
+            {%- capture css -%}
+              {%- if value_1[4] != blank -%}{{property_1}}:{{value_1[4]}};{%- endif -%}
+              {%- if value_2[4] != blank -%}{{property_2}}:{{value_2[4]}};{%- endif -%}
+              {%- if value_3[4] != blank -%}{{property_3}}:{{value_3[4]}};{%- endif -%}
+              {%- if value_4[4] != blank -%}{{property_4}}:{{value_4[4]}};{%- endif -%}
+              {%- if value_5[4] != blank -%}{{property_5}}:{{value_5[4]}};{%- endif -%}
+            {%- endcapture -%}
+
+            {%- if css != blank -%}@media screen and (max-width: 575px){ {{-class}}{ {{-css-}} }}{%- endif -%}
+          {% comment %} end {% endcomment %}
+
+          {%- when 6 -%}
+            {%- capture css -%}
+              {%- if value_1[5] != blank -%}{{property_1}}:{{value_1[5]}};{%- endif -%}
+              {%- if value_2[5] != blank -%}{{property_2}}:{{value_2[5]}};{%- endif -%}
+              {%- if value_3[5] != blank -%}{{property_3}}:{{value_3[5]}};{%- endif -%}
+              {%- if value_4[5] != blank -%}{{property_4}}:{{value_4[5]}};{%- endif -%}
+              {%- if value_5[5] != blank -%}{{property_5}}:{{value_5[5]}};{%- endif -%}
+            {%- endcapture -%}
+
+            {%- if css != blank -%}@media screen and (max-width: 375px){ {{-class}}{ {{-css-}} }}{%- endif -%}
+          {% comment %} end {% endcomment %}
+
+        {%- endcase -%}
+      {%- endfor -%}
+
+  {%- endcase -%}
+{%- endcapture -%}
+
+{{content | strip | strip_newlines }}

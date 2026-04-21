@@ -1,0 +1,299 @@
+{{ 'blog.css' | asset_url | stylesheet_tag }}
+{{ 'pagination.css' | asset_url | stylesheet_tag }}
+
+{%- assign new_comment = false -%}
+{%- if comment and comment.created_at -%}
+  {%- assign new_comment = true -%}
+  {%- assign new_comment_id = comment.id -%}
+{%- endif -%}
+
+{%- if new_comment -%}
+  {%- assign duplicate_comment = false -%}
+  {%- for comment in article.comments -%}
+    {%- if comment.id == new_comment_id -%}
+      {%- assign duplicate_comment = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if duplicate_comment -%}
+    {%- assign number_of_comments = article.comments_count -%}
+  {%- else -%}
+    {%- assign number_of_comments = article.comments_count | plus: 1 -%}
+  {%- endif -%}
+{%- else -%}
+  {%- assign number_of_comments = article.comments_count -%}
+{%- endif -%}
+
+{%- capture article_sidebar -%}
+  {%- render 'blog-sidebar', section: section -%}
+{%- endcapture -%}
+
+{%- capture article_content -%}
+  <article class="article-template{% unless article.comments_enabled? %} comments-disable{% endunless %}">
+    {%- if article.image != blank -%}
+      <main class="article-template_body">
+        <div class="article-template_featured-image">
+          {%- render 'image-style', image: article.image -%}
+        </div>
+      </main>
+    {%- endif -%}
+
+    <header class="article-template_header">
+      <h1 class="page-title article-template_title h3">{{ article.title }}</h1>
+      <ul class="article-meta">
+        <li class="article-date">{{ article.published_at | date: '%d %b, %Y' }}</li>
+        <li>
+          <span class="article-author">{{ 'pages.article.posted_by' | t }} {{ article.author | escape }}</span>
+        </li>
+      </ul>
+      <div class="article-template_content">{{ article.content }}</div>
+
+      {%- if section.settings.share_facebook or section.settings.share_x -%}
+        {%- render 'social-sharing', section: section -%}
+      {%- endif -%}
+    </header>
+
+    <footer class="article-template_footer">
+      {%- if article.comments_enabled? -%}
+        {%- if number_of_comments >= 0 -%}
+          <div class="article-comments">
+            <div class="article-comments_title">
+              {%- liquid
+                assign comment_string = 'pages.article.comment' | t
+                assign comments_string = 'pages.article.comments' | t
+              -%}
+              {{ article.comments_count | pluralize: comment_string, comments_string }} ({{ article.comments_count }})
+            </div>
+
+            {%- paginate article.comments by 10 -%}
+              <div id="comments">
+                {%- if new_comment -%}
+                  <p class="note form-success">
+                    {%- if blog.moderated? -%}
+                      {{ 'pages.article.success_moderated' | t }}
+                    {%- else -%}
+                      {{ 'pages.article.success' | t }}
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+
+                <ul class="article-comments_list">
+                  {%- for comment in article.comments -%}
+                    <li class="article-comments_item comment">
+                      <div class="comment_avatar">
+                        {%- render 'image-style', image: 'avatar-default' -%}
+                      </div>
+                      <div class="comment_info">
+                        <span class="author">{{ comment.author }}</span>
+                        <span class="date">- {{ comment.created_at | date: " %b %d, %Y " }}</span>
+                        <p>{{ comment.content }}</p>
+                      </div>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+
+                {%- if paginate.pages > 1 -%}
+                  {%- render 'pagination', paginate: paginate -%}
+                {%- endif -%}
+              </div>
+            {%- endpaginate -%}
+
+          </div>
+        {%- endif -%}
+
+        {%- form 'new_comment', article, class: "article-template_comment-form comment-form", id: "comment-form" -%}
+          <div class="comment-form_headline">
+            <h4 class="comment-form_title">{{ 'pages.article.leave_a_comment' | t }}</h4>
+            {{ form.errors | default_errors }}
+            {%- if blog.moderated? -%}
+              <p class="moderated">{{ 'pages.article.moderated' | t }}</p>
+            {%- endif -%}
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-lg-6">
+              <div class="input-group field-name">
+                <input type="text" name="comment[author]" id="comment-form-name" placeholder="{{ 'pages.article.your_name' | t }}" required class="w-100">
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+              <div class="input-group field-email">
+                <input type="email" name="comment[email]" id="comment-form-email" placeholder="{{ 'pages.article.your_email' | t }}" required class="w-100">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="input-group">
+                <textarea name="comment[body]" id="comment-form-body" class="w-100" cols="45" rows="6" maxlength="1200" placeholder="{{ 'pages.article.your_comment' | t }}" required></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex">
+            <button type="submit" class="btn btn-1">{{ 'pages.article.post_comment' | t }}</button>
+          </div>
+        {%- endform -%}
+      {%- endif -%}
+    </footer>
+  </article>
+{%- endcapture -%}
+
+<div class="section-article-template" id="section-{{ section.id }}">
+  <div class="section-wrapper">
+    <div class="section-body row">
+    {%- if section.settings.layout == 'left-sidebar' -%}
+      <div class="col-12 col-lg-3">{{ article_sidebar }}</div>
+      <div class="col-12 col-lg-9">{{ article_content }}</div>
+    {%- elsif section.settings.layout == 'right-sidebar' -%}
+      <div class="col-12 col-lg-9">{{ article_content }}</div>
+      <div class="col-12 col-lg-3">{{ article_sidebar }}</div>
+    {%- else -%}
+      {{ article_content }}
+    {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    let commentForm = document.getElementById('comment-form');
+
+    let textarea = commentForm.querySelector('textarea[name="comment[body]"]');
+    let counter = commentForm.querySelector('.js-counter');
+    textarea.addEvent('input', function(){
+      counter.innerHTML = this.value.length;
+    })
+  })()
+</script>
+
+{%- schema -%}
+{
+  "name": "t:sections.article-template.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "right-sidebar",
+      "options": [
+        {
+          "value": "left-sidebar",
+          "label": "t:sections.common.left_sidebar"
+        },
+        {
+          "value": "right-sidebar",
+          "label": "t:sections.common.right_sidebar"
+        },
+        {
+          "value": "none-sidebar",
+          "label": "t:sections.common.none_sidebar"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "share_facebook",
+      "default": true,
+      "label": "t:sections.main-product.blocks.share.settings.share_on_facebook.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "share_x",
+      "default": true,
+      "label": "t:sections.main-product.blocks.share.settings.tweet_on_x.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "search",
+      "name": "t:sections.blog-template.blocks.search.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "t:sections.common.placeholder",
+          "default": "Enter Keywords..."
+        }
+      ]
+    },
+    {
+      "type": "textbox",
+      "name": "t:sections.blog-template.blocks.textbox.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "t:sections.common.content"
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "t:sections.blog-template.blocks.menu.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "CATEGORIES"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.common.menu_item"
+        }
+      ]
+    },
+    {
+      "type": "featured-blogs",
+      "name": "t:sections.blog-template.blocks.featured-blogs.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "TOP STORIES"
+        },
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "t:sections.common.blog_post"
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "label": "t:sections.common.limit",
+          "step": 1,
+          "min": 1,
+          "max": 6,
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "tags",
+      "name": "t:sections.blog-template.blocks.tags.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "Tags"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

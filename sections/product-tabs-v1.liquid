@@ -1,0 +1,466 @@
+{{ 'section-product-tab-v1.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  if section.settings.border_radius
+    assign bg_class = ' .section-wrapper'
+  else
+    assign bg_class = ''
+  endif
+  
+  assign section_id = '#section-' | append: section.id
+  assign enable_slider = section.settings.enable_slider
+  assign controls_position = section.settings.controls_position
+  assign tab_heading_vertical = section.settings.tab_heading_vertical
+  assign alignment_tab_title = section.settings.alignment_tab_title
+  assign tab_title_style = section.settings.tab_title_style
+
+  if section.settings.items_spacing == false
+    assign items_spacing_row = 'no-padding'
+    assign items_spacing_slider = '0'
+  else
+     assign items_spacing_slider = '30px'
+  endif
+
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+-%}
+
+{%- assign style= '' -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'special-product' -%}
+    {%- assign style= block.settings.style -%}
+    {%- assign special_style = block.settings.image_special_style -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading', type:'render-html', config: section.settings -%}
+{%- endcapture -%}
+
+{%- capture grid_class -%}{%- render 'set-item-per-row', value: section.settings.items_resp -%}{%- endcapture -%}
+
+<div class="section-product-tab-v1{% if section.settings.border_radius %} border-radius{% endif %}" id="section-{{ section.id }}" data-section-id="{{ section.id }}"{% if enable_slider %} data-section-type="featured-collection"{% endif %}>
+  <div
+    class="{% if template == 'index' or template contains 'page' %}{{ section.settings.section_layout }}{% endif %}
+    th-vertical-{{ tab_heading_vertical }}
+    controls-position-{{ controls_position }}"
+  >
+    <div class="section-wrapper block-type-{{ style }} {{ items_spacing_row }}{% if style == 'image' %} image-special-style-{{ special_style }}{% endif %}">
+      {%- if section_heading != blank -%}
+        {%- capture heading_css -%}
+          {%- render 'snippet-heading', type: 'render-css', config: heading_style_block.settings, classID: section_id -%}
+        {%- endcapture -%}
+        <div class="section-header">{{ section_heading }}</div>
+      {%- endif -%}
+
+      <div class="section-body">
+        <div class="tab-heading-container">
+          <ul class="tab-heading js-tab-controls tab-heading-{{ tab_title_style }} align-{{ alignment_tab_title }}">
+            {%- for block in section.blocks -%}
+              {%- if block.type != 'heading-style' -%}
+                {%- assign collection = collections[block.settings.collection] -%}
+                <li>
+                  <a href="{{ collection.url }}"{%- if block.type == 'special-product' -%} class="active"{% endif %}>
+                    {%- if block.settings.heading != blank -%}{{ block.settings.heading }}{%- else -%}{{ collection.title }}{%- endif -%}
+                  </a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        <div class="tab-content js-tab-contents">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'special-product' -%}
+              {%- liquid
+                assign style = block.settings.style
+                assign product = all_products[block.settings.product]
+              -%}
+
+              <div class="tab-content-inner">
+                <div class="tab-items-row">
+
+                  {%- if style == 'normal' -%}
+                    {%- render 'product-tabs-v1-normal',
+                      enable_slider: enable_slider,
+                      product: product,
+                      block: block,
+                      section: section,
+                      grid_class: grid_class,
+                      items_spacing_slider: items_spacing_slider
+                    -%}
+
+                  {%- elsif style == 'special-product' -%}
+                    {%- assign special_product_position = block.settings.special_product_position -%}
+                    {%- render 'product-tabs-v1-special-product', product: product, block: block, special_product_position: special_product_position, grid_class: grid_class -%}
+
+                  {%- else -%}
+                    <div class="block-image">
+                      <div class="block-image-inner">
+                        <a href="{{ block.settings.link | default: 'javascript:void(0)' | default: 'javascript:void(0)' }}">
+                          {%- render 'image-style', image: block.settings.image, limit: 768 -%}
+                        </a>
+                      </div>
+                    </div>
+
+                    {%- render 'product-tabs-v1-normal',
+                      enable_slider: enable_slider,
+                      product: product,
+                      block: block,
+                      section: section,
+                      grid_class: grid_class,
+                      items_spacing_slider: items_spacing_slider
+                    -%}
+
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- break -%}
+            {%- endif -%}
+          {%- endfor -%} 
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- if enable_slider -%}
+  <script>
+    window.theme = window.theme || {};
+    if(!!window.theme.sectionRegister){
+      !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
+    }else{
+      window.theme.sectionRegister = ["featured-collection"];
+    }
+  </script>
+
+  <script>
+    window.theme = window.theme || {};
+    if(!!window.theme.customElementsList){
+      !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
+    }else{
+      window.theme.customElementsList = ["slider-component"];
+    }
+  </script>
+{%- endif -%}
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, classID: bg_class, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.product-tabs-v1.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "checkbox",
+      "id": "border_radius",
+      "label": "t:sections.common.border_radius"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "t:sections.common.subtext"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "6,5,3,2"
+    },
+    {
+      "type": "checkbox",
+      "id": "items_spacing",
+      "label": "t:sections.common.items_spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.common.limit",
+      "step": 1,
+      "min": 1,
+      "max": 20,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.tab_heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "tab_heading_vertical",
+      "label": "t:sections.product-tabs-v1.settings.vertical_style",
+      "default": false,
+      "info": "The options below are not used when activating Vertical style"
+    },
+    {
+      "type": "select",
+      "id": "alignment_tab_title",
+      "label": "t:sections.common.alignment",
+      "options": [
+        { "value": "start", "label": "t:sections.common.left" },
+        { "value": "center", "label": "t:sections.common.center" },
+        { "value": "end", "label": "t:sections.common.right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "tab_title_style",
+      "label": "Border style",
+      "options": [
+        { "value": "1", "label": "Style 01" },
+        { "value": "2", "label": "Style 02" },
+        { "value": "3", "label": "Style 03" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.slider_settings",
+      "info": "t:sections.product-tabs-v1.settings.not_for_style_special_product"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "label": "t:sections.common.enable_slider"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.common.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "t:sections.common.controls",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "controls_position",
+      "label": "t:sections.common.controls_position",
+      "options": [
+        { "value": "1", "label": "t:sections.common.same_row_with_heading" },
+        { "value": "2", "label": "t:sections.common.below_heading" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "checkbox",
+      "id": "dots",
+      "label": "t:sections.common.dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.common.autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_timeout",
+      "label": "t:sections.common.autoplay_timeout",
+      "step": 0.1,
+      "min": 2,
+      "max": 10,
+      "unit": "s",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        }
+      ]
+    },
+    {
+      "type": "special-product",
+      "name": "t:sections.common.product",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading",
+          "default": "Tab title"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "t:sections.common.style",
+          "default": "normal",
+          "options": [
+            { "value": "normal", "label": "t:sections.common.normal" },
+            { "value": "special-product", "label": "t:sections.common.special_product" },
+            { "value": "image", "label": "t:sections.common.image" }
+          ]
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.common.collection"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.special_product"
+        },
+        {
+          "type": "select",
+          "id": "special_product_position",
+          "label": "t:sections.common.position",
+          "default": "middle",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "left-2", "label": "Left 2" },
+            { "value": "middle", "label": "Middle 1" },
+            { "value": "middle-2", "label": "Middle 2" },
+            { "value": "right", "label": "Right" }
+          ]
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.common.product"
+        },
+        {
+          "type": "textarea",
+          "id": "product_text",
+          "label": "t:sections.common.label",
+          "default": "Special<br> Offer"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.block_image"
+        },
+        {
+          "type": "range",
+          "id": "image_special_style",
+          "label": "t:sections.common.style",
+          "min": 1,
+          "max": 3,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "t:sections.common.block_link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading",
+          "default": "Tab title"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.common.collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product-tabs-v1.name",
+      "blocks": [
+        {
+          "type": "special-product"
+        },
+        {
+          "type": "link"
+        },
+        {
+          "type": "link"
+        },
+        {
+          "type": "link"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

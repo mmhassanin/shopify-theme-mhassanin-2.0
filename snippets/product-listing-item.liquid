@@ -1,0 +1,58 @@
+{%- if product != blank -%}
+	{%- liquid
+		assign first_variant = product.variants | first
+		assign selected_variant = product.first_available_variant | default: first_variant
+		assign price = selected_variant.price
+		assign compare_at_price = selected_variant.compare_at_price
+		assign image_padding = settings.product_image_ratio | replace: 'auto', '100%'
+
+		if settings.product_customize_ratio != blank
+			assign image_padding = 1 | divided_by: settings.product_customize_ratio.aspect_ratio | times: 100 | append: '%'
+		endif
+	-%}
+
+	{%- capture product_price -%}
+		<div class="product-price">
+			{%- if compare_at_price > price -%}
+				<div class="price-sale">{{ price | money }}</div>
+				<del class="price-compare">{{ compare_at_price | money }}</del>
+			{%- else -%}
+				<div class="price">{{ price | money }}</div>
+			{%- endif -%}
+		</div>
+	{%- endcapture -%}
+
+	<div class="product-card balance-row-{{ settings.product_title_limit }} {% if settings.product_image_crop -%} object-fit-cover {%- endif -%}">
+		<header class="product-card_header">
+			<div class="product-card_media position-relative">
+				<a href="{{ product.url }}">
+					{%- render 'image-style', image: product.images[0], limit: 100, padding_top: image_padding -%}
+				</a>
+			</div>
+		</header> 
+		<main class="product-card_body">
+			<div class="product-card_title">
+				<a href="{{ product.url }}">{{ product.title }}</a>
+			</div>
+			{{ product_price }}
+		</main>   
+	</div>
+{%- else -%}
+	{%- assign placeholder_image_index = index0 | modulo: 4 | plus: 1 -%}
+	<div class="product-card">
+		<header class="product-card_header">
+			<div class="product-card_media">
+				{{ 'product-apparel-' | append: placeholder_image_index | placeholder_svg_tag: 'placeholder-svg' }}
+			</div>
+		</header>
+
+		<main class="product-card_body">
+			<div class="product-card_title">
+				<h3 class="product-card_title">{{ 'general.onboarding.product_title' | t }}</h3>
+			</div>
+			<div class="product-price">
+				<div class="price">{{ 9999 | money }}</div>
+			</div>
+		</main>
+	</div>
+{%- endif -%}

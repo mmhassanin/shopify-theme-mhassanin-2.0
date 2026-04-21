@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js"{% if settings.direction == 'RTL' %} dir="rtl"{% endif %}>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 128, height: 128 }}">
+    {%- endif -%}
+
+    {%- unless settings.header_font.system? and settings.type_body_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- else -%}
+      <meta name="description" content="{{ shop.name }}">
+    {%- endif -%}
+
+    {%- render 'meta-tags' -%}
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+    
+    {%- render 'js-resources' -%}
+    {{ content_for_header }}
+
+    {%- style -%}
+      {%- assign font_header = settings.type_header_font -%}
+      {%- for fontVariantHeader in font_header.variants -%}
+        {{- fontVariantHeader | font_modify: 'weight', fontVariantHeader.weight | font_face: font_display: 'swap' -}}
+      {%- endfor -%}
+    
+      {%- assign font = settings.type_body_font -%}
+      {%- for fontVariant in font.variants -%}
+        {{- fontVariant | font_modify: 'weight', fontVariant.weight | font_face: font_display: 'swap' -}}
+      {%- endfor -%}
+
+      {%- liquid
+        assign header_font_bold = settings.type_header_font | font_modify: 'weight', 'bold'
+        assign header_font_italic = settings.type_header_font | font_modify: 'style', 'italic'
+        assign header_font_bold_italic = header_font_bold | font_modify: 'style', 'italic'
+         
+        assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+        assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+        assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+      -%}
+      
+      {{ settings.type_header_font | font_face: font_display: 'swap' }}
+      {{ header_font_bold | font_face: font_display: 'swap' }}
+      {{ header_font_italic | font_face: font_display: 'swap' }}
+      {{ header_font_bold_italic | font_face: font_display: 'swap' }}
+      
+      {{ settings.type_body_font | font_face: font_display: 'swap' }}
+      {{ body_font_bold | font_face: font_display: 'swap' }}
+      {{ body_font_italic | font_face: font_display: 'swap' }}
+      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+      {{ settings.type_header_font | font_face: font_display: 'swap' }}
+
+      :root {
+        --heading-font: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
+        --font-heading-weight: {{ settings.type_header_font.weight }};
+        
+        --body-font: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+        --font-body-weight: {{ settings.type_body_font.weight }};
+
+        --font-bold:        {{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};
+      }
+    {%- endstyle -%}
+
+    {%- unless settings.type_body_font.system? -%}
+      {% comment %}theme-check-disable AssetPreload{% endcomment %}
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {%- unless settings.type_header_font.system? -%}
+      {% comment %}theme-check-disable AssetPreload{% endcomment %}
+      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {{ 'themes.css' | asset_url | stylesheet_tag: preload: true }}
+
+    {%- if template contains 'page' -%}
+      {{ 'pages.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
+
+    {{ 'cart.css' | asset_url | stylesheet_tag }}
+    {{ 'popup-style.css' | asset_url | stylesheet_tag }}
+
+    {%- render 'css_variables' -%}
+
+    {%- style -%}
+      content-visibility: auto;
+      {%- if settings.custom_color != blank -%}
+        {%- liquid
+          assign custom_color = settings.custom_color | split: ','
+        -%}
+        {%- for color in custom_color -%}
+          {%- if color != blank -%}
+            .custom-color[data-custom-color="{{ color | split: ":" | first | strip }}"],.custom-color[data-custom-color="{{ color | split: ":" | first | strip }}"] a{
+              background: {{ color | split: ':' | last | strip }} !important;
+            }
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endstyle -%}
+  </head>
+ 
+  <body class="template-{{ template.name }} template-{{ template.name }}--{{ template.suffix | default: 'default' }}{% if settings.page_layout == 'fix-boxed' %} fix-container{% endif %} cart-type-{{ settings.cart_type }}{% if settings.catalog_mode %} catalog-mode{% endif %}">
+    <div class="body-main-content">
+      {{ 'header.css' | asset_url | stylesheet_tag }}
+      {{ 'product-items.css' | asset_url | stylesheet_tag }}
+      {%- if settings.direction == 'RTL' -%}
+        {{ 'themes-rtl.css' | asset_url | stylesheet_tag }}
+      {%- endif -%}
+
+      <div class="header-group{% if settings.header_overlay %} header-overlay{% endif %}">
+        <header class="header{% if settings.header_overlay_overlay %} header-overlay{% endif %}" id="header" data-sticky="{{ settings.header_sticky }}" data-section-id="header-container" data-section-type="header">
+          {%- sections 'group-header' -%}
+
+          <script type="application/javascript">
+            function insertHeader(){
+              let deskTemplate = document.getElementById("desk-header-template");
+              if(!deskTemplate){
+                return;
+              }
+              if(window.innerWidth >= 992){
+                deskTemplate.insertAdjacentElement('beforebegin', deskTemplate.content.firstElementChild);
+                deskTemplate.remove();
+                document.dispatchEvent(new CustomEvent('desktop-lazyloaded'));
+              }else{
+                window.addEvent('resize', function(){
+                  let div = document.createElement('div');
+                  div.innerHTML = deskTemplate.innerHTML;
+                  deskTemplate.insertAdjacentElement('beforebegin', div.firstElementChild);
+                  deskTemplate.remove();
+                  document.dispatchEvent(new CustomEvent('desktop-lazyloaded'));
+                }, {once: true});
+              }
+            }
+
+            insertHeader();
+            {%- if request.design_mode -%}
+              document.addEventListener('shopify:section:load', insertHeader);
+            {%- endif -%}
+          </script>
+        </header>
+      </div>
+
+      {%- capture main_content -%}{{ content_for_layout }}{%- endcapture -%}
+      {%- render 'preload-hero-banner', type: 'splitContent', content: main_content, key: 'preload', firstSection: true, output: 'value' -%}
+
+      {%- if template contains 'product' and product.media.first != blank -%}
+        {%- render 'preload-hero-product-page', image: product.media.first, limit: 540 -%}
+      {%- endif -%}
+     
+      <main id="main-content">
+        {%- unless template == 'index' or template == 'page.about-us' -%}{%- render 'breadcrumb' -%}{%- endunless -%}
+
+        {%- if template == 'index' and settings.left_column_style == 'full-slideshow' -%}
+          {% section 'section-slideshow' %}
+        {%- endif -%}
+
+        {%- if template == 'index' and settings.left_column_style != 'none' -%}
+          <div class="{%- if settings.page_layout == 'wide' -%}container-fluid{%- else -%}container{%- endif -%}">
+            <div class="row">
+              <div id="home-left-column" class="col-lg-3 d-none d-lg-block">
+                {% section 'homepage-left-column' %}
+              </div>
+        {%- endif -%}
+
+        {%- unless template == 'index' or template contains 'page' -%}
+          <div class="{%- if settings.page_layout == 'wide' -%}container-fluid{%- else -%}container{%- endif -%}">
+        {%- endunless -%}
+        {%- if template == 'index' and settings.left_column_style != 'none' -%}
+          <div id="home-main-content" class="col-lg-9 col-md-12">
+        {%- endif -%}
+        {%- capture main_content -%}{%- render 'preload-hero-banner', type: 'splitContent', content: main_content, key: 'preload', firstSection: false, output: '' -%}{%- endcapture -%}
+        {%- render 'preload-hero-banner', type: 'splitContent', content: main_content, firstSection: false, output: '' -%}
+        {%- if template == 'index' and settings.left_column_style != 'none' -%}
+          </div>
+        {%- endif -%}
+        {%- unless template == 'index' or template contains 'page' -%}
+          </div>
+        {%- endunless -%}
+
+        {%- if template == 'index' and settings.left_column_style != 'none' -%}
+          </div>
+            </div>
+        {%- endif -%}
+      </main>
+      
+      <footer class="footer">
+        {%- sections 'group-footer' -%}
+      </footer>
+    </div>
+
+    <div>
+      <button class="btn btn-1" id="back-to-top">{%- render 'svg', type: 'angle-up' -%}</button>
+      {%- render 'popup' -%}
+      {%- if shop.permanent_domain contains 'arena-electro.myshopify.com' -%}{%- render 'home-demos' -%}{%- endif -%}
+      {%- if settings.switcher_mode -%}{%- render 'mode-switcher' -%}{%- endif -%}
+    </div>
+  </body>
+</html>

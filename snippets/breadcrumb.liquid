@@ -1,0 +1,162 @@
+{%- liquid
+	case settings.breadcrumb_visibility
+	  	when 'desktop'
+	  		assign breadcrumb_class = 'd-none d-md-block'
+	  	when 'mobile'
+	  		assign breadcrumb_class = 'd-md-none'
+	  	when 'both'
+	  		assign breadcrumb_class = ''
+	  	else
+	  		assign breadcrumb_class = 'd-none'
+	endcase
+-%}
+
+<div class="section-breadcrumb {{ breadcrumb_class }}">
+	<div class="{%- if settings.page_layout == 'wide' -%}container-fluid{%- else -%}container{%- endif -%}">
+	  <div class="section-wrapper">
+	    <div class="breadcrumb">
+		    <ul class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+		        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+		          <a itemprop="item" href="{{ shop.url }}">
+		            <span itemprop="name">{{- 'sections.breadcrumb.home' | t -}}</span>
+		            <meta itemprop="position" content="{% increment brcCounter %}"/>
+		          </a>
+		        </li>
+
+		        {%- case template.name -%}
+		          {%- when 'product' -%}
+		            {%- liquid
+		              if collection == blank
+		                assign collection = product.collections | first
+		              endif
+		            -%}
+		            {%- if collection != blank -%}
+		              <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+		                <a href="{{ collection.url }}" itemprop="item">
+		                  <span itemprop="name">{{ collection.title }}</span>
+		                  <meta itemprop="position" content="{% increment brcCounter %}"/>
+		                </a>
+		              </li>
+		            {%- endif -%}
+
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active">
+		              <a href="{{ product.url }}" itemprop="item" class="d-none">
+			              <span itemprop="name">{{- product.title -}}</span>
+			              <meta itemprop="position" content="{% increment brcCounter %}"/>
+			          </a>
+		              <span>{{ product.title }}</span>
+		            </li>
+		          {% comment %} end {% endcomment %}
+
+		          {%- when 'collection' -%}
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+		              <a href="{{ routes.collections_url }}" itemprop="item">
+		                <span itemprop="name">{{- 'sections.breadcrumb.all_collections' | t -}}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </a>
+		            </li>
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active">
+		              <span itemprop="item">
+		                <span itemprop="name">{{ collection.title }}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </span>
+		            </li>
+		          {% comment %} end {% endcomment %}
+
+		          {%- when 'list-collections' -%}
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active">
+		              <span itemprop="item">
+		                <span itemprop="name">{{- 'sections.breadcrumb.all_collections' | t -}}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </span>
+		            </li>
+		          {% comment %} end {% endcomment %}
+
+		          {%- when 'article' -%}
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+		              <a href="{{ blog.url }}" itemprop="item">
+		                <span itemprop="name">{{ blog.title }}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </a>
+		            </li>
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active">
+		              <span itemprop="item">
+		                <span itemprop="name">{{ article.title }}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </span>
+		            </li>
+		          {% comment %} end {% endcomment %}
+
+		          {%- when 'blog' -%}
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active">
+		              <span itemprop="item">
+		                <span itemprop="name">{{ blog.title }}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </span>
+		            </li>
+		          {% comment %} end {% endcomment %}
+
+		          {%- when 'cart' -%}
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active">
+		              <span itemprop="item">
+		                <span itemprop="name">{{ 'sections.breadcrumb.shopping_cart' | t }}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </span>
+		            </li>
+		          {% comment %} end {% endcomment %}
+
+		          {%- when 'account' -%}
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active">
+		              <span itemprop="item">
+		                <span itemprop="name">{{ 'sections.breadcrumb.account' | t }}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </span>
+		            </li>
+		          {% comment %} end {% endcomment %}
+
+		          {%- when 'addresses' -%}
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+		              <span itemprop="item">
+		                <span itemprop="name">{{ 'sections.breadcrumb.addresses' | t }}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </span>
+		            </li>
+
+		          {% comment %} end {% endcomment %}
+
+		          {%- when 'search' -%}
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active">
+		              <span itemprop="item">
+		                <span itemprop="name">{{ 'sections.breadcrumb.search' | t }}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </span>
+		            </li>
+		          {% comment %} end {% endcomment %}
+
+		          {%- else -%}
+		            <li class="svg-element-ui">{%- render 'svg', type: 'angle-right' -%}</li>
+		            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active">
+		              <span itemprop="item">
+		                <span itemprop="name">{{ page_title }}</span>
+		                <meta itemprop="position" content="{% increment brcCounter %}"/>
+		              </span>
+		            </li>
+		        {%- endcase -%}
+
+		    </ul>
+	    </div>
+	  </div>
+	</div>
+</div>

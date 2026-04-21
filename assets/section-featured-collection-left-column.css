@@ -1,0 +1,9 @@
+.section-featured-collection-left-column .section-body {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.section-featured-collection-left-column .sb-widget .sb-menu {
+  box-shadow: none;
+  border-radius: 0;
+}

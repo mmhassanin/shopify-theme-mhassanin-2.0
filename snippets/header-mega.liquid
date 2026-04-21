@@ -1,0 +1,48 @@
+{%- for block in section.blocks -%}
+  {%- if block.type != 'mega-trigger' -%}{%- continue -%}{%- endif -%}
+
+  {%- liquid
+    assign mega_background = block.settings.background
+    assign link_title_downcase = link_title | downcase
+    assign mega_trigger_title = block.settings.title
+    assign mega_trigger_title_downcase = mega_trigger_title | downcase
+    assign mega_trigger_width = block.settings.mega_trigger_width | append: '%'
+  -%}
+  {%- capture mega_background_image -%}{%- render 'bg_responsive' image_desk: block.settings.background_image, image_mobi: block.settings.background_image -%}{%- endcapture -%}
+  {%- if mega_trigger_title_downcase != link_title_downcase -%}{%- continue -%}{%- endif -%}
+
+  {%- if mega_type == 'hor' -%}
+    <div class="dropdown-menu dropdown-menu--mega mega-menu {{ mega_background_image }}" style="width: {{ mega_trigger_width }}; background-color: {{ mega_background }};" {{ block.shopify_attributes }}>
+      <div class="dropdown-menu_wrapper">
+        {%- for block_widget in section.blocks offset: forloop.index -%}
+          {%- if block_widget.type == 'mega-trigger' -%}{%- break -%}{%- endif -%}
+          {%- render 'header-mega-widget', block: block_widget, type: block_widget.type -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- else -%}
+    {%- assign ver_mega_trigger_width = block.settings.mega_trigger_width | plus: 0 -%}
+    {%- if ver_mega_trigger_width < 26 -%}
+      {%- assign ver_mega_trigger_width = 25 -%}
+    {%- else -%}
+      {%- if ver_mega_trigger_width < 51 -%}
+        {%- assign ver_mega_trigger_width = 50 -%}
+      {%- else -%}
+        {%- if ver_mega_trigger_width < 76 -%}
+          {%- assign ver_mega_trigger_width = 75 -%}
+        {%- else -%}
+          {%- assign ver_mega_trigger_width = 100 -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    <div class="dropdown-menu dropdown-menu--mega width-{{ ver_mega_trigger_width }} mega-menu {{ mega_background_image }}" style="background-color: {{ mega_background }};" {{ block.shopify_attributes }}>
+      <div class="dropdown-menu_wrapper">
+        {%- for block_widget in section.blocks offset: forloop.index -%}
+          {%- if block_widget.type == 'mega-trigger' -%}{%- break -%}{%- endif -%}
+          {%- render 'header-mega-widget', block: block_widget, type: block_widget.type -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+{%- endfor -%}

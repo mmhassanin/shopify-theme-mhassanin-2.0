@@ -1,0 +1,339 @@
+{{ 'left-column.css' | asset_url | stylesheet_tag }}
+{{ 'section-featured-collection-left-column.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign items_resp = section.settings.items_resp
+
+  assign collection = collections[section.settings.collection]
+  if section.settings.collection != blank and section.settings.limit > collection.all_products_count
+    assign limit = collection.all_products_count
+  else
+    assign limit = section.settings.limit
+  endif
+
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+-%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading', type:'render-html', config: section.settings -%}
+{%- endcapture -%}
+
+{%- capture grid_class -%}{%- render 'set-item-per-row', value: items_resp -%}{%- endcapture -%}
+
+{%- capture content -%}
+  {%- if section.settings.collection == blank or collection.all_products_count < 1 -%}
+    {%- for index in (1..limit) -%}
+      <div class="slider-item {{ grid_class }}">
+        {%- render 'product-item', index0: forloop.index0, product: product -%}
+      </div>
+    {%- endfor -%}
+  {%- else -%}
+    {%- for product in collection.products limit: limit -%}
+      <div class="slider-item {{ grid_class }}">
+        {%- render 'product-item', product: product, collection: collection -%}
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="section-featured-collection-left-column" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper{% unless section.settings.items_spacing %} no-padding{% endunless %}">
+
+      <div class="section-body">
+        <div class="left-column-container d-none d-lg-block">
+          <div class="sb-widget">
+            <div class="sb-menu">
+              {%- unless section.settings.menu_item == blank -%}
+                {%- if section.settings.left_sidebar_heading != blank -%}
+                  <h5 class="sb-title">{{ section.settings.left_sidebar_heading }}</h5>
+                {%- endif -%}
+                
+                <div class="sb-menu-inner">
+                  <ul class="sb-menu-list">
+                    {%- for _menu_link in linklists[section.settings.menu_item].links -%}
+                      {%- assign submenu = _menu_link.title | handleize -%}
+
+                      {%- if linklists[submenu].links.size > 0 -%}
+                        <li class="item menu-item-dropdown">
+                          <div class="dropdown-inner">
+                            <a href="{{ _menu_link.url }}"><span>{{ _menu_link.title }}</span></a>
+                            <span class="expand fc-mi_expand">{%- render 'svg', type: 'angle-right' -%}</span>
+                          </div>
+                          <ul class="child-list">
+                            {%- for l in linklists[submenu].links -%}
+                              <li class="child-item">
+                                <a href="{{ l.url }}">
+                                  <span>{{ l.title }}</span>
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </li>
+                      {%- else -%}
+                        <li class="item">
+                          <a href="{{ _menu_link.url }}">
+                            <span>{{ _menu_link.title }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+
+                    {%- endfor -%}
+                  </ul>
+                </div>
+
+                <script type="text/javascript">
+                  let _elements = document.querySelectorAll(".fc-mi_expand");
+                  _elements.forEach((e) => {
+                      e.addEvent("click", () => {
+                        if(e.closest(".menu-item-dropdown").classList.contains("active")){
+                          e.closest(".menu-item-dropdown").classList.remove('active');
+                        }
+                        else{
+                          e.closest(".menu-item-dropdown").classList.add('active');
+                        }
+                      });
+                  }); 
+                </script>tren nay chac pha que 
+
+              {%- else -%}
+                {%- if section.settings.collection == blank or collection.all_products_count < 1 -%}
+                  <div class="sb-menu-inner">
+                    <ul class="sb-menu-list">
+                      {%- for i in (1..10) -%}
+                        <li class="item menu-item-dropdown">
+                          <div class="dropdown-inner">
+                            <a role="link" aria-disabled="true" aria-hidden="true">
+                              <span>{{ 'general.onboarding.menu_title' | t }}</span>
+                            </a>
+                            <span class="expand mi-expand">{%- render 'svg', type: 'angle-right' -%}</span>
+                          </div>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
+              {%- endunless -%}
+            </div>
+          </div>
+    
+          {%- unless section.settings.image == blank -%}
+            <div class="sb-widget">
+              <div class="sb-banner">
+                <a href="{{ section.settings.link | default: 'javascript:void(0)' }}">
+                  {%- render 'image-style', image: section.settings.image , padding_top: image_padding -%}
+                </a>
+              </div>
+            </div>
+          {%- endunless -%}
+        </div>
+
+        <div class="block-slider-component">
+          {%- if section_heading != blank -%}
+            {%- capture heading_css -%}
+              {%- render 'snippet-heading', type: 'render-css', config: heading_style_block.settings, classID: section_id -%}
+            {%- endcapture -%}
+            <div class="section-header">
+              {{ section_heading }}
+            </div>
+          {%- endif -%}
+
+          <div class="slider-container js-slider-container">
+            <div class="slider-wrapper">
+              <div class="slider-list row" id="slider-{{ section.id }}">
+                {{ content }}
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+  @media (min-width: 992px) {
+    .section-featured-collection-left-column .left-column-container {
+        flex: 0 0 22%;
+        max-width: 22%;
+        -webkit-padding-end: 10px;
+        padding-inline-end: 10px;
+    }
+    .section-featured-collection-left-column .block-slider-component {
+        flex: 0 0 78%;
+        max-width: 78%;
+        -webkit-padding-start: 20px;
+        padding-inline-start: 20px;
+    }
+  }
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.featured-collection-with-left-sidebar.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.block_product"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Featured products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.common.collection"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "5,3,2"
+    },
+    {
+      "type": "checkbox",
+      "id": "items_spacing",
+      "label": "t:sections.common.items_spacing"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.common.limit",
+      "step": 1,
+      "min": 1,
+      "max": 20,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.left_sidebar"
+    },
+    {
+      "type": "text",
+      "id": "left_sidebar_heading",
+      "label": "t:sections.common.heading"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_item",
+      "label": "t:sections.common.menu_item"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.common.image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.common.link",
+      "default": "/"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "select",
+          "id": "section_heading_container_align",
+          "label": "t:sections.common.alignment",
+          "options": [
+            {
+              "value": "start",
+              "label": "t:sections.common.left"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.common.center"
+            },
+            {
+              "value": "end",
+              "label": "t:sections.common.right"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "section_heading_margin",
+          "label": "t:sections.common.margin",
+          "info": "t:sections.common.order_info"
+        },
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured-collection-with-left-sidebar.name"
+    }
+  ]
+}
+{%- endschema -%}

@@ -1,0 +1,86 @@
+.section-featured-blog .no-padding .featured_blog__item {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (min-width: 1025px) {
+  .section-featured-blog .tns-ovh {
+    padding: 0 15px 25px;
+    margin: 0 -15px -25px;
+  }
+}
+
+.section-featured-blog .slider-container:not(.slider-initialized) .slider-list:not(.row) {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.section-featured-blog .slider-container:not(.slider-initialized) .slider-list:not(.row) .featured_blog__item {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .section-featured-blog .slider-container:not(.slider-initialized) .slider-list:not(.row) .featured_blog__item {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+  }
+}
+
+.section-featured-blog .featured_blog__item-inner {
+  border-radius: 10px;
+  padding: var(--gutter-xs);
+  overflow: initial;
+  white-space: normal;
+  transition: all .35s ease-in-out;
+}
+
+@media (min-width: 1025px) {
+  .section-featured-blog .featured_blog__item-inner:hover {
+    box-shadow: 0 20px 15px 0.81px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.section-featured-blog .featured_blog__item-image img {
+  border-radius: 10px;
+}
+
+.section-featured-blog .featured_blog__item-info {
+  padding: 27px var(--gutter-xs) var(--gutter-xs);
+}
+
+.section-featured-blog .featured_blog__item-info > * {
+  margin-bottom: var(--gutter-sm);
+}
+
+.section-featured-blog .featured_blog__item-info > :last-child {
+  margin-bottom: 0;
+}
+
+.section-featured-blog .featured_blog__item-publish {
+  font-weight: var(--font-bold);
+  display: block;
+}
+
+.section-featured-blog .featured_blog__item-title {
+  font-size: calc(var(--heading-size-h3) - 2px);
+  font-weight: var(--font-bold);
+  margin-bottom: 17px;
+}
+
+.section-featured-blog .featured_blog__item-excerpt {
+  color: var(--body-color-2);
+  letter-spacing: .1px;
+  line-height: 1.6;
+}
+
+.section-featured-blog .featured_blog__item-btn {
+  display: flex;
+  align-items: center;
+  font-weight: var(--font-bold);
+  gap: 14px;
+}
+
+.section-featured-blog .featured_blog__item-btn svg {
+  flex: 0 0 16px;
+}

@@ -1,0 +1,232 @@
+{{ 'section-list-brands.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+  assign brands_blocks = section.blocks | where: 'type', 'block-item'
+-%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading', type:'render-html' config: section.settings -%}
+{%- endcapture -%}
+
+<div class="section-list-brands" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper">
+
+      {%- if section_heading != blank -%}
+        {%- capture heading_css -%}
+          {%- render 'snippet-heading', type: 'render-css', config: heading_style_block.settings, classID: section_id -%}
+        {%- endcapture -%}
+        <div class="section-header">{{ section_heading }}</div>
+      {%- endif -%}
+
+      <div class="section-body">
+        <div class="list-brands {% render 'grid-class', value: section.settings.items_resp -%}">
+          {%- for block in brands_blocks -%}
+            <div class="item">
+              <a href="{{ block.settings.link | default: 'javascript:void(0)' }}">
+                {%- if block.settings.image != blank -%}
+                  <span class="image-1">
+                    {%- render 'image-style', image: block.settings.image, limit: 768, padding_top: 0 -%}
+                  </span>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="subtext">
+                    {{ block.settings.text }}
+                  </p>
+                {%- endif -%}
+                {%- if block.settings.image_2 != blank -%}
+                  <span class="image-2">
+                    {%- render 'image-style', image: block.settings.image_2, limit: 768, padding_top: 0 -%}
+                  </span>
+                {%- endif -%}
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+  .section-list-brands#section-{{ section.id }} .list-brands .item{
+    background: {{ section.settings.item_bg_color }};
+  }
+  .section-list-brands#section-{{ section.id }} .list-brands .item .subtext{
+    color: {{ section.settings.item_text_color }};
+  }
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.list-brands.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "3,2"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Brands"
+    },
+    {
+      "type": "color",
+      "id": "item_bg_color",
+      "label": "t:sections.list-brands.settings.item_background_color.label",
+      "default": "#f2efe9"
+    },
+    {
+      "type": "color",
+      "id": "item_text_color",
+      "label": "t:sections.common.text_color",
+      "default": "#878787"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "select",
+          "id": "section_heading_container_align",
+          "label": "t:sections.common.alignment",
+          "options": [
+            {
+              "value": "start",
+              "label": "t:sections.common.left"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.common.center"
+            },
+            {
+              "value": "end",
+              "label": "t:sections.common.right"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "section_heading_margin",
+          "label": "t:sections.common.margin",
+          "info": "t:sections.common.order_info"
+        },
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        }
+      ]
+    },
+    {
+      "type": "block-item",
+      "name": "t:sections.common.block_item",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "t:sections.common.textbox",
+          "default": "Brings you the best in music, plus all things culture, style, and sports"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.list-brands.name",
+      "blocks": [
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

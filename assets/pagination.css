@@ -1,0 +1,97 @@
+.pagination-holder {
+  margin: var(--gutter-lg) auto 0;
+  padding-top: var(--gutter-md);
+  border-top: 1px solid var(--body-border-color);
+}
+
+.pagination-holder .pagination {
+  list-style: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  gap: 8px;
+}
+
+.pagination-holder .pagination li {
+  margin: 0;
+}
+
+.pagination-holder .pagination li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 35px;
+  min-height: 35px;
+  color: var(--body-link);
+  font-size: var(--body-font-size);
+  font-weight: var(--font-body-weight);
+  border-radius: 50%;
+  border: 1px solid var(--body-border-color);
+}
+
+.pagination-holder .pagination li a.next, .pagination-holder .pagination li a.prev {
+  border: none;
+  min-height: auto;
+  min-width: auto;
+}
+
+.pagination-holder .pagination li a.next svg, .pagination-holder .pagination li a.prev svg {
+  color: inherit;
+}
+
+.pagination-holder .pagination li a.next svg path, .pagination-holder .pagination li a.prev svg path {
+  fill: currentColor;
+}
+
+@media (hover: hover) {
+  .pagination-holder .pagination li:hover a {
+    color: var(--btn1-cl);
+    background: var(--btn1-bg-cl);
+    border-color: var(--main-color);
+  }
+  .pagination-holder .pagination li:hover a.next, .pagination-holder .pagination li:hover a.prev {
+    color: var(--body-link-hover);
+  }
+}
+
+.pagination-holder .pagination li.active a {
+  color: var(--btn1-cl);
+  background: var(--btn1-bg-cl);
+  border-color: var(--main-color);
+  font-weight: var(--font-bold);
+}
+
+.pagination-holder .pagination li.disabled a {
+  display: none;
+}
+
+.pagination-holder .pagination li:first-child {
+  -webkit-margin-end: auto;
+  margin-inline-end: auto;
+}
+
+@media (hover: hover) {
+  .pagination-holder .pagination li:first-child:hover a {
+    background: transparent;
+    border-color: transparent;
+  }
+}
+
+.pagination-holder .pagination li:last-child {
+  -webkit-margin-start: auto;
+  margin-inline-start: auto;
+}
+
+@media (hover: hover) {
+  .pagination-holder .pagination li:last-child:hover a {
+    background: transparent;
+    border-color: transparent;
+  }
+}
+
+.pagination-holder .showing-items {
+  text-align: center;
+  margin-top: 14px;
+}

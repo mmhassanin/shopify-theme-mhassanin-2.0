@@ -1,0 +1,14 @@
+{%- capture imageSrcSet -%}
+  {%- if image.width > 100  and limit_size != true -%}{%- if 100 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 100 }} 100w,{%- endif -%}{%- endif -%}
+  {%- if image.width > 180  and limit_size != true -%}{%- if 180 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 180 }} 180w,{%- endif -%}{%- endif -%}
+  {%- if image.width > 360  and limit_size != true -%}{%- if 360 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 360 }} 360w,{%- endif -%}{%- endif -%}
+  {%- if image.width > 540  and limit_size != true -%}{%- if 540 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 540 }} 540w,{%- endif -%}{%- endif -%}
+  {%- if image.width > 720  and limit_size != true -%}{%- if 720 > limit -%} {%- assign limit_size = true -%} {%- else -%}{{ image | image_url: width: 720 }} 720w,{%- endif -%}{%- endif -%}
+{%- endcapture -%}
+
+<link
+  rel="preload"
+  as="image"
+  href="{{ image | image_url: width: image.width }}"
+  media="all"
+  imagesrcset="{{ imageSrcSet }}">

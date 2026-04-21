@@ -1,0 +1,131 @@
+<style>
+  :root {
+    --heading-size-h1:  {{ settings.heading_size_1 }}px;
+    --heading-size-h2:  {{ settings.heading_size_2 }}px;
+    --heading-size-h3:  {{ settings.heading_size_3 }}px;
+    --heading-size-h4:  {{ settings.heading_size_4 }}px;
+    --heading-size-h5:  {{ settings.heading_size_5 }}px;
+    --heading-size-h6:  {{ settings.heading_size_6 }}px;
+    
+    --topbar-bg-color:             {{ settings.topbar_bg_color }};
+    --topbar-text-color:           {{ settings.topbar_text_color }};
+    --topbar-text-color-rgba:      {{ settings.topbar_text_color | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+    --header-bg-color:             {{ settings.header_bg_color }};
+    --text-header-color:           {{ settings.header_text_color }};
+    --text-header-color-rgba:      {{ settings.header_text_color | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+    --header-text-color-hover:     {{ settings.header_text_color_hover }};
+    --bg-number-icon:              {{ settings.bg_color_number_icon }};
+    --text-number-icon:            {{ settings.color_number_icon }};
+    
+    --header-bg-mobile-color:      {{ settings.header_bg_mobile_color }};  
+    --header-mobile-text-color:    {{ settings.header_mobile_text_color }};
+    --bg-color-mobile-number-icon: {{ settings.bg_color_mobile_number_icon }};
+    --color-mobile-number-icon:    {{ settings.color_mobile_number_icon }};
+  
+    --nav-font-size:               {{ settings.nav_font_size }}px;
+    --nav-sub-font-size:           {{ settings.nav_item_dd_font_size }}px;
+    --nav-link-color:              {{ settings.nav_link_color }}; 
+    --nav-link-hover-color:        {{ settings.nav_hover_color }};
+    --nav-dropdown-background:     {{ settings.dropdown_bg_color }}; 
+    --nav-dropdown-link-color:     {{ settings.dropdown_item_color }}; 
+    --nav-dropdown-link-hover-color: {{ settings.dropdown_item_color_hover }};
+    --nav-bg-nav-link-hover:        {{ settings.nav_bg_nav_link_hover }};
+      
+    --menu-label-color-1:          {{ settings.menu_label_color_1 }};
+    --menu-label-bg-1:             {{ settings.menu_label_bg_1 }};
+    --menu-label-color-2:          {{ settings.menu_label_color_2 }};
+    --menu-label-bg-2:             {{ settings.menu_label_bg_2 }};
+  	--menu-label-color-3:          {{ settings.menu_label_color_3 }};
+    --menu-label-bg-3:             {{ settings.menu_label_bg_3 }};
+  
+    --main-color:                  {{ settings.main_color }};
+    --main-color-rgba:             {{ settings.main_color | color_to_rgb | remove: 'rgb(' | remove: ')' }};  
+    --body-font-size:              {{ settings.body_font_size }}px;
+    --body-border-color:           {{ settings.main_border_color }};
+    --body-bg-color:               {{ settings.body_bg_color }};
+    --second-bg-color:             {{ settings.second_bg_color }};
+    --body-color:                  {{ settings.body_text_color }};
+    --body-color-rgba:             {{ settings.body_text_color | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+    --body-link:                   {{ settings.body_link_color }};
+    --body-link-hover:             {{ settings.body_link_color_hover }};
+    --body-color-2:                {{ settings.body_text_2_color }};
+    
+    --section-heading-margin:      {{ settings.section_heading_margin }};
+    --section-heading-cl:          {{ settings.section_heading_cl }};
+    --section-heading-fs:          {{ settings.section_heading_fs }}px;
+
+    --sale-lb-cl:                  {{ settings.sale_label_color }};
+    --sale-lb-bgcl:                {{ settings.sale_label_bg_color }};
+    --hot-lb-cl:                   {{ settings.hot_label_color }};
+    --hot-lb-bgcl:                 {{ settings.hot_label_bg_color }};
+    --new-lb-cl:                   {{ settings.new_label_color }};
+    --new-lb-bgcl:                 {{ settings.new_label_bg_color }};
+
+
+    --btn1-fs:                     {{ settings.btn1_fs }}px;	
+    --btn1-cl:                     {{ settings.btn1_cl }};
+    --btn1-bg-cl:                  {{ settings.btn1_bg_cl }};
+    --btn1-hover-cl:               {{ settings.btn1_hover_cl }};
+    --btn1-hover-bg-cl:            {{ settings.btn1_hover_bg_cl }};
+    --btn1-border-width:           {{ settings.btn1_border_width }}px;
+    --btn1-border-cl:              {{ settings.btn1_border_cl }};
+    --btn1-hover-border-cl:        {{ settings.btn1_hover_border_cl }};
+
+    --btn2-fs:                     {{ settings.btn2_fs }}px;
+    --btn2-cl:                     {{ settings.btn2_cl }};
+    --btn2-bg-cl:                  {{ settings.btn2_bg_cl }};
+    --btn2-hover-cl:               {{ settings.btn2_hover_cl }};
+    --btn2-hover-bg-cl:            {{ settings.btn2_hover_bg_cl }};
+    --btn2-border-width:           {{ settings.btn2_border_width }}px;
+    --btn2-border-cl:              {{ settings.btn2_border_cl }};
+    --btn2-hover-border-cl:        {{ settings.btn2_hover_border_cl }};
+
+    --price-color:                 {{ settings.price_color }};
+    --price-compare-color:         {{ settings.price_compare_color }};
+    --price-sale-color:            {{ settings.price_sale_color }};
+    --rating-star-color:           {{ settings.rating_star_color }};
+    --rating-star-empty-color:     {{ settings.rating_star_empty_color }};
+
+    --footer-bg:                   {{ settings.footer_background_color }};
+    --footer-text-cl:              {{ settings.footer_text_color }};
+  
+    --product-bg-color:            {{ settings.product_bg_color }};
+    --product-card-title-cl:       {{ settings.product_title_color }};
+    --product-card-title-fs:       {{ settings.product_card_title_fs }}px;
+    --product-card-vendor-fs:      {{ settings.product_card_vendor_fs }}px;
+    --product-card-price-fs:       {{ settings.product_card_price_fs }}px;
+    --product-card-price-sale-fs:  {{ settings.product_card_price_sale_fs }}px;
+    --product-card-price-compare-fs: {{ settings.product_card_price_compare_fs }}px;
+
+    --breadcrumb-bg-color:         {{ settings.breadcrumb_bg_color }};
+    --breadcrumb-color-1:          {{ settings.breadcrumb_color_1 }};
+    --breadcrumb-color-2:          {{ settings.breadcrumb_color_2 }};
+
+    --newsletter-popup-background:      {{ settings.newsletter_popup_background }};
+    --newsletter-popup-heading-color:   {{ settings.newsletter_popup_heading_color }};
+    --newsletter-popup-subtext-color:   {{ settings.newsletter_popup_subtext_color }};
+    --newsletter-popup-subtext-2-color: {{ settings.newsletter_popup_subtext_2_color }};
+    
+    --button-cart-bg:   #e6e6e6;
+  	--button-cart-hover-bg: #fed700;
+    --button-cart-cl:   #ffffff;
+    --button-cart-hover-cl:   #ffffff;
+    --bg-deal-section:  #e6e6e6;
+    --text-deal-text:   #383838;
+  
+    --bg-dark: #181818;
+    --color-dark: #d9d9d9;
+    --border-dark: #2f3336;
+    --button-cart-bg-dark:  #495057;
+  	--button-cart-hover-bg-dark: #fed700;
+    --button-cart-cl-dark:  #d9d9d9;
+    --button-cart-hover-cl-dark:  #181818;
+    
+    --gutter-xlg:       40px;
+    --gutter-lg:        30px;
+    --gutter-md:        25px;
+    --gutter-sm:        20px;
+    --gutter-xs:        15px;
+    --gutter-xxs:       10px;
+  }
+</style>

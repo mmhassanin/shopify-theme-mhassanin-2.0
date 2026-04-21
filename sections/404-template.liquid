@@ -1,0 +1,56 @@
+{{ 'pages.css' | asset_url | stylesheet_tag }}
+
+<div class="section-template-404">
+  <div class="container">
+    <div class="section-body text-center">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="template-404_title">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <div class="template-404_subtitle">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+      
+      {%- if section.settings.btn_label != blank -%}
+        <div class="template-404_button">
+          <a href="{{ section.settings.btn_link | default: 'javascript:void(0)' }}" class="btn btn-1">
+            {{ section.settings.btn_label }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- schema -%}
+{
+  "name": "t:sections.404-template.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "404"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "t:sections.common.subheading",
+      "default": "We are sorry, the page you've requested is not available."
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "t:sections.common.button_label",
+      "default": "Back to Homepage"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "t:sections.common.button_link",
+      "default": "/"
+    }
+  ]
+}
+{%- endschema -%}

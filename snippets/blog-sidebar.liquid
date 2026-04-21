@@ -1,0 +1,111 @@
+<aside class="sidebar" id="blog-sidebar">
+  {%- for block in section.blocks -%}
+    <div class="sidebar_widget widget-{{ block.type }}" id="block-{{ block.id }}" {{ block.shopify_attributes }}>
+      {%- if block.type != 'search' and block.settings.title != blank-%}
+        <div class="sidebar_widget_title">
+          <h5 class="sb-title">{{ block.settings.title }}</h5>
+        </div>
+      {%- endif -%}
+
+      {%- case block.type -%}
+        {%- when 'search' -%}
+          <div class="search-blog">
+            <form action="{{ routes.search_url }}" method="get">
+              <input type="hidden" name="type" value="article" />
+              <input type="text" name="q" class="form-control"  placeholder="{{ block.settings.placeholder }}" autocomplete="off" />
+              <button type="submit">{%- render 'svg', type: 'search' -%}</button>
+            </form>
+
+          </div>
+        {% comment %} end {% endcomment %}
+
+        {%- when 'textbox' -%}
+          {%- if block.settings.content != blank -%}
+            <div class="caption">{{ block.settings.content }}</div>
+          {%- endif -%}
+        {% comment %} end {% endcomment %}
+
+        {%- when 'menu' -%}
+          <ul class="menu-list">
+            {%- for l in linklists[block.settings.menu].links -%}
+              {%- assign submenu = l.title | handleize -%}
+              {%- if linklists[submenu].links.size > 0 -%}
+                <li class="menu-item menu-item-dropdown">
+                  <div class="dropdown-inner">
+                    <a href="{{ l.url }}" class="dropdown-link"><span>{{ l.title }}</span></a>
+                    <span class="expand b-mi_expand">{%- render 'svg', type: 'angle-right' -%}</span>
+                  </div>
+
+                  <ul class="dropdown-menu">
+                    {%- for l in linklists[submenu].links -%}
+                      <li class="menu-item">
+                        <a href="{{ l.url }}">{{ l.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </li>
+              {%- else -%}
+                <li class="menu-item">
+                  <a href="{{ l.url }}">{{ l.title }}</a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+
+          <script type="text/javascript">
+            let elements = document.querySelectorAll(".b-mi_expand");
+            elements.forEach((e) => {
+                e.addEvent("click", () => {
+                  if(e.closest(".menu-item-dropdown").classList.contains("active")){
+                    e.closest(".menu-item-dropdown").classList.remove('active');
+                  }
+                  else{
+                    e.closest(".menu-item-dropdown").classList.add('active');
+                  }
+                });
+            }); 
+          </script>
+        {% comment %} end {% endcomment %}
+
+        {%- when 'tags' -%}
+          {%- assign tags_list = blog.all_tags -%}
+          {%- assign size = tags_list | size -%}
+          {%- if size > 0  -%}
+            <ul class="tags-list">
+              <li><a href="{{ blog.url }}">All</a></li>
+              {%- for tag in blog.all_tags -%}
+
+                {%- if current_tags contains tag -%}
+                  <li class="active">{{ tag | link_to_remove_tag: tag }}</li>
+                {%- else -%}
+                  <li>{{ tag | link_to_tag: tag }}</li>
+                {%- endif -%}
+
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        {% comment %} end {% endcomment %}
+
+        {%- when 'featured-blogs' -%}
+          <div class="articles-list">
+            {%- for article in blogs[block.settings.blog].articles limit: block.settings.limit -%}
+              <article class="article">
+                {%- if article.image -%}
+                <div class="article_image">
+                  <a href="{{ article.url }}">{%- render 'image-style', image: article.image , limit: 540 -%}</a>
+                </div>
+                {%- endif -%}
+                <div class="article-content">
+                  <h6><a href="{{ article.url }}">{{ article.title }}</a></h6>
+                  <div class="meta-data">
+                    <span class="date">{{ article.published_at | date: "%d %b, %Y" }}</span>
+                  </div>
+                </div>
+              </article>
+            {%- endfor -%}
+          </div>
+        {% comment %} end {% endcomment %}
+      {%- endcase -%}
+    </div>
+  {%- endfor -%}
+</aside>

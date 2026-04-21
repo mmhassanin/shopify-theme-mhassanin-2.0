@@ -1,0 +1,57 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div.page-template.page-cart",
+  "sections": {
+    "main": {
+      "type": "cart-template",
+      "settings": {
+        "show_order_notes": true,
+        "show_estimated_shipping": true,
+        "estimate_shipping_default_country": "United States"
+      }
+    },
+    "1627565819e587cc2a": {
+      "type": "featured-collection",
+      "settings": {
+        "style": "normal",
+        "margin": "50px 0 50px 0, 30px 0 30px 0",
+        "padding": "",
+        "bg_color": "rgba(0,0,0,0)",
+        "heading": "You might also like",
+        "subheading": "",
+        "collection": "accessories",
+        "items_resp": "6,4,2",
+        "items_spacing": false,
+        "limit": 10,
+        "link": "",
+        "position": "2",
+        "text_1": "",
+        "text_2": "",
+        "expire": "",
+        "textbox_1": "",
+        "textbox_2": "",
+        "button_label": "",
+        "button_link": "",
+        "enable_slider": true,
+        "loop": false,
+        "controls": true,
+        "controls_position": "1",
+        "dots": false,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1627565819e587cc2a"
+  ]
+}

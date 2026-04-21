@@ -1,0 +1,44 @@
+<div id="shipping-calculator">
+  <div class="shipping-calculator_title">{{ 'pages.cart.estimated_shipping' | t }}</div>
+  <form class="shipping-calculator_form d-flex">
+
+    <div class="form-group country">
+      <label for="shipping-calculator-country" class="shipping-calculator_title country d-none">{{ 'pages.cart.country' | t }}</label>
+      <div class="select-group">
+        <select class="w-100" id="shipping-calculator-country" name="shipping_address[country]"
+          data-default="{% if customer %}{{ customer.default_address.country }}{% else %}{{ section.settings.estimate_shipping_default_country }}{% endif %}">
+          {{ country_option_tags }}
+        </select>
+        {%- render 'svg', type: 'bold-angle-down' -%}
+      </div>
+    </div>
+
+    <div class="form-group province d-none">
+      <label for="shipping-calculator-province" class="shipping-calculator_title province d-none">{{ 'pages.cart.province' | t }}</label>
+      <div class="select-group">
+        <select class="w-100" id="shipping-calculator-province" name="shipping_address[province]" data-default="{{ customer.default_address.province }}"></select>
+        {%- render 'svg', type: 'bold-angle-down' -%}
+      </div>
+    </div>
+
+    <div class="form-group zip">
+      <label for="shipping-calculator-zip" class="shipping-calculator_title zip d-none">{{ 'pages.cart.zip' | t }}</label>
+      <input type="text" id="shipping-calculator-" value="35034" name="shipping_address[zip]" data-default="{{ customer.default_address.zip }}">
+    </div>
+
+    <button type="submit" class="btn btn-2">
+      <span>{{ 'pages.cart.calculate' | t }}</span>
+      {%- render 'svg', type: 'is-loading' -%}
+    </button>
+  </form>
+
+  <div class="shipping-calculator_errors js-message-container d-none">
+    {%- render 'svg', type: 'close-bold' -%}
+    <span class="js-error-message"></span>
+  </div>
+  
+  <div class="shipping-calculator_results js-shipping-calculator-results">
+    <p></p>
+    <ul></ul>
+  </div>
+</div>

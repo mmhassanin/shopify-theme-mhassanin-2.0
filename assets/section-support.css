@@ -1,0 +1,84 @@
+.section-support .section-wrapper {
+  border-top: 1px solid var(--body-border-color);
+  padding-top: 28px;
+}
+
+.section-support .block-support {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: space-between;
+}
+
+@media (min-width: 992px) {
+  .section-support .block-support {
+    flex-wrap: nowrap;
+  }
+}
+
+.section-support .block-support-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+@media (min-width: 992px) {
+  .section-support .block-support-right {
+    flex: 0 0 auto;
+  }
+}
+
+.section-support .support-icon {
+  flex: 0 0 auto;
+}
+
+.section-support .support-icon svg {
+  color: var(--body-color);
+}
+
+.section-support .support-title {
+  font-size: calc(var(--body-font-size) + 4px);
+  margin-bottom: 5px;
+}
+
+.section-support .support-icons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  padding: 0;
+}
+
+@media (min-width: 992px) {
+  .section-support .support-icons {
+    gap: 35px;
+  }
+}
+
+.section-support .support-icons li {
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 0;
+  text-indent: 0;
+}
+
+.section-support .support-icons .icon {
+  flex: 0 0 auto;
+}
+
+.section-support .support-icons .text p {
+  margin: 0 0 5px;
+}
+
+.section-support .support-icons .text p:last-of-type {
+  margin-bottom: 0;
+}
+
+.section-support .support-icons .btn-chat {
+  padding-left: 25px;
+  padding-right: 25px;
+  border-top-left-radius: 0;
+}

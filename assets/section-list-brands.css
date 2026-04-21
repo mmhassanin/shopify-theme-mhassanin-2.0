@@ -1,0 +1,58 @@
+@media (max-width: 1550px) {
+  .section-list-brands {
+    overflow: hidden;
+  }
+}
+
+.section-list-brands .list-brands {
+  grid-gap: 30px;
+}
+
+.section-list-brands .item {
+  border-radius: 10px;
+  padding: 23px;
+  position: relative;
+  margin-bottom: 41px;
+}
+
+.section-list-brands a {
+  display: block;
+}
+
+.section-list-brands img {
+  position: static;
+}
+
+.section-list-brands .image-1 {
+  max-width: 140px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.section-list-brands .image-2 {
+  position: absolute;
+  right: 0;
+  bottom: -45px;
+  max-width: 145px;
+  width: 100%;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .section-list-brands .image-2 {
+    right: -10px;
+  }
+}
+
+@media (min-width: 1441px) {
+  .section-list-brands .image-2 {
+    right: -50px;
+  }
+}
+
+.section-list-brands .subtext {
+  letter-spacing: .1px;
+  line-height: 1.6;
+  -webkit-margin-end: 100px;
+  margin-inline-end: 100px;
+}

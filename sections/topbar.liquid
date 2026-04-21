@@ -1,0 +1,329 @@
+{{ 'topbar.css' | asset_url | stylesheet_tag }}
+
+<div class="topbar-container{% if settings.header_overlay %} header-overlay{% endif %} border-bottom-{{ section.settings.border_bottom }}" id="section-{{ section.id }}">
+  <div class="{{ section.settings.section_layout }}">
+    <div class="topbar-wrapper">
+      {%- for block in section.blocks -%}
+
+        {%- if block.type == 'topbar_left' or block.type == 'topbar_right' -%}
+          {%- assign index = forloop.index -%}
+
+          <div class="topbar-block {{ block.type }}">
+            <ul class="topbar-items">
+              {%- for block in section.blocks offset: index -%}
+                {%- assign index = index | plus: 1 -%}
+
+                {%- case block.type -%}
+                  {%- when 'topbar_custom_text' -%}
+                    <li class="tb-item tb-item-text">
+                      <span class="text">{{ block.settings.text }}</span>
+                    </li>
+                    
+                  {%- when 'topbar_phone' -%}
+                    <li class="tb-item tb-item-phone">
+                      <span class="icon">{{ block.settings.icon }}</span>
+                      <span class="text">{{ block.settings.text }}</span>
+                    </li>
+
+                  {%- when 'topbar_email' -%}
+                    <li class="tb-item tb-item-email">
+                      <span class="icon">{{ block.settings.icon }}</span>
+                      <span class="text">{{ block.settings.text }}</span>
+                    </li>
+
+                  {%- when 'topbar_location' -%}
+                    <li class="tb-item tb-item-location">
+                      <a href="{{ block.settings.link | default: 'javascript:void(0)'}}">
+                        <span class="icon">{{ block.settings.icon }}</span>
+                        <span class="text">{{ block.settings.text }}</span>
+                      </a>
+                    </li>
+
+                  {%- when 'topbar_account' -%}
+                    {%- if shop.customer_accounts_enabled or shop.customer_accounts_optional -%}
+                      <li class="tb-item tb-item-account">
+                        <span class="icon">{{ block.settings.icon }}</span>
+                        <span class="text">
+                          {%- if customer -%}
+                            <a href="{{ routes.account_url }}">
+                              {{ 'sections.header.my_account' | t }}
+                            </a>
+                            <span>{{ 'sections.header.or' | t }}</span>
+                            <a href="{{ routes.account_logout_url }}">
+                              {{ 'sections.header.logout' | t }}
+                            </a>
+                          {%- else -%}
+                            <a href="{{ routes.account_login_url }}">
+                              {{ 'sections.header.sign_in' | t }}
+                            </a>
+                            <span>{{ 'sections.header.or' | t }}</span>
+                            <a href="{{ routes.account_register_url }}">
+                              {{ 'sections.header.register' | t }}
+                            </a>
+                          {%- endif -%}
+                        </span>
+                      </li>
+                    {%- endif -%}
+
+                  {%- when 'topbar_language' -%}
+                    {%- if settings.enable_language_selector or settings.enable_currency_selector -%}
+                      <li class="tb-item tb-item-language">
+                        <div class="group-lc-wrapper">
+                          <span class="lc_icon">{%- render 'svg', type: 'globe' -%}</span>
+
+                          <div class="group-lc_dropdown">
+                            <div class="lc_dropdown-inner">
+                              {%- if settings.enable_currency_selector -%}
+                                <div class="lc_dropdown">
+                                  <div class="lc-heading">
+                                    <span>{{ 'sections.header.currencies' | t }}</span>
+                                    {%- render 'svg', type: 'angle-down' -%}
+                                  </div>
+                                  <ul class="lc-currencies-list">
+                                    {%- for currency in shop.enabled_currencies -%}
+                                      <li data-value="{{ currency.iso_code }}" class="currency-code {% if currency == cart.currency %} active{% endif %}">{{ currency.iso_code }}</li>
+                                    {%- endfor -%}
+                                  </ul>
+                                </div>
+
+                                <div class="group-lc-action" style="display: none;">
+                                  <label for="currency_select">{{ 'sections.header.currencies' | t }}</label>
+                                  {%- form 'currency' -%}
+                                    <div class="select-group">
+                                      <select  id="currencies-select" name="currency" onchange="this.closest('form').submit()">
+                                        {%- for currency in shop.enabled_currencies -%}
+                                          <option class="currency-value" value="{{ currency.iso_code }}" {% if currency == cart.currency %} selected="true"{% endif %}>{{ currency.iso_code }}</option>
+                                        {%- endfor -%}
+                                      </select>
+                                      {%- render 'svg', type: 'angle-down' -%}
+                                    </div>
+                                  {%- endform -%}
+                                </div>
+
+                                <script type="text/javascript">
+                                  if (window.innerWidth > 992) {
+                                    let els_currency = document.getElementsByClassName('currency-code');
+                                    for(let i = 0; i < els_currency.length; i++)
+                                    {
+                                      els_currency[i].addEventListener('click', function() {
+                                        let _value_change = document.getElementById('currencies-select');
+                                        let _value = this.getAttribute('data-value');
+                                        let _value_action = document.getElementsByClassName('currency-value');
+
+                                        for(let j = 0; j < _value_action.length; j++){
+                                          if(_value_action[j].getAttribute('value') == _value){
+                                            var select = document.querySelector('#currencies-select');
+                                          select.value = _value;
+                                          select.dispatchEvent(new Event('change'));
+                                          }
+                                         }
+                                      });
+                                    }
+                                  }
+                                </script>
+                              {%- endif -%}
+
+                              {%- if settings.enable_language_selector -%}
+                                <div class="lc_dropdown">
+                                  <div class="lc-heading">
+                                    <span>{{ 'sections.header.languages' | t }}</span>
+                                    {%- render 'svg', type: 'angle-down' -%}
+                                  </div>
+                                  <ul class="lc-languages-list">
+                                    {%- for locale in shop.enabled_locales -%}
+                                      {%- if routes.root_url == locale.root_url -%}
+                                        <li class="active"><span>{{ locale.iso_code }}</span></li>
+                                      {%- else -%}
+                                        <li><a href="{{ shop.url }}{{ locale.root_url }}">{{ locale.iso_code }}</a></li>
+                                      {%- endif -%}
+                                    {%- endfor -%}
+                                  </ul>
+                                </div>
+                              {%- endif -%}
+                            </div>
+                          </div>
+
+                        </div>
+                      </li>
+                    {%- endif -%}
+
+                  {%- else -%}
+                    {%- break -%}
+
+                {%- endcase -%}
+
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+      {%- endfor -%}
+
+    </div>
+  </div>
+</div>
+
+{%- schema -%}
+{
+  "name": "t:sections.topbar.name",
+  "tag": "section",
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "border_bottom",
+      "label": "t:sections.common.border_bottom",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "topbar_left",
+      "name": "t:sections.topbar.blocks.topbar_left.name",
+      "limit": 1
+    },
+    {
+      "type": "topbar_right",
+      "name": "t:sections.topbar.blocks.topbar_right.name",
+      "limit": 1
+    },
+    {
+      "type": "topbar_custom_text",
+      "name": "t:sections.topbar.blocks.topbar_custom_text.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.common.text"
+        }
+      ]
+    },
+    {
+      "type": "topbar_phone",
+      "name": "t:sections.topbar.blocks.topbar_phone_number.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "icon",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.common.phone_number",
+          "default": "(+800) 123 456 7890"
+        }
+      ]
+    },
+    {
+      "type": "topbar_email",
+      "name": "t:sections.topbar.blocks.topbar_email.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "icon",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.common.email",
+          "default": "sample@email.com"
+        }
+      ]
+    },
+    {
+      "type": "topbar_location",
+      "name": "t:sections.topbar.blocks.topbar_location.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "icon",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.common.text",
+          "default": "Store Location"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    },
+    {
+      "type": "topbar_account",
+      "name": "t:sections.topbar.blocks.topbar_account.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "icon",
+          "label": "t:sections.common.svg"
+        }
+      ]
+    },
+    {
+      "type": "topbar_language",
+      "name": "t:sections.topbar.blocks.topbar_language.name",
+      "limit": 1,
+      "settings": [
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.topbar.name",
+      "blocks": [
+        {
+          "type": "topbar_left"
+        },
+        {
+          "type": "topbar_phone"
+        },
+        {
+          "type": "topbar_email"
+        },
+        {
+          "type": "topbar_right"
+        },
+        {
+          "type": "topbar_location"
+        },
+        {
+          "type": "topbar_account"
+        },
+        {
+          "type": "topbar_language"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

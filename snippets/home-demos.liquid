@@ -1,0 +1,63 @@
+<div class="home-demos">
+  <div class="home-demos-close">{%- render 'svg', type: 'close' -%}</div>
+  <div class="home-demos-content">
+    <div class="home-demos-icon">
+      {%- render 'svg', type: 'demo' -%}
+      <span>Demos</span>
+    </div>
+
+    <div class="home-demos-content-inner">
+      <template id="home-demos-id">
+        <div class="home-demo-content">
+
+          <div class="home-demo-block">
+            <div class="hdb-title"><span>Homepages</span></div>
+
+            <div class="hdb-items">
+              {%- liquid
+                assign metafield_home = shop.metafields.c_f
+                assign number_metafield_home = metafield_home.demo_text.size | minus: 1
+              -%}
+
+              {%- for i in (0..number_metafield_home) -%}
+                {%- if metafield_home.demo_text[i] != blank -%}
+                  <div class="item">
+                    <a href="{{ metafield_home.demo_link[i] }}">
+                      <span class="image"><img src="{{ metafield_home.demo_image[i] }}" alt="" /></span>
+                      <span class="text">{{- metafield_home.demo_text[i] -}}</span>
+                    </a>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    let _home_template_id = document.querySelector(".home-demos-content");
+    let _home_demos_close = document.querySelector(".home-demos-close");
+
+    _home_template_id.addEventListener("click", () => {
+      let __home_this = _home_template_id.querySelector('#home-demos-id');
+      if(__home_this){
+        let div = document.createElement("div");
+        div.innerHTML = __home_this.innerHTML;
+        __home_this.insertAdjacentElement("afterend", div.firstElementChild);
+        __home_this.remove();
+      }
+
+      document.querySelector(".home-demos").classList.add("active");
+      document.querySelector("html").classList.add("overflow-hidden");
+    });
+
+    _home_demos_close.addEventListener("click", () => {
+      document.querySelector(".home-demos").classList.remove("active");
+      document.querySelector("html").classList.remove("overflow-hidden");
+    });
+
+  </script>
+</div>

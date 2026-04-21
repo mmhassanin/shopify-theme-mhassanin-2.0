@@ -1,0 +1,277 @@
+{{ 'section-list-collections.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign display_style = section.settings.display_style
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+-%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading', type:'render-html', config: section.settings -%}
+{%- endcapture -%}
+
+{%- capture grid_class -%}{%- render 'set-item-per-row', value: section.settings.items_resp -%}{%- endcapture -%}
+
+<div class="section-list-collections style-{{ display_style }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper{% unless section.settings.items_spacing %} no-padding{% endunless %}">
+
+      {%- if section_heading != blank -%}
+        {%- capture heading_css -%}
+          {%- render 'snippet-heading', type: 'render-css', config: heading_style_block.settings, classID: section_id -%}
+        {%- endcapture -%}
+        <div class="section-header">{{ section_heading }}</div>
+      {%- endif -%}
+
+      <div class="section-body">
+        <div class="list-collection">
+          
+          <div class="row row-item">
+            {%- if section.settings.display_type == 'all' -%}
+              {%- for collection in collections -%}
+                {%- assign sub_collection = collections[collection.handle].metafields.c_f.sub_collection -%}
+
+                <div class="collection-item {{ grid_class }}">
+                  <div class="item">
+                    {%- if display_style == 'all' -%}
+                      <div class="image">
+                        <a href="{{ collection.url }}">
+                          {%- render 'image-style', image: collection.image, limit: 768 -%}
+                        </a>
+                      </div>
+                    {%- endif -%}
+
+                    <div class="text-box">
+                      <h6><a href="{{ collection.url }}">{{ collection.title }}</a></h6>
+                      {%- if sub_collection != blank and display_style == 'all' -%}
+                        {%- assign sub_collection_list = sub_collection | split: "|" -%}
+                        <ul class="sub-collections">
+                          {%- for _sub_col in sub_collection_list -%}
+                            <li>
+                              <a href="{{ collections[_sub_col].url }}">{{ collections[_sub_col].title }}</a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+
+            {%- else -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type != 'heading-style' -%}
+                  {%- assign _collection = block.settings.collection -%}
+                  {%- assign text = block.settings.text -%}
+                  
+                  {%- if _collection != blank -%}
+                    {%- assign collection = collections[_collection] -%}
+                    {%- assign sub_collection = collections[collection.handle].metafields.c_f.sub_collection -%}
+
+                    <div class="collection-item {{ grid_class }}">
+                      <div class="item">
+                        {%- if display_style == 'all' -%}
+                          <div class="image">
+                            <a href="{{ collection.url }}">
+                              {%- render 'image-style', image: collection.image, limit: 768 -%}
+                            </a>
+                          </div>
+                        {%- endif -%}
+
+                        <div class="text-box">
+                          <h6><a href="{{ collection.url }}">{%- if text == blank -%}{{ collection.title }}{%- else -%}{{ text }}{%- endif -%}</a></h6>
+                          {%- if sub_collection != blank and display_style == 'all' -%}
+                            {%- assign sub_collection_list = sub_collection | split: "|" -%}
+                            <ul class="sub-collections">
+                              {%- for _sub_col in sub_collection_list -%}
+                                <li>
+                                  <a href="{{ collections[_sub_col].url }}">{{ collections[_sub_col].title }}</a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- endif -%}
+                        </div>
+                      </div>
+                    </div>
+                  {%- endif -%}
+
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}  
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.list-collections.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Top Categories"
+    },
+    {
+      "type": "paragraph",
+      "content": "All of your collections are listed by default. To customize your list, choose 'Selected' and add collections."
+    },
+    {
+      "type": "radio",
+      "id": "display_type",
+      "label": "t:sections.list-collections.settings.select_collections_to_show",
+      "default": "all",
+      "options": [
+        { "value": "all", "label": "t:sections.list-collections.settings.all"},
+        { "value": "selected", "label": "t:sections.list-collections.settings.selected" }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "display_style",
+      "label": "t:sections.common.style",
+      "default": "all",
+      "options": [
+        { "value": "all", "label": "t:sections.list-collections.settings.all"},
+        { "value": "only-text", "label": "t:sections.list-collections.settings.only_text"}
+      ]
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "4,2"
+    },
+    {
+      "type": "checkbox",
+      "id": "items_spacing",
+      "label": "t:sections.common.items_spacing",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "select",
+          "id": "section_heading_container_align",
+          "label": "t:sections.common.alignment",
+          "options": [
+            {
+              "value": "start",
+              "label": "t:sections.common.left"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.common.center"
+            },
+            {
+              "value": "end",
+              "label": "t:sections.common.right"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "section_heading_margin",
+          "label": "t:sections.common.margin",
+          "info": "t:sections.common.order_info"
+        },
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        }
+      ]
+    },
+    {
+      "type": "block-item",
+      "name": "t:sections.common.block_item",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.common.collection"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.common.text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.list-collections.name"
+    }
+  ]
+}
+{%- endschema -%}

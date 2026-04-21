@@ -1,0 +1,99 @@
+<div class="section-contact-us">
+  {%- capture heading_section -%}
+    {%- if section.settings.heading != blank -%}
+      <div class="page-title">
+        <h1 class="h3">{{ section.settings.heading }}</h1>
+      </div>
+    {%- endif -%}
+    {%- if section.settings.subtext != blank -%}
+      <div class="subtext">{{ section.settings.subtext }}</div>
+    {%- endif -%}
+  {%- endcapture -%}
+
+  <div class="container">
+    <div class="section-body d-grid grid-1 grid-md-2">
+      <div class="contact-form">
+        {%- if heading_section != blank -%}
+          <div class="section-header">{{ heading_section }}</div>
+        {%- endif -%}
+
+        {%- form 'contact' -%}
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label for="contact-name">{{ 'pages.contact_us.your_name' | t }}<span class="req">*</span></label>
+                <input type="text" id="contact-name" name="contact[{{ 'pages.contact_us.your_name' | t }}]" required>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label for="contact-email">{{ 'pages.contact_us.your_email' | t }}<span class="req">*</span></label>
+                <input type="email" id="contact-email" name="contact[email]" required>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="contact-phone">{{ 'pages.contact_us.phone_number' | t }}</label>
+                <input type="text" id="contact-phone" name="contact[{{ 'pages.contact_us.phone_number' | t }}]">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <div class="label-group">
+                  <label for="contact-message">{{ 'pages.contact_us.your_comment' | t }}<span class="req">*</span></label>
+                </div>
+                <textarea id="contact-message" name="contact[{{ 'pages.contact_us.your_comment' | t }}]" required maxlength="1200" cols="30" rows="8"></textarea>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-1 btn-submit">{{ 'pages.contact_us.submit' | t }}</button>
+        {%- endform -%}
+      </div>
+
+      {%- if section.settings.embed_map != blank -%}
+      <div class="contact-map">
+        <div class="embed-map">{{ section.settings.embed_map }}</div>
+      </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    let contactMessage = document.getElementById('contact-message');
+    let messageCharTotal = document.getElementById('char-total');
+    contactMessage.addEvent('input', function() {
+      messageCharTotal.innerHTML = this.value.length
+    })
+  })()
+</script>
+
+{%- schema -%}
+{
+  "name": "t:sections.contact-us.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Contact Us"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "t:sections.common.subtext",
+      "default": "If you have any questions please send us a message using the adjacent form and we will get back to you as soon as possible"
+    },
+    {
+      "type": "textarea",
+      "id": "embed_map",
+      "label": "t:sections.contact-us.embed_map"
+    }
+  ],
+  "blocks": [
+  ]
+}
+{%- endschema -%}

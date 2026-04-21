@@ -1,0 +1,175 @@
+{{ 'blog.css' | asset_url | stylesheet_tag }}
+{{ 'pagination.css' | asset_url | stylesheet_tag }}
+
+{%- paginate blog.articles by section.settings.item_per_page -%}
+  {%- capture blog_grid -%}
+    <div class="blog-grid">
+      <div id="main-blog-grid">
+        {%- for article in blog.articles -%}
+          {%- render 'article-item', article: article -%}
+        {%- else -%}
+          <div class="text-center">
+            <p>{{ 'pages.blog.not_matching' | t }}</p>
+          </div>
+        {%- endfor -%} 
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <div class="pagination-container">
+          {%- render 'pagination', paginate: paginate -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endcapture -%}
+
+  {%- if section.settings.layout != 'none-sidebar' -%}
+    {%- capture blog_sidebar -%}
+      {%- render 'blog-sidebar', section: section -%}
+    {%- endcapture -%}
+  {%- endif -%}
+
+  <div class="section-blog-template" id="section-{{ section.id }}">
+    <div class="section-wrapper">
+      {%- if section.settings.layout == 'left-sidebar' -%}
+        <div class="section-body row">
+          <div class="col-12 col-lg-3 d-none d-lg-block">{{ blog_sidebar }}</div>
+          <div class="col-12 col-lg-9">{{ blog_grid }}</div>
+        </div>
+      {%- elsif section.settings.layout == 'right-sidebar' -%}
+        <div class="section-body row">
+          <div class="col-12 col-lg-9">{{ blog_grid }}</div>
+          <div class="col-12 col-lg-3 d-none d-lg-block">{{ blog_sidebar }}</div>
+        </div>
+      {%- else -%}
+        <div class="section-body">{{ blog_grid }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.blog-template.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "right-sidebar",
+      "options": [
+        {
+          "value": "left-sidebar",
+          "label": "t:sections.common.left_sidebar"
+        },
+        {
+          "value": "right-sidebar",
+          "label": "t:sections.common.right_sidebar"
+        },
+        {
+          "value": "none-sidebar",
+          "label": "t:sections.common.none_sidebar"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "item_per_page",
+      "label": "t:sections.common.items_per_page",
+      "step": 1,
+      "min": 1,
+      "max": 20,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "search",
+      "name": "t:sections.blog-template.blocks.search.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "t:sections.common.placeholder",
+          "default": "Enter Keywords..."
+        }
+      ]
+    },
+    {
+      "type": "textbox",
+      "name": "t:sections.blog-template.blocks.textbox.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "t:sections.common.content"
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "t:sections.blog-template.blocks.menu.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "Categories"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.common.menu_item"
+        }
+      ]
+    },
+    {
+      "type": "featured-blogs",
+      "name": "t:sections.blog-template.blocks.featured-blogs.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "Top Stories"
+        },
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "t:sections.common.blog_post"
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "label": "t:sections.common.limit",
+          "step": 1,
+          "min": 1,
+          "max": 6,
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "tags",
+      "name": "t:sections.blog-template.blocks.tags.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "Tags"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

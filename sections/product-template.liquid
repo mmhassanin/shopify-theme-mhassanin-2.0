@@ -1,0 +1,463 @@
+{{ 'product-page.css' | asset_url | stylesheet_tag }}
+{{ 'fancybox.css' | asset_url | stylesheet_tag }}
+
+{%- assign sidebar_mode = section.settings.sidebar_mode -%}
+
+{%- if template.suffix == 'ajax-quick-view' -%}
+  {%- render 'product-info', type: 'quick-view' -%}
+{%- else -%}
+  {%- if sidebar_mode != 'none-sidebar' -%}
+    {%- capture product_sidebar -%}
+      {{ 'left-column.css' | asset_url | stylesheet_tag }}
+      {%- render 'product-sidebar', section: section -%}
+    {%- endcapture -%}
+  {%- endif -%}
+
+  <div class="section-product-template sidebar-{{ sidebar_mode }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="product-template">
+    <div class="section-wrapper row">
+
+      {%- if sidebar_mode == 'left' -%}
+        <div class="col-12 col-lg-3 d-none d-lg-block col-sidebar">{{ product_sidebar }}</div>
+        <div class="col-12 col-lg-9 col-main">
+          <div class="section-body">
+            {%- render 'product-info', section: section -%}
+          </div>
+
+          <div class="section-footer">
+            <div class="section-footer_item">
+              {%- render 'product-snippet', type: 'tabs' -%}
+            </div>
+          </div>
+        </div>
+
+      {%- elsif sidebar_mode == 'right' -%}
+        <div class="col-12 col-lg-9 col-main">
+          <div class="section-body">
+            {%- render 'product-info', section: section -%}
+          </div>
+
+          <div class="section-footer">
+            <div class="section-footer_item">
+              {%- render 'product-snippet', type: 'tabs' -%}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-3 d-none d-lg-block col-sidebar">{{ product_sidebar }}</div>
+
+      {%- else -%}
+        <div class="col-12">
+          <div class="section-body">
+            {%- render 'product-info', section: section -%}
+          </div>
+
+          <div class="section-footer">
+            <div class="section-footer_item">
+              {%- render 'product-snippet', type: 'tabs' -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+
+  {%- render 'product-snippet', type: 'json' -%}
+
+  <script crossorigin="anonymous" src="{{ 'fancybox.umd.min.js' | asset_url }}" defer></script>
+  <script>
+    (() => {
+      window.theme = window.theme || {};
+      (window.theme.sectionRegister = window.theme.sectionRegister || []).push("product-template");
+      (window.theme.customElementsList = window.theme.customElementsList || []).push('slider-component');
+      window.theme.customElementsList.push('collapse-panel');
+    })();
+  </script>
+{%- endif -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.product-template.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "t:sections.product-template.settings.show_dynamic_checkout.label",
+      "info": "Lets customers check out directly using a familiar payment method. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "t:sections.product-template.settings.show_vendor.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "t:sections.product-template.settings.show_sku.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Metafield",
+      "info": "Metafield allow you to attach metadata, which is additional information to a store's resources. Please install the [Custom Fields](https:\/\/apps.shopify.com\/advanced-custom-field) from Shopify app store."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_short_des",
+      "label": "t:sections.product-template.settings.short_description.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown_timer",
+      "label": "t:sections.product-template.settings.countdown_timer.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.product-template.settings.header_1.content"
+    },
+    {
+      "type": "select",
+      "id": "status_variant_picker",
+      "label": "t:sections.product-template.settings.status_variant_picker.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.product-template.settings.status_variant_picker.option_1.label"
+        },
+        {
+          "value": "hide",
+          "label": "t:sections.product-template.settings.status_variant_picker.option_2.label"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.product-template.settings.header_2.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_inventory_quantity",
+      "label": "t:sections.product-template.settings.show_inventory_quantity.label",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "inventory_threshold",
+      "label": "t:sections.product-template.settings.inventory_threshold.label",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0,
+      "info": "t:sections.product-template.settings.inventory_threshold.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.product-template.settings.header_3.content"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.product-template.settings.paragraph_1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_notifications_subscribe",
+      "label": "t:sections.product-template.settings.enable_notifications_subscribe.label",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.product-template.settings.paragraph_2.content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "notifications_subscribe_label",
+      "label": "t:sections.product-template.settings.notifications_subscribe_label.label",
+      "default": "Notify me when available"
+    },
+    {
+      "type": "text",
+      "id": "notifications_subscribe_email_placeholder",
+      "label": "t:sections.product-template.settings.notifications_subscribe_email_placeholder.label",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "notifications_subscribe_button_submit",
+      "label": "t:sections.product-template.settings.notifications_subscribe_button_submit.label",
+      "default": "NOTIFY ME"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.product-template.settings.paragraph_3.content"
+    },
+    {
+      "type": "text",
+      "id": "notification_subcribe_message_heading",
+      "label": "t:sections.product-template.settings.notification_subcribe_message_heading.label",
+      "default": "Notify me When Available"
+    },
+    {
+      "type": "text",
+      "id": "notification_subcribe_message_subheading",
+      "label": "t:sections.product-template.settings.notification_subcribe_message_subheading.label",
+      "default": "You will receive an email when the product is available."
+    },
+    {
+      "type": "header",
+      "content": "t:sections.product-template.settings.product_description_tabs.label",
+      "info": "t:sections.product-template.settings.product_description_tabs.info"
+    },
+    {
+      "type": "select",
+      "id": "multi_tabs",
+      "label": "t:sections.common.style",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.product-template.settings.product_description_tabs.default"
+        },
+        {
+          "value": "heading",
+          "label": "t:sections.product-template.settings.product_description_tabs.multi_tabs_heading_5"
+        },
+        {
+          "value": "metafield",
+          "label": "t:sections.product-template.settings.product_description_tabs.multi_tabs_metafield"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.sidebar",
+      "info": "t:sections.product-template.settings.sidebar.info"
+    },
+    {
+      "type": "select",
+      "id": "sidebar_mode",
+      "label": "t:sections.common.style",
+      "options": [
+        { "value": "left", "label": "t:sections.common.left_sidebar" },
+        { "value": "right", "label": "t:sections.common.right_sidebar" },
+        { "value": "none", "label": "t:sections.common.none_sidebar" }
+      ],
+      "default": "none"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "page",
+      "name": "t:sections.product-template.settings.product_description_tabs.tabs_page",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "t:sections.product-template.settings.product_description_tabs.select_a_page"
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "t:sections.product-template.settings.sidebar.sidebar_menu",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.common.menu_item"
+        }
+      ]
+    },
+    {
+      "type": "banner",
+      "name": "t:sections.product-template.settings.sidebar.sidebar_banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    },
+    {
+      "type": "products-listing",
+      "name": "t:sections.product-template.settings.sidebar.sidebar_products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "sb_latest_product_title",
+          "label": "t:sections.common.heading",
+          "default": "Latest Products"
+        },
+        {
+          "type": "collection",
+          "id": "sb_latest_product_col",
+          "label": "t:sections.common.collection"
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "label": "t:sections.common.limit",
+          "step": 1,
+          "min": 1,
+          "max": 12,
+          "default": 8
+        }
+      ]
+    },
+    {
+      "type": "service",
+      "name": "t:sections.product-template.settings.sidebar.sidebar_service",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.common.block_item"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_sb_services_1",
+          "label": "t:sections.common.enable_widget",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "sb_services_icon_1",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_title_1",
+          "label": "t:sections.common.text"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_caption_1",
+          "label": "t:sections.common.subtext"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.block_item"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_sb_services_2",
+          "label": "t:sections.common.enable_widget",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "sb_services_icon_2",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_title_2",
+          "label": "t:sections.common.text"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_caption_2",
+          "label": "t:sections.common.subtext"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.block_item"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_sb_services_3",
+          "label": "t:sections.common.enable_widget",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "sb_services_icon_3",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_title_3",
+          "label": "t:sections.common.text"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_caption_3",
+          "label": "t:sections.common.subtext"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.block_item"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_sb_services_4",
+          "label": "t:sections.common.enable_widget",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "sb_services_icon_4",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_title_4",
+          "label": "t:sections.common.text"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_caption_4",
+          "label": "t:sections.common.subtext"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.block_item"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_sb_services_5",
+          "label": "t:sections.common.enable_widget",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "sb_services_icon_5",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_title_5",
+          "label": "t:sections.common.text"
+        },
+        {
+          "type": "text",
+          "id": "sb_services_caption_5",
+          "label": "t:sections.common.subtext"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

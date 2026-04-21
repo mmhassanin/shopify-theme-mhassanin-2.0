@@ -1,0 +1,394 @@
+{{ 'section-faqs.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign image_desktop = section.settings.image_desktop
+  if section.settings.image_mobile == blank
+    assign image_mobile = image_desktop
+  else
+    assign image_mobile = section.settings.image_mobile
+  endif
+
+  assign show_left_column = section.settings.show_left_column
+  if show_left_column
+    assign block_class = 'col-md-6 col-12'
+  else
+    assign block_class = 'col-12 one-column'
+  endif
+
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+  assign block_style = section.blocks | where: 'type' , 'block-style' | first
+  assign faq_blocks = section.blocks | where: 'type', 'faq-item'
+-%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading', type:'render-html', config: section.settings -%}
+{%- endcapture -%}
+
+{%- capture content -%}
+  <div class="faqs-container {{ block_class }}">
+    {%- if section_heading != blank -%}
+      {%- capture heading_css -%}
+        {%- render 'snippet-heading', type: 'render-css', config: heading_style_block.settings, classID: section_id -%}
+      {%- endcapture -%}
+      <div class="section-header">{{ section_heading }}</div>
+    {%- endif -%}
+
+    <div class="faqs-items-content">
+      {%- for block in faq_blocks -%}
+        {%- liquid
+          assign question = block.settings.question
+          assign answer = block.settings.answer
+
+          if question == blank or answer == blank
+            continue
+          endif
+        -%}
+
+        <div class="faq">
+          <div class="question js-collapse-trigger">
+            {%- unless show_left_column -%}
+              <h5>{{ question }}</h5>
+            {%- endunless -%}
+            <span class="faq-plus">{%- render 'svg', type: 'plus' -%}</span>
+            <span class="faq-minus">{%- render 'svg', type: 'minus' -%}</span>
+            {%- if show_left_column -%}
+              <h5>{{ question }}</h5>
+            {%- endif -%}
+          </div>
+          <div class="answer collapse">
+            <div class="collapse-wrapper">{{ answer }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+
+      <script>
+        (() => {
+          [...document.getElementsByClassName('js-collapse-trigger')].forEach(button => {
+            let target = button.nextElementSibling;
+            button.addEvent('click', function() {
+            if(this.classList.contains('active')){
+              this.classList.remove('active');
+              target.style.height = "";
+              target.classList.remove('is-open');
+            }else{
+              let alltab = document.getElementsByClassName('js-collapse-trigger');
+              for (let i = 0; i < alltab.length; i++) {
+                alltab[i].classList.remove('active');
+                alltab[i].nextElementSibling.style.height = "";
+                alltab[i].nextElementSibling.classList.remove('is-open');
+              }
+
+              this.classList.add('active');
+              target.style.height = target.firstElementChild.offsetHeight + "px";
+              target.classList.add('is-open');
+            }
+            })
+          })
+        })()
+      </script>
+    </div>
+  </div>
+{%- endcapture -%}
+
+<div class="section-faqs" id="section-{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+
+    <div class="section-wrapper">
+      <div class="section-body row">
+        {%- if show_left_column -%}
+          <div class="block-image col-md-6 col-12">
+            <div class="block-image__inner">
+              <div class="image">
+                {%- if image_desktop == blank and image_mobile == blank -%}
+                  {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- else -%}
+                  {%- render 'image-style', image: image_desktop, class: 'image-desktop', limit: limit -%}
+                  {%- render 'image-style', image: image_mobile, class: 'image-mobile', limit: 768 -%}
+                {%- endif -%}
+              </div>
+
+              <div class="textbox">
+                {%- if section.settings.textbox_heading != blank -%}
+                  <div class="textbox-heading">{{ section.settings.textbox_heading }}</div>
+                {%- endif -%}
+                {%- if section.settings.subtext != blank -%}
+                  <div class="textbox-subtext">{{ section.settings.subtext }}</div>
+                {%- endif -%}
+                {%- if section.settings.button != blank and section.settings.button_link != blank -%}
+                  <a href="{{ section.settings.button_link | default: 'javascript:void(0)' }}" class="btn btn-2 textbox-button">
+                    {{ section.settings.button }}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+        
+        {%- if section.settings.show_faqs_item -%}
+          {{ content }}
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+  {%- if block_style != blank -%}
+    {%- liquid
+      assign bg_color = block_style.settings.bg_color
+      assign title_color = block_style.settings.title_color
+      assign title_font_size = block_style.settings.title_font_size
+      assign subtext_color = block_style.settings.subtext_color
+      assign subtext_font_size = block_style.settings.subtext_font_size
+    -%}
+
+    {%- render 'css-responsive', preClassID: section_id, classID: ' .textbox',
+      value_1: bg_color, property_1: 'background'
+      -%}
+    {%- render 'css-responsive', preClassID: section_id, classID: ' .textbox-heading',
+      value_1: title_color, property_1: 'color'
+      value_2: title_font_size, property_2: 'font-size'
+      -%}
+    {%- render 'css-responsive', preClassID: section_id, classID: ' .textbox-subtext',
+      value_1: subtext_color, property_1: 'color'
+      value_2: subtext_font_size, property_2: 'font-size'
+      -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.section-faqs.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.featured-blog-v2.settings.left_column.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_left_column",
+      "label": "t:sections.featured-blog-v2.settings.show_left_column.label",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "t:sections.common.image_desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "t:sections.common.image_mobile"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "textbox_heading",
+      "label": "t:sections.common.heading",
+      "default": "Trust our Experience We Gained Since 1999"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subtext",
+      "label": "t:sections.common.subtext",
+      "default": "Dont hestitate to ask our team."
+    },
+    {
+      "type": "text",
+      "id": "button",
+      "label": "t:sections.common.button_label",
+      "default": "START NEW CHAT"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:sections.common.button_link"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.section-faqs.settings.faqs.header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_faqs_item",
+      "label": "t:sections.section-faqs.settings.faqs.show_faqs",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Frequently Asked Questions"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style", 
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "select",
+          "id": "section_heading_container_align",
+          "label": "t:sections.common.alignment",
+          "options": [
+            {
+              "value": "start",
+              "label": "t:sections.common.left"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.common.center"
+            },
+            {
+              "value": "end",
+              "label": "t:sections.common.right"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "section_heading_margin",
+          "label": "t:sections.common.margin",
+          "info": "t:sections.common.order_info"
+        },
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        }
+      ]
+    },
+    {
+      "type": "block-style",
+      "limit": 1,
+      "name": "t:sections.common.textbox_style",
+      "settings": [
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "t:sections.common.background",
+          "default": "#fed700"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.heading"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "title_font_size",
+          "label": "t:sections.common.font_size"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.subheading"
+        },
+        {
+          "type": "color",
+          "id": "subtext_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "subtext_font_size",
+          "label": "t:sections.common.font_size"
+        }
+      ]
+    },
+    {
+      "type": "faq-item",
+      "name": "t:sections.section-faqs.blocks.faq_item.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "question",
+          "label": "t:sections.section-faqs.blocks.faq_item.settings.question.label",
+          "default": "FAQs title"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "t:sections.section-faqs.blocks.faq_item.settings.answer.label",
+          "default": "<p>Your conten here</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.section-faqs.name",
+      "blocks": [
+        {
+          "type": "faq-item"
+        },
+        {
+          "type": "faq-item"
+        },
+        {
+          "type": "faq-item"
+        },
+        {
+          "type": "faq-item"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

@@ -1,0 +1,335 @@
+{{ 'section-featured-collection-v3.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign slider_id = '#slider-' | append: section.id
+  assign controls_id = '#controls-' | append: section.id
+  assign items_resp = section.settings.items_resp
+  assign items_resp_first = items_resp | split: "," | first | plus: 0
+
+  assign collection = collections[section.settings.collection]
+  if section.settings.collection != blank and section.settings.limit > collection.all_products_count
+    assign limit = collection.all_products_count
+  else
+    assign limit = section.settings.limit
+  endif
+
+  assign width_items = section.settings.width_items
+  if width_items == 'half'
+    assign row_class = 'row-items__hw'
+    assign width_items_class = 'col-lg-6 col-12'
+    assign items_spacing_slider = '4px'
+  else
+    assign row_class = 'row-items__fw'
+    assign width_items_class = 'col-12'
+    if items_resp_first > 3
+      assign items_spacing_slider = '20px'
+    else
+      assign items_spacing_slider = '40px'
+    endif
+  endif
+
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+-%}
+
+{%- capture content -%}
+  {%- if section.settings.collection == blank or collection.all_products_count < 1 -%}
+    {%- for index in (1..limit) -%}
+      <div class="slider-item">
+        {%- render 'product-item', index0: forloop.index0, product: product -%}
+      </div>
+    {%- endfor -%}
+  {%- else -%}
+    {%- for product in collection.products limit: limit -%}
+      <div class="slider-item">
+        {%- if width_items == 'half' -%}
+          {%- render 'product-item', product: product, collection: collection -%}
+        {%- else -%}
+          {%- render 'product-item-v2', product: product, collection: collection, short_description: true -%}
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="section-featured-collection-v3" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="featured-collection">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper row {{ row_class }}">
+
+      {%- if section.settings.heading != blank -%}
+        {%- capture heading_css -%}
+          {%- liquid
+            assign margin = heading_style_block.settings.section_heading_margin
+            assign heading_color = heading_style_block.settings.section_heading_color
+          -%}
+          {%- render 'css-responsive', classID: section_id, nextClassID: ' .section-header-text',
+            value_1: margin,    property_1: 'margin'
+            value_2: heading_color,     property_2: 'color'
+            -%}
+        {%- endcapture -%}
+
+        <div class="section-header {{ width_items_class }}">
+          <div class="section-header-text">{{ section.settings.heading }}</div>  
+        </div>
+      {%- endif -%}
+
+      <div class="section-body {{ width_items_class }}">
+        <div class="block-slider-component">
+          <slider-component>
+            <div class="slider-container js-slider-container">
+              <div class="slider-wrapper">
+                <div class="slider-list" id="slider-{{ section.id }}">
+                  {{ content }}
+                </div>
+
+                {%- render 'set-tns-config'
+                  slider_id: slider_id,
+                  classID: section_id,
+                  loop: section.settings.loop,
+                  dots: section.settings.dots,
+                  controls: section.settings.controls,
+                  controls_id: controls_id,
+                  customControls: true,
+                  autoplay: section.settings.autoplay,
+                  autoplay_timeout: section.settings.autoplay_timeout,
+                  items_resp: items_resp,
+                  padding: items_spacing_slider,
+                  total_item: limit
+                -%}
+              </div>
+            </div>
+          </slider-component>
+        </div> 
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.sectionRegister){
+    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
+  }else{
+    window.theme.sectionRegister = ["featured-collection"];
+  }
+</script>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.customElementsList){
+    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
+  }else{
+    window.theme.customElementsList = ["slider-component"];
+  }
+</script>
+
+{%- capture section_css -%}
+  {{- heading_css -}}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+  @media (min-width: 992px) {
+    .section-featured-collection-v3#section-{{ section.id }} .product-card_title{
+      font-size: {{ section.settings.product_card_title_fs }}px;
+    }
+    .section-featured-collection-v3#section-{{ section.id }} .short-description{
+      font-size: {{ section.settings.product_card_short_des_fs }}px;
+    }
+    .section-featured-collection-v3#section-{{ section.id }} .product-price .price-sale,
+    .section-featured-collection-v3#section-{{ section.id }} .product-price .price{
+      font-size: {{ section.settings.product_card_price_fs }}px;
+    }
+    .section-featured-collection-v3#section-{{ section.id }} .product-price .price-compare{
+      font-size: {{ section.settings.product_card_price_compare_fs }}px;
+    }
+  }
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.featured-collection-v3.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "<h3>MOOVA Series - Electric scooters</h3>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.common.collection"
+    },
+    {
+      "type": "select",
+      "id": "width_items",
+      "label": "Layout width of items to show",
+      "default": "half",
+      "options": [
+        {
+          "value": "half",
+          "label": "50%",
+        },
+        {
+          "value": "full",
+          "label": "100%",
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "3,2"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.common.limit",
+      "step": 1,
+      "min": 1,
+      "max": 8,
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "t:settings_schema.product_card.settings.product_card_style.label"
+    },
+    {
+      "type": "range",
+      "id": "product_card_title_fs",
+      "label": "t:settings_schema.product_card.settings.product_card_style.title_font_size.label",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "product_card_short_des_fs",
+      "label": "t:sections.product-template.settings.short_description.label",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "product_card_price_fs",
+      "label": "t:settings_schema.product_card.settings.product_card_style.price_font_size.label",
+      "min": 10,
+      "max": 34,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "product_card_price_compare_fs",
+      "label": "t:settings_schema.product_card.settings.product_card_style.price_compare_font_size.label",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.slider_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.common.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "t:sections.common.controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "dots",
+      "label": "t:sections.common.dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.common.autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_timeout",
+      "label": "t:sections.common.autoplay_timeout",
+      "step": 0.1,
+      "min": 2,
+      "max": 10,
+      "unit": "s",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured-collection-v3.name"
+    }
+  ]
+}
+{%- endschema -%}

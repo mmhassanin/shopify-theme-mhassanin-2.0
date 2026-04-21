@@ -1,0 +1,420 @@
+{{ 'section-single-product-v3.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign slider_id = '#slider-' | append: section.id
+  assign controls_id = '#controls-' | append: section.id
+  assign slideshow_height = section.settings.slideshow_height
+  assign disable_lazyload = section.settings.disable_lazyload
+  assign items_resp = '1'
+  assign gallery_blocks = section.blocks | where: 'type', 'block-item'
+  assign limit = gallery_blocks.size
+-%}
+
+<div class="section-single-product-v3" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="featured-collection">
+  <div
+    class="{% if template == 'index' or template contains 'page' %}{{ section.settings.section_layout }}{% endif %}
+    {{ slideshow_height }}"
+  >
+    <div class="section-wrapper">
+
+      <div class="section-body">
+        <div class="bc-single-product">
+          <slider-component>
+            <div class="slider-container js-slider-container">
+              <div class="slider-wrapper">
+                <div class="slider-list" id="slider-{{ section.id }}">
+                  {%- for block in section.blocks -%}
+                    {%- case block.type -%}
+                      {%- when 'block-item' -%}
+                        {%- liquid
+                          assign image = block.settings.image
+                          if block.settings.image_mobile == blank
+                            assign image_mobile = block.settings.image
+                          else
+                            assign image_mobile = block.settings.image_mobile
+                          endif
+                        -%}
+
+                        {%- capture block_id -%}.slide-{{ block.id }}{%- endcapture -%}
+
+                        <div class="slider-item slide-{{ block.id }}">
+                          <div class="elementor-element elementor-element__image" aria-label="Slideshow image">
+                            <div class="elementor-element__child">
+                              {%- if forloop.first -%}
+                                {%- if image == blank and image_mobile == blank -%}
+                                  {%- render 'image-style', image: image, class: 'image-desktop', placeholder_type: 'hero' -%}
+                                {%- else -%}
+                                  {%- render 'image-style', image: image, class: 'image-desktop', preload: true, preloadType: 'desktop', dislazy: disable_lazyload -%}
+                                  {%- render 'image-style', image: image_mobile, class: 'image-mobile', preload: true, preloadType: 'mobile', dislazy: disable_lazyload -%}
+                                {%- endif -%}
+                              {%- else -%}
+                                {%- if image == blank and image_mobile == blank -%}
+                                  {%- render 'image-style', image: image, class: 'image-desktop', placeholder_type: 'hero' -%}
+                                {%- else -%}
+                                  {%- render 'image-style', image: image, class: 'image-desktop' -%}
+                                  {%- render 'image-style', image: image_mobile, class: 'image-mobile' -%}
+                                {%- endif -%}
+                              {%- endif -%}
+                            </div>
+                          </div>
+                          
+                          <div class="elementor-element elementor-element__tp">
+                            <div class="elementor-element elementor-element__tp-inner">
+                              <div class="elementor-element elementor-element__title">
+                                {%- if block.settings.heading != blank or block.settings.subtext != blank -%}
+                                  <div class="elementor-element__child">
+                                    {%- if block.settings.heading != blank -%}
+                                      <div class="content-text-1">{{ block.settings.heading }}</div>
+                                    {%- endif -%}
+                                    {%- if block.settings.subtext != blank -%}
+                                      <div class="content-text-2">{{ block.settings.subtext }}</div>
+                                    {%- endif -%}
+                                  </div>
+                                {%- endif -%}
+                              </div>
+
+                              {%- if block.settings.product != blank -%}
+                                {%- assign product = all_products[block.settings.product] -%}
+
+                                <div class="elementor-element elementor-element__product">
+                                  <div class="elementor-element__child">
+                                    {%- liquid
+                                      assign vendor = product.vendor
+                                      assign first_variant = product.variants | first
+                                      assign selected_variant = product.first_available_variant | default: first_variant
+                                      assign avaiable = selected_variant.available
+                                      assign price = selected_variant.price
+                                      assign compare_at_price = selected_variant.compare_at_price
+                                    -%}
+
+                                    {%- if vendor != blank and settings.show_vendor -%}
+                                      <div class="product-card_vendor">{{ vendor }}</div>
+                                    {%- endif -%}
+
+                                    <div class="product-card_title">{{ product.title }}</div>
+
+                                    {%- if block.settings.product_subtext != blank -%}
+                                      <div class="product-card_subtext">{{ block.settings.product_subtext }}</div>
+                                    {%- endif -%}
+
+                                    <div class="product-price">
+                                      {%- if avaiable -%}
+                                        {%- if compare_at_price > price -%}
+                                          <div class="price-sale">{{ price | money }}</div>
+                                          <del class="price-compare">{{ compare_at_price | money }}</del>
+                                        {%- else -%}
+                                          <div class="price">{{ price | money }}</div>
+                                        {%- endif -%}
+                                      {%- else -%}
+                                        <div class="sold-out">{{ 'general.product_card.sold_out' | t }}</div>
+                                      {%- endif -%}
+                                    </div>
+
+                                    {%- if avaiable -%}
+                                      <div class="product-card_button">
+                                        <a href="{{ product.url }}" class="btn btn-1" aria-label="{{ 'general.product_card.start_buying' | t }}">
+                                          <span class="text">{{ 'general.product_card.start_buying' | t }}</span>
+                                        </a>
+                                      </div>
+                                    {%- endif -%}
+                                  </div>
+                                </div>
+
+                              {%- else -%}
+                                <div class="elementor-element elementor-element__product">
+                                  <div class="elementor-element__child">
+                                      <div class="product-card_title">{{ 'general.onboarding.product_title' | t }}</div>
+                                      {%- if block.settings.product_subtext != blank -%}
+                                        <div class="product-card_subtext">{{ block.settings.product_subtext }}</div>
+                                      {%- endif -%}
+                                      <div class="product-price">
+                                        <div class="price">{{ 9999 | money }}</div>
+                                      </div>
+                                      <div class="product-card_button">
+                                        <a role="link" aria-disabled="true" aria-hidden="true" class="btn btn-1">
+                                          <span class="text">{{ 'general.product_card.start_buying' | t }}</span>
+                                        </a>
+                                      </div>
+                                  </div>
+                                </div>
+                              {%- endif -%}
+                            </div>
+                          </div>
+
+                          {%- for block in section.blocks offset: forloop.index -%}
+                            {%- if block.type == 'block-item' -%}{%- break -%}{%- endif -%}
+                              {%- assign  block_type = block.type | remove: 'style_' -%}
+                              {%- capture block_css -%}
+                                {%- render 'snippet-slideshow-style', type: block_type, sectionID: section_id, block: block, blockID: block_id -%}
+                              {%- endcapture -%}
+                              {%- unless block_css == blank -%}
+                                <style{{ block.shopify_attributes }}>{{ block_css }}</style>
+                              {%- endunless -%}
+                          {%- endfor -%}
+                        </div>
+
+                      {%- else -%}
+                    {%- endcase -%}
+                  {%- endfor -%}
+                </div>
+
+                {%- render 'set-tns-config'
+                  slider_id: slider_id,
+                  classID: section_id,
+                  loop: section.settings.loop,
+                  dots: section.settings.dots,
+                  controls: section.settings.controls,
+                  controls_id: controls_id,
+                  customControls: true,
+                  autoplay: section.settings.autoplay,
+                  autoplay_timeout: section.settings.autoplay_timeout
+                  items_resp: items_resp,
+                  total_item : limit
+                -%}
+
+              </div>
+            </div>
+          </slider-component>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.sectionRegister){
+    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
+  }else{
+    window.theme.sectionRegister = ["featured-collection"];
+  }
+</script>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.customElementsList){
+    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
+  }else{
+    window.theme.customElementsList = ["slider-component"];
+  }
+</script>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+  {%- if slideshow_height == 'fix-height' -%}
+    @media (min-width: 768px) {
+      .section-single-product-v3#section-{{ section.id }} .bc-single-product{
+        height: {{ section.settings.manually_height }}px;
+      }
+    }
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.single-product-v3.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "layout-wide",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "layout-wide",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "select",
+      "id": "slideshow_height",
+      "label": "t:sections.slideshow.settings.slideshow_height",
+      "default": "auto-height",
+      "options": [
+        { "value": "auto-height", "label": "t:sections.common.auto" },
+        { "value": "full-height", "label": "t:sections.slideshow.settings.full_screen" },
+        { "value": "fix-height", "label": "t:sections.slideshow.settings.manually" }
+      ]
+    },
+    {
+      "type":"range",
+      "id":"manually_height",
+      "label":"t:sections.slideshow.settings.manually_height",
+      "min": 300,
+      "max": 700,
+      "step": 5,
+      "unit":"px",
+      "default": 425
+    }, 
+    {
+      "type":"checkbox",
+      "id":"disable_lazyload",
+      "label":"t:sections.slideshow.settings.disable_lazyload",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.slider_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.common.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "t:sections.common.controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "dots",
+      "label": "t:sections.common.dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.common.autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_timeout",
+      "label": "t:sections.common.autoplay_timeout",
+      "step": 0.1,
+      "min": 2,
+      "max": 10,
+      "unit": "s",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block-item",
+      "name": "t:sections.slideshow.blocks.slide.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image_desktop"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "t:sections.common.image_mobile"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:sections.common.heading",
+          "default": "<strong>ALL-NEW</strong>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "subtext",
+          "label": "t:sections.common.subtext",
+          "default": "HERO SERIES ` 24"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.common.product"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "product_subtext",
+          "label": "t:sections.single-product-v3.settings.product_subtext.label",
+          "default": "Al-inOne Omni Obstacle Sensing Mini Camera Drone"
+        }
+      ]
+    },
+    {
+     "type": "style_paragraph",
+     "name": "t:sections.slideshow.blocks.paragraph.name",
+     "settings": [
+      {
+          "type":"paragraph",
+          "content":"[What mean of comma?](https:\/\/support.arenacommerce.com\/a\/solutions\/articles\/6000243911)"
+      },
+      {
+          "type": "header",
+          "content": "t:sections.common.heading"
+      },
+      {
+          "type": "text",
+          "id": "text_fs_1",
+          "label": "t:sections.common.font_size",
+          "info": "E.g: 24px"
+      },
+      {
+          "type": "color",
+          "id": "text_cl_1",
+          "label": "t:sections.common.text_color"
+      },
+      {
+          "type": "header",
+          "content": "t:sections.common.subtext"
+      },
+      {
+          "type": "text",
+          "id": "text_fs_2",
+          "label": "t:sections.common.font_size",
+          "info": "E.g: 24px"
+      },
+      {
+          "type": "color",
+          "id": "text_cl_2",
+          "label": "t:sections.common.text_color"
+      }
+     ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.single-product-v3.name",
+      "blocks": [
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

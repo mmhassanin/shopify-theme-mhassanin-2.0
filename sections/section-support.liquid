@@ -1,0 +1,175 @@
+{{ 'section-support.css' | asset_url | stylesheet_tag }}
+
+{%- assign section_id = '#section-' | append: section.id -%}
+
+<div class="section-support" id="section-{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper">
+
+      <div class="section-body">
+        <div class="block-support">
+          <div class="block-support-left">
+            {%- if section.settings.icon != blank -%}
+              <div class="support-icon">{{ section.settings.icon }}</div>
+            {%- endif -%}
+            <div class="support-textbox">
+              {%- if section.settings.textbox_title != blank -%}
+                <div class="support-title">{{ section.settings.textbox_title }}</div>
+              {%- endif -%}
+              {%- if section.settings.textbox_subtext != blank -%}
+                <div class="support-subtext">{{ section.settings.textbox_subtext }}</div>
+              {%- endif -%}
+            </div>
+          </div>
+
+          {%- if section.blocks.size > 0 -%}
+            <div class="block-support-right">
+              <ul class="support-icons">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'support' -%}
+                    {%- if block.settings.icon != blank or block.settings.text != blank -%}
+                      <li class="type-{{ block.type }}">
+                        {%- if block.settings.icon != blank -%}
+                          <span class="icon">{{ block.settings.icon }}</span>
+                        {%- endif -%}
+                        {%- if block.settings.text != blank -%}
+                          <span class="text">{{ block.settings.text }}</span>
+                        {%- endif -%}
+                      </li>
+                    {%- endif -%}
+
+                  {%- else -%}
+                    {%- if block.settings.text != blank -%}
+                      <li class="type-{{ block.type }}">
+                        <button class="btn btn-1 btn-chat">{{ block.settings.text }}</button>
+                      </li>
+                    {%- endif -%}
+
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.support-information.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "textarea",
+      "id": "icon",
+      "label": "t:sections.common.svg"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "textbox_title",
+      "label": "t:sections.common.heading",
+      "default": "<strong>YOU NEED HELP?</strong>"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "textbox_subtext",
+      "label": "t:sections.common.subtext",
+      "default": "Do not hastitate to ask, our specialists will help you choose proper products"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "support",
+      "name": "Support",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "icon",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:sections.common.text",
+          "default": "<h6><strong>Contact support information</strong></h6>"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "name": "Chat",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.common.text",
+          "default": "START NEW CHAT"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.support-information.name",
+      "blocks": [
+        {
+          "type": "support"
+        },
+        {
+          "type": "support"
+        },
+        {
+          "type": "chat"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

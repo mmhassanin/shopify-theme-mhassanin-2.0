@@ -1,0 +1,208 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div.page-template.page-store-location",
+  "sections": {
+    "main": {
+      "type": "page-store-location",
+      "blocks": {
+        "d2425c2e-20fd-4769-8aed-1caae2964173": {
+          "type": "location",
+          "settings": {
+            "title": "The Rusty Bucket",
+            "country": "Canada",
+            "city": "150 Mile House",
+            "full_address": "293 Likely Rd, 150 Mile House, BC 150 Mile House British Columbia Canada",
+            "lat": "52.13549",
+            "long": "-121.9494469"
+          }
+        },
+        "6f21be1d-34fd-4d08-b4b3-407f7c9c9a84": {
+          "type": "location",
+          "settings": {
+            "title": "Ambition Salon",
+            "country": "Canada",
+            "city": "Abbotsford",
+            "full_address": "#210 - 34077 Gladys Avenue Abbotsford British Columbia Canada",
+            "lat": "49.0445462",
+            "long": "-122.2809162"
+          }
+        },
+        "d28d2702-5fcd-4193-8b48-6d064f9ba00e": {
+          "type": "location",
+          "settings": {
+            "title": "Cheam Wellness Group",
+            "country": "Canada",
+            "city": "Abbotsford",
+            "full_address": "304-32625 South Fraser Way Abbotsford British Columbia Canada",
+            "lat": "49.0521016999999",
+            "long": "-122.3204674"
+          }
+        },
+        "53dd227c-57db-4728-ba6d-a725ea6e1921": {
+          "type": "location",
+          "settings": {
+            "title": "Rosy Cheeks Boutique",
+            "country": "Canada",
+            "city": "Barrière",
+            "full_address": "4614 BarrièreTown Road Barrière British Columbia Canada",
+            "lat": "51.1826856",
+            "long": "-120.123353"
+          }
+        },
+        "55d033af-31b3-4209-a2ee-3969c005cc16": {
+          "type": "location",
+          "settings": {
+            "title": "Chickadee Boutique",
+            "country": "Canada",
+            "city": "Burnaby",
+            "full_address": "4347 Hastings Street Burnaby British Columbia Canada",
+            "lat": "49.2811893",
+            "long": "-123.007186"
+          }
+        },
+        "8f7b4d6a-71c3-47db-87f6-343c831b1a71": {
+          "type": "location",
+          "settings": {
+            "title": "Ocean Mountain Yoga",
+            "country": "Canada",
+            "city": "Campbell River",
+            "full_address": "1121 Cedar Street Campbell River British Columbia Canada",
+            "lat": "50.0265889999999",
+            "long": "-125.246632"
+          }
+        },
+        "a180eea2-acd6-4c25-8d33-f766d2a48a0c": {
+          "type": "location",
+          "settings": {
+            "title": "Luna Float",
+            "country": "Canada",
+            "city": "Chilliwack",
+            "full_address": "​101-45645 Tamihi Way Chilliwack British Columbia Canada",
+            "lat": "49.1055831",
+            "long": "-121.9640516"
+          }
+        },
+        "84ac5fb4-6209-46b9-b5c4-37345722be48": {
+          "type": "location",
+          "settings": {
+            "title": "Jilly's Boutique",
+            "country": "Canada",
+            "city": "Edmonton",
+            "full_address": "14227-23 Avenue NW Edmonton Alberta Canada",
+            "lat": "53.4532199999999",
+            "long": "-113.5666301"
+          }
+        },
+        "bb4c2c5d-f381-4600-b663-22ad89534dd4": {
+          "type": "location",
+          "settings": {
+            "title": "Little Leaf Baby",
+            "country": "Canada",
+            "city": "Edmonton",
+            "full_address": "5232 Windermere Boulevard Edmonton Alberta Canada",
+            "lat": "53.4354929",
+            "long": "-113.6029826"
+          }
+        },
+        "c6734eb0-3700-4d79-b192-29b4441c31e4": {
+          "type": "location",
+          "settings": {
+            "title": "Cravings",
+            "country": "Canada",
+            "city": "Saskatoon",
+            "full_address": "3  2105 8th Street East Saskatoon Saskatchewan Canada",
+            "lat": "52.1153213",
+            "long": "-106.6247452"
+          }
+        },
+        "c44e8342-8c6c-4426-9ca3-5e2bcb50f85a": {
+          "type": "location",
+          "settings": {
+            "title": "Relish Day Spa",
+            "country": "Canada",
+            "city": "Stratford",
+            "full_address": "397 Ontario Street Stratford Ontario Canada",
+            "lat": "43.370982",
+            "long": "-80.9702052999999"
+          }
+        },
+        "bbe93fd1-741e-4eb0-8f8d-992d18462c49": {
+          "type": "location",
+          "settings": {
+            "title": "Macpherson Toy House",
+            "country": "Canada",
+            "city": "Toronto",
+            "full_address": "103 - 1128 Yonge Street Toronto Ontario Canada",
+            "lat": "43.6792367",
+            "long": "-79.3907639"
+          }
+        },
+        "4725a5ff-76bb-4e04-98ea-a7bfa23840ef": {
+          "type": "location",
+          "settings": {
+            "title": "Ritual Skin Co.",
+            "country": "Canada",
+            "city": "Thunder Bay",
+            "full_address": "8 Court Street South Thunder Bay Ontario Canada",
+            "lat": "48.435483",
+            "long": "-89.2225519"
+          }
+        },
+        "20e4db94-2f76-4df7-b8ce-dc85887d2d67": {
+          "type": "location",
+          "settings": {
+            "title": "CouCou",
+            "country": "USA",
+            "city": "Boston",
+            "full_address": "24 Union Park Street, Boston, MA",
+            "lat": "42.3417043",
+            "long": "-71.0699187"
+          }
+        },
+        "ec53ffb9-6007-4e2e-9c18-47f401445a2f": {
+          "type": "location",
+          "settings": {
+            "title": "Pascale's Spa",
+            "country": "USA",
+            "city": "Lafayette",
+            "full_address": "1118B Coolidge Boulevard, Lafayette, LA",
+            "lat": "30.204684",
+            "long": "-92.017872"
+          }
+        }
+      },
+      "block_order": [
+        "d2425c2e-20fd-4769-8aed-1caae2964173",
+        "6f21be1d-34fd-4d08-b4b3-407f7c9c9a84",
+        "d28d2702-5fcd-4193-8b48-6d064f9ba00e",
+        "53dd227c-57db-4728-ba6d-a725ea6e1921",
+        "55d033af-31b3-4209-a2ee-3969c005cc16",
+        "8f7b4d6a-71c3-47db-87f6-343c831b1a71",
+        "a180eea2-acd6-4c25-8d33-f766d2a48a0c",
+        "84ac5fb4-6209-46b9-b5c4-37345722be48",
+        "bb4c2c5d-f381-4600-b663-22ad89534dd4",
+        "c6734eb0-3700-4d79-b192-29b4441c31e4",
+        "c44e8342-8c6c-4426-9ca3-5e2bcb50f85a",
+        "bbe93fd1-741e-4eb0-8f8d-992d18462c49",
+        "4725a5ff-76bb-4e04-98ea-a7bfa23840ef",
+        "20e4db94-2f76-4df7-b8ce-dc85887d2d67",
+        "ec53ffb9-6007-4e2e-9c18-47f401445a2f"
+      ],
+      "settings": {
+        "subheading": "Visit us and discover everything",
+        "store_location_map_key": ""
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

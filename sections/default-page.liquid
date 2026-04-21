@@ -1,0 +1,17 @@
+<div class="page-template page-default">
+  <div class="container">
+    <div class="page-header text-center">
+      <h1 class="page-title">{{ page.title }}</h1>
+    </div>
+    <div class="page-body">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+
+{%- schema -%}
+{
+  "name": "t:sections.default-page.name",
+  "tag": "section"
+}
+{%- endschema -%}

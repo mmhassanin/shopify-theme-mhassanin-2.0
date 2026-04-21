@@ -1,0 +1,80 @@
+{%- if value != blank -%}
+  {%- liquid
+    assign value = value | split: ','
+    assign size = value | size
+  -%}
+  {%- capture selector -%}{{preClassID}}  {{classID}}  {{nextClassID}}{%- endcapture -%}
+
+  {%- if type == 'col' -%}
+    {%- case size -%}
+      {%- when 1 -%}
+        {%- liquid
+          assign _value_0 = value[0] | divided_by: 2 | append: 'px'
+        -%}
+        {{-selector}}{padding-left: {{_value_0}};padding-right: {{_value_0}};}
+      {%- when 2 -%}
+        {%- liquid
+          assign _value_0 = value[0] | divided_by: 2 | append: 'px'
+          assign _value_1 = value[1] | divided_by: 2 | append: 'px'
+        -%}
+        {{selector}}{padding-left: {{_value_1}};padding-right: {{_value_1}};}
+        @media screen and (min-width: 992px){ {{selector}}{padding-left: {{_value_0}};padding-right: {{_value_0}}};}
+      {%- when 3 -%}
+        {%- liquid
+          assign _value_0 = value[0] | divided_by: 2 | append: 'px'
+          assign _value_1 = value[1] | divided_by: 2 | append: 'px'
+          assign _value_2 = value[2] | divided_by: 2 | append: 'px'
+        -%}
+        {{selector}}{padding-left: {{_value_2}};padding-right: {{_value_2}};}
+        @media screen and (min-width: 768px){ {{selector}}{padding-left: {{_value_1}};padding-right: {{_value_1}};}}
+        @media screen and (min-width: 992px){ {{selector}}{padding-left: {{_value_0}};padding-right: {{_value_0}};}}
+      {%- when 4 -%}
+        {%- liquid
+          assign _value_0 = value[0] | divided_by: 2 | append: 'px'
+          assign _value_1 = value[1] | divided_by: 2 | append: 'px'
+          assign _value_2 = value[2] | divided_by: 2 | append: 'px'
+          assign _value_3 = value[3] | divided_by: 2 | append: 'px'
+        -%}
+        {{selector}}{padding-left: {{_value_3}};padding-right: {{_value_3}};}
+        @media screen and (min-width: 576px){ {{selector}}{padding-left: {{_value_2}};padding-right: {{_value_2}};}}
+        @media screen and (min-width: 768px){ {{selector}}{padding-left: {{_value_1}};padding-right: {{_value_1}};}}
+        @media screen and (min-width: 992px){ {{selector}}{padding-left: {{_value_0}};padding-right: {{_value_0}};}}
+      {%- when 5 -%}
+        {%- liquid
+          assign _value_0 = value[0] | divided_by: 2 | append: 'px'
+          assign _value_1 = value[1] | divided_by: 2 | append: 'px'
+          assign _value_2 = value[2] | divided_by: 2 | append: 'px'
+          assign _value_3 = value[3] | divided_by: 2 | append: 'px'
+          assign _value_4 = value[4] | divided_by: 2 | append: 'px'
+        -%}
+        {{selector}}{padding-left: {{_value_4}};padding-right: {{_value_3}};}
+        @media screen and (min-width: 576px){ {{selector}}{padding-left: {{_value_3}};padding-right: {{_value_3}};}}
+        @media screen and (min-width: 768px){ {{selector}}{padding-left: {{_value_2}};padding-right: {{_value_2}};}}
+        @media screen and (min-width: 992px){ {{selector}}{padding-left: {{_value_1}};padding-right: {{_value_1}};}}
+        @media screen and (min-width: 1200px){ {{selector}}{padding-left: {{_value_0}};padding-right: {{_value_0}};}}
+    {%- endcase -%}
+  {%- else -%}
+    {%- case size -%}
+      {%- when 1 -%}
+        {{-selector}}{grid-gap: {{value[0]}};}
+      {%- when 2 -%}
+        {{selector}}{grid-gap: {{value[1]}};}
+        @media screen and (min-width: 992px){ {{selector}}{grid-gap: {{value[0]}};}}
+      {%- when 3 -%}
+        {{selector}}{grid-gap: {{value[2]}};}
+        @media screen and (min-width: 768px){ {{selector}}{grid-gap: {{value[1]}};}}
+        @media screen and (min-width: 992px){ {{selector}}{grid-gap: {{value[0]}};}}
+      {%- when 4 -%}
+        {{selector}}{grid-gap: {{value[3]}};}
+        @media screen and (min-width: 576px){ {{selector}}{grid-gap: {{value[2]}};}}
+        @media screen and (min-width: 768px){ {{selector}}{grid-gap: {{value[1]}};}}
+        @media screen and (min-width: 992px){ {{selector}}{grid-gap: {{value[0]}};}}
+      {%- when 5 -%}
+        {{selector}}{grid-gap: {{value[4]}};}
+        @media screen and (min-width: 576px){ {{selector}}{grid-gap: {{value[3]}};}}
+        @media screen and (min-width: 768px){ {{selector}}{grid-gap: {{value[2]}};}}
+        @media screen and (min-width: 992px){ {{selector}}{grid-gap: {{value[1]}};}}
+        @media screen and (min-width: 1200px){ {{selector}}{grid-gap: {{value[0]}};}}
+    {%- endcase -%}
+  {%- endif -%}
+{%- endif -%}

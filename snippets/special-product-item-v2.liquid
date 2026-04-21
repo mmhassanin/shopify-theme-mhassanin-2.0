@@ -1,0 +1,170 @@
+{%- if product != blank -%}
+	{%- liquid
+		assign first_variant = product.variants | first
+		assign selected_variant = product.first_available_variant | default: first_variant
+		assign avaiable = selected_variant.available
+		assign price = selected_variant.price
+		assign compare_at_price = selected_variant.compare_at_price
+		assign image_padding = settings.product_image_ratio | replace: 'auto', '100%'
+
+		if settings.product_customize_ratio != blank
+			assign image_padding = 1 | divided_by: settings.product_customize_ratio.aspect_ratio | times: 100 | append: '%'
+		endif
+	-%}
+
+	{%- capture product_price -%}
+		<div class="product-price">
+			{%- if compare_at_price > price -%}
+				<div class="price-sale">{{ price | money }}</div>
+				<del class="price-compare">{{ compare_at_price | money }}</del>
+			{%- else -%}
+				<div class="price">{{ price | money }}</div>
+			{%- endif -%}
+		</div>
+	{%- endcapture -%}
+
+	{%- capture product_stock -%}
+		{%- assign stock_sold = product.metafields.c_f.already_sold -%}
+
+		{%- if stock_sold > 0 -%}
+		  	<div class="deal-progress">
+			    <div class="deal-stock">
+			      <span class="stock-sold">{{ 'pages.product.text_sold' | t }}: <strong>{{ stock_sold }}</strong></span>
+
+			      {%- assign available = 0 -%}
+			      
+			      {%- for variant in product.variants -%} 
+			        {%- if variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' -%}
+			          {%- capture i -%}{{ available | plus: variant.inventory_quantity }}{%- endcapture -%}
+			        {%- else -%}
+			          {%- assign i = 30 -%}
+			        {%- endif -%}
+
+			        {%- assign available = i | plus: 0 -%}
+			      {%- endfor -%}
+
+			      {%- if available > 0 -%} 
+			        {%- assign total = available | plus: stock_sold -%} 
+			        <span class="stock-available">{{ 'pages.product.text_available' | t }}: <strong>{{ available }}</strong></span>
+			      {%- else -%}
+			      	<span class="stock-available">{{ 'pages.product.text_available' | t }}: <strong>0</strong></span>
+			      {%- endif -%}
+			    </div>
+
+			    {%- if available > 0 -%}
+			      {%- capture progress -%}{{ stock_sold | times:100 | divided_by: total }}{%- endcapture -%}
+			      <div class="progress">
+			        <span class="progress-bar" style="width:{{ progress }}%"></span>
+			      </div>
+			    
+			    {%- else -%}
+			      {%- capture progress -%}{{ stock_sold | times:100 | divided_by: total }}{%- endcapture -%}
+			      <div class="progress">
+			        <span class="progress-bar" style="width:100%"></span>
+			      </div>
+			    {%- endif -%}
+		  	</div>
+		{%- endif -%}
+	{%- endcapture -%}
+
+	{%- capture product_countdown -%}
+		{%- assign check_shop_url = 'https://electro-7-test.myshopify.com' -%}
+		{%- assign shop_url = shop.url -%}
+
+		{%- unless product.metafields.c_f.countdown_timer == blank -%}
+			{%- if shop_url == check_shop_url -%}
+		        {%- assign seconds = 34 | times: 60 | times: 60 -%}
+		        {%- assign expire_time = 'now' | date: "%s" | plus: seconds | date: "%m/%d/%Y" -%}
+		    {%- else -%}
+		        {%- assign expire_time = product.metafields.c_f.countdown_timer -%}
+		    {%- endif -%}
+	    {%- endunless -%}
+
+	    {%- unless expire_time == blank -%}
+			{%- assign due_date = expire_time | split: '/' -%}
+			<div class="product-countdown" data-dueDate-year="{{ due_date[2] }}" data-dueDate-month="{{ due_date[0] | plus:0 }}" data-dueDate-day="{{ due_date[1] | plus:0 }}">
+				<span class="offer-text">{{ 'pages.product.text_countdown' | t }}</span>
+				<div class="countdown-html countdown_{{ block.id }}"></div>
+			</div>
+        {%- endunless -%}
+	{%- endcapture -%}
+
+	{%- capture product_form -%}
+		<form method="post" action="{{ routes.cart_add_url }}" accept-charset="UTF-8" class="product-form js-form-add-to-cart d-none" enctype="multipart/form-data" novalidate="novalidate">
+			<input type="hidden" name="form_type" value="product"/>
+			<input type="hidden" name="utf8" value="✓"/>
+			<input type="hidden" name="id" value="{{ selected_variant.id }}">
+			{%- if avaiable -%}
+				{%- if product.variants.size > 1 -%}
+					<a href="{{ product.url }}" class="btn-add-to-cart" aria-label="{{ 'general.product_card.select_options' | t }}">
+						{%- render 'svg', type: 'icon-right' -%}
+						<span class="text">{{ 'general.product_card.select_options' | t }}</span>
+					</a>
+				{%- else -%}
+					<button type="submit" name="add" class="btn-add-to-cart js-atc-btn" aria-label="{{ 'general.product_card.add_to_cart_button' | t }}">
+						{%- render 'svg', type: 'add-cart-icon' -%}
+						<span class="text">{{ 'general.product_card.add_to_cart_button' | t }}</span>
+					</button>
+				{%- endif -%}
+			{%- else -%}
+				<div class="sold-out">{{ 'general.product_card.sold_out' | t }}</div>
+			{%- endif -%}
+		</form>
+	{%- endcapture -%}
+
+	<product-card>
+		<section class="product-card balance-row-{{ settings.product_title_limit }} effect-{{ item_effect }} {% if settings.product_image_crop -%} object-fit-cover {%- endif -%}">
+			<header class="product-card_header">
+				<div class="product-card_media position-relative">
+					{%- if produc_text != blank -%}
+						<span class="special-offer-text">{{ produc_text }}</span>
+					{%- endif -%}
+					<a href="{{ product.url }}">
+						{%- render 'image-style', image: product.images[0], limit: 540, padding_top: image_padding -%}
+					</a>
+					{%- if compare_at_price > price -%}
+					<div class="product-card_labels">
+						<span class="text">{{ 'general.label.save' | t }}</span>
+						{%- assign percent_off = product.variants.first.compare_at_price | minus : product.variants.first.price -%}
+						{%- capture percent -%}{{ percent_off | times:100.00 | divided_by: product.variants.first.compare_at_price | round }}{%- endcapture -%}
+						<span class="percent">{{ percent | append: '%' }}</span>
+					</div>
+					{%- endif -%}
+				</div>
+			</header>
+			<footer class="product-card_footer">
+				<h3 class="product-card_title">
+					<a href="{{ product.url }}">{{ product.title }}</a>
+				</h3>
+				<div class="product-card_price_action">
+					{{ product_price }}
+					{{ product_form }}
+					{{ product_stock }}
+					{{ product_countdown }}
+				</div>
+			</footer>
+
+		</section>
+	</product-card>
+{%- else -%}
+	<product-card>
+		<section class="product-card">
+			<header class="product-card_header">
+				<div class="product-card_media position-relative">
+					{{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+				</div>
+			</header>
+			<footer class="product-card_footer">
+				<h3 class="product-card_title">{{ 'general.onboarding.product_title' | t }}</h3>
+				<div class="product-card_price_action">
+					<div class="product-price">
+						<div class="price">{{ 9999 | money }}</div>
+					</div>
+					<div class="product-card_actions d-none">
+						<form></form>
+					</div>
+				</div>
+			</footer>
+		</section>
+	</product-card>
+{%- endif -%}

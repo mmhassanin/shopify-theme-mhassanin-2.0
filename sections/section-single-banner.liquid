@@ -1,0 +1,326 @@
+{{ 'section-single-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  if section.settings.section_layout == 'container'
+    assign bg_class = ' .section-wrapper'
+    assign limit = 1440
+  else
+    assign bg_class = ''
+    assign limit = 1920
+  endif
+  
+  assign section_id = '#section-' | append: section.id
+  assign link = section.settings.link
+  assign button = section.settings.button
+  assign button_position =section.settings.button_position
+  assign block_style = section.blocks | where: 'type' , 'block-style' | first
+
+  assign image_desktop = section.settings.image_desktop
+  if section.settings.image_mobile == blank
+    assign image_mobile = image_desktop
+  else
+    assign image_mobile = section.settings.image_mobile
+  endif
+-%}
+
+{%- capture image_html -%}
+  {%- if link != blank -%}
+    <a href="{{ link | default: 'javascript:void(0)' }}" aria-label="Banner" class="image">
+  {%- else -%}
+    <div class="image">
+  {%- endif -%}
+    {%- render 'image-style', image: image_desktop, class: 'image-desktop', limit: limit, placeholder_type: 'hero' -%}
+    {%- render 'image-style', image: image_mobile, class: 'image-mobile', limit: 768, placeholder_type: 'hero' -%}
+  {%- if link != blank -%}
+    </a>
+  {%- else -%}
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="section-single-banner"> 
+  <div class="section-single-banner-inner" id="section-{{ section.id }}">
+
+    <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+      <div class="section-wrapper">
+        {{ image_html }}
+
+        <div class="section-body{% if section.settings.section_layout == 'layout-wide' %} container{% endif %}">
+          <div
+            class="textbox
+            position-{{ section.settings.text_position }}
+            mobile-position-{{ section.settings.text_position_mobile }}
+            text-{{ section.settings.text_alignment }}
+            {% if section.settings.hide_content_mobile %}hide-mobile{% endif %}"
+          >
+            {%- if section.settings.heading != blank -%}
+              <div class="single-banner-heading">{{ section.settings.heading }}</div>
+            {%- endif -%}
+            {%- if button_position and button != blank and link != blank -%}
+              <a href="{{ link | default: 'javascript:void(0)' }}" class="btn btn-2 single-banner-button">{{ button }}</a>
+            {%- endif -%}
+            {%- if section.settings.subtext != blank -%}
+              <div class="single-banner-subtext">{{ section.settings.subtext }}</div>
+            {%- endif -%}
+            {%- if button_position == false and button != blank and link != blank -%}
+              <a href="{{ link | default: 'javascript:void(0)' }}" class="btn btn-1 single-banner-button">{{ button }}</a>
+            {%- endif -%}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, classID: bg_class, config: section.settings -%}
+  .section-single-banner-inner#section-{{ section.id }} .image img {
+    border-radius: {{ section.settings.image_corner_radius }}px;
+  }
+
+  {%- if block_style != blank -%}
+    {%- liquid
+      assign title_color = block_style.settings.title_color
+      assign title_font_size = block_style.settings.title_font_size
+      assign subtext_color = block_style.settings.subtext_color
+      assign subtext_font_size = block_style.settings.subtext_font_size
+    -%}
+
+    {%- render 'css-responsive', preClassID: section_id, classID: ' .single-banner-heading',
+      value_1: title_color, property_1: 'color'
+      value_2: title_font_size, property_2: 'font-size'
+      -%}
+    {%- render 'css-responsive', preClassID: section_id, classID: ' .single-banner-subtext',
+      value_1: subtext_color, property_1: 'color'
+      value_2: subtext_font_size, property_2: 'font-size'
+      -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.single-banner.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "layout-wide",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "t:sections.common.image_desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "t:sections.common.image_mobile"
+    },
+    {
+      "type": "range",
+      "id": "image_corner_radius",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.image-gallery.settings.image_corner_radius",
+      "default": 0
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.common.link",
+      "default": "/"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.textbox"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "t:sections.slideshow.blocks.slide.box_align.label",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "t:sections.slideshow.blocks.slide.box_align.options__1.label"
+        },
+        {
+          "value": "top-center",
+          "label": "t:sections.slideshow.blocks.slide.box_align.options__2.label"
+        },
+        {
+          "value": "top-right",
+          "label": "t:sections.slideshow.blocks.slide.box_align.options__3.label"
+        },
+        {
+          "value": "middle-left",
+          "label": "t:sections.slideshow.blocks.slide.box_align.options__4.label"
+        },
+        {
+          "value": "middle-center",
+          "label": "t:sections.slideshow.blocks.slide.box_align.options__5.label"
+        },
+        {
+          "value": "middle-right",
+          "label": "t:sections.slideshow.blocks.slide.box_align.options__6.label"
+        },
+        {
+          "value": "bottom-left",
+          "label": "t:sections.slideshow.blocks.slide.box_align.options__7.label"
+        },
+        {
+          "value": "bottom-center",
+          "label": "t:sections.slideshow.blocks.slide.box_align.options__8.label"
+        },
+        {
+          "value": "bottom-right",
+          "label": "t:sections.slideshow.blocks.slide.box_align.options__9.label"
+        }
+      ],
+      "default": "middle-center"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_content_mobile",
+      "label": "t:sections.slideshow.blocks.slide.hide_content_mobile.label"
+    },
+    {
+      "type": "select",
+      "id": "text_position_mobile",
+      "label": "t:sections.slideshow.blocks.slide.mobile_box_align.label",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.slideshow.blocks.slide.mobile_box_align.options__1.label"
+        },
+        {
+          "value": "middle",
+          "label": "t:sections.slideshow.blocks.slide.mobile_box_align.options__2.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.slideshow.blocks.slide.mobile_box_align.options__3.label"
+        }
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.common.alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.common.left"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.common.center"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.common.right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "<h2>Hoover Scooter 4 Pro</h2>"
+    },
+    {
+      "type": "richtext",
+      "id": "subtext",
+      "label": "t:sections.common.subtext",
+      "default": "<p>Al-inOne Omni Obstacle Sensing Mini Camera Drone</p>"
+    },
+    {
+      "type": "text",
+      "id": "button",
+      "label": "t:sections.common.button_label",
+      "default": "Buy now"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_position",
+      "label": "t:sections.single-banner.settings.button_position.label"
+    }
+  ],
+  "blocks":[
+    {
+      "type": "block-style",
+      "limit": 1,
+      "name": "t:sections.common.textbox_style",
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.common.heading"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "title_font_size",
+          "label": "t:sections.common.font_size"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.subheading"
+        },
+        {
+          "type": "color",
+          "id": "subtext_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "subtext_font_size",
+          "label": "t:sections.common.font_size"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.single-banner.name"
+    }
+  ]
+}
+{%- endschema -%}

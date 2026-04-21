@@ -1,0 +1,144 @@
+{%- if product != blank -%}
+	{%- liquid
+		assign vendor = product.vendor
+		assign first_variant = product.variants | first
+		assign selected_variant = product.first_available_variant | default: first_variant
+		assign avaiable = selected_variant.available
+		assign price = selected_variant.price
+		assign compare_at_price = selected_variant.compare_at_price
+		assign image_padding = settings.product_image_ratio | replace: 'auto', '100%'
+
+		if settings.product_customize_ratio != blank
+			assign image_padding = 1 | divided_by: settings.product_customize_ratio.aspect_ratio | times: 100 | append: '%'
+		endif
+	-%}
+
+	{%- capture product_vendor -%}
+		{%- if vendor != blank and settings.show_vendor -%}
+			<div class="product-vendor"><a href="{{ vendor | url_for_vendor }}">{{ vendor }}</a></div>
+		{%- endif -%}
+	{%- endcapture -%}
+
+	{%- capture product_price -%}
+		<div class="product-price">
+			{%- if avaiable -%}
+				{%- if compare_at_price > price -%}
+					<div class="price-sale">{{ price | money }}</div>
+					<del class="price-compare">{{ compare_at_price | money }}</del>
+				{%- else -%}
+					<div class="price">{{ price | money }}</div>
+				{%- endif -%}
+			{%- else -%}
+				<div class="sold-out">{{ 'general.product_card.sold_out' | t }}</div>
+			{%- endif -%}
+		</div>
+	{%- endcapture -%}
+
+	{%- capture product_form -%}
+		<form method="post" action="{{ routes.cart_add_url }}" accept-charset="UTF-8" class="product-form js-form-add-to-cart" enctype="multipart/form-data" novalidate="novalidate">
+			<input type="hidden" name="form_type" value="product"/>
+			<input type="hidden" name="utf8" value="✓"/>
+			<input type="hidden" name="id" value="{{ selected_variant.id }}">
+			{%- if avaiable -%}
+				{%- if product.variants.size > 1 -%}
+					<a href="{{ product.url }}" class="btn-add-to-cart" aria-label="{{ 'general.product_card.select_options' | t }}">
+						{%- render 'svg', type: 'icon-right' -%}
+						<span class="text">{{ 'general.product_card.select_options' | t }}</span>
+					</a>
+				{%- else -%}
+					<button type="submit" name="add" class="btn-add-to-cart js-atc-btn" aria-label="{{ 'general.product_card.add_to_cart_button' | t }}">
+						{%- render 'svg', type: 'add-cart-icon' -%}
+						<span class="text">{{ 'general.product_card.add_to_cart_button' | t }}</span>
+					</button>
+				{%- endif -%}
+			{%- endif -%}
+		</form>
+	{%- endcapture -%}
+
+
+	<product-card>
+		<section class="product-card balance-row-{{ settings.product_title_limit }} effect-{{ item_effect }} {% if settings.product_image_crop -%} object-fit-cover {%- endif -%}">
+			<header class="product-card_header">
+				<div class="product-card_vendor-title">
+					{{ product_vendor }}
+					<h3 class="product-card_title">
+						<a href="{{ product.url }}">{{ product.title }}</a>
+					</h3>
+				</div>
+				<div class="product-card_media position-relative">
+					{%- capture number_of_images -%}{{ product.images | size }}{%- endcapture -%}
+      				{%- assign number_images = number_of_images | plus:0 -%}
+
+      				<div class="wrap-image">
+      					{%- if produc_text != blank -%}
+							<span class="special-offer-text">{{ produc_text }}</span>
+						{%- endif -%}
+						<a href="{{ product.url }}">
+							{%- render 'image-style', image: product.images[0], limit: 720, padding_top: image_padding -%}
+						</a>
+						{%- if compare_at_price > price -%}
+							<div class="product-card_labels">
+								<span class="text">{{ 'general.label.save' | t }}</span>
+								{%- assign percent_off = product.variants.first.compare_at_price | minus : product.variants.first.price -%}
+								{%- capture percent -%}{{ percent_off | times:100.00 | divided_by: product.variants.first.compare_at_price | round }}{%- endcapture -%}
+								<span class="percent">{{ percent | append: '%' }}</span>
+							</div>
+						{%- endif -%}
+					</div>
+
+					{%- if number_images > 1 -%}
+				        <div class="wrap-thumb-image">
+					        {%- for image in product.images limit: 4 -%}
+						        <div class="thumb-image">
+						            <div class="t-image">
+						            	{%- render 'product-change-image-lazysize' image: image, limit: 720, padding_top: image_padding, class: 'img-swt-temp', data-swatch-image: image -%}
+						            </div>
+						        </div>
+					        {%- endfor -%}
+				        </div>
+				    {%- endif -%}
+				</div>
+			</header>
+			<footer class="product-card_footer">
+				<div class="product-card_price_action">
+					{{ product_price }}
+					<div class="product-card_actions">
+						{{ product_form }}
+					</div>
+				</div>
+				<div class="product-buttons{% if avaiable == false %} d-none{% endif %}">
+					<button class="product-card_quick-view js-product-card-quick-view" type="button" data-product-handle="{{ product.handle }}">
+						{%- render 'svg', type: 'quickview' -%}
+					</button>
+					{%- if settings.enable_product_wishlist -%}
+						<div class="product-wishlist">
+				            <button class="st-wishlist-button" data-handle="{{ product.handle }}"></button>
+				        </div>
+			        {%- endif -%}
+				</div>
+			</footer>
+
+		</section>
+	</product-card>
+{%- else -%}
+	<product-card>
+		<section class="product-card">
+			<header class="product-card_header">
+				<div class="product-card_media position-relative">
+					{{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+				</div>
+			</header>
+			<footer class="product-card_footer">
+				<h3 class="product-card_title">{{ 'general.onboarding.product_title' | t }}</h3>
+				<div class="product-card_price_action">
+					<div class="product-price">
+						<div class="price">{{ 9999 | money }}</div>
+					</div>
+					<div class="product-card_actions d-none">
+						<form></form>
+					</div>
+				</div>
+			</footer>
+		</section>
+	</product-card>
+{%- endif -%}

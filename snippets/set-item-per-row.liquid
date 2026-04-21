@@ -1,0 +1,28 @@
+{%- assign item_resp = value | strip | split: ',' -%}
+{%- if item_resp.size > 1 -%}
+  {%- case item_resp.size -%}
+    {%- when 2 -%}{%- assign ii = 1 -%}{%- assign ar_class = 'col-md-, col-' -%}
+    {%- when 3 -%}{%- assign ii = 2 -%}{%- assign ar_class = 'col-lg-, col-md-, col-' -%}
+    {%- when 4 -%}{%- assign ii = 3 -%}{%- assign ar_class = 'col-lg-, col-md-, col-sm-, col-' -%}
+    {%- when 5 -%}{%- assign ii = 4 -%}{%- assign ar_class = 'col-xl-, col-lg-, col-md-, col-sm-, col-' -%}
+    {%- else -%}  {%- assign ii = 5 -%}{%- assign ar_class = 'col-xl-, col-lg-, col-md-, col-sm-, col-xxs-, col-' -%}
+  {%- endcase -%}
+
+  {%- assign items_resp = '' -%}
+  {%- assign arr_class = ar_class | split: ',' -%}
+  {%- for i in (0..ii) -%}
+    {%- capture out -%}{%- render 'set-width', number: item_resp[i] -%}{%- endcapture -%}
+    {%- assign class_item = out | prepend: arr_class[i] -%}
+    {%- if out == '5' -%}{%- assign class_item = class_item | append: 'th' -%}{%- endif -%}
+    {%- if out == '7' -%}{%- assign class_item = class_item | append: 'th' -%}{%- endif -%}
+    {%- assign items_resp = items_resp | append: class_item -%}
+  {%- endfor -%}
+  {%- capture output -%}{{- items_resp -}}{%- endcapture -%}
+
+{%- else -%}
+  {%- capture out -%}{%- render 'set-width', number: item_resp[0] -%}{%- endcapture -%}
+  {%- assign class_xs = out | strip | prepend: 'col-' -%}
+  {%- if out == '5' -%}{%- assign class_xs = class_xs | append: 'th' -%}{%- endif -%}
+  {%- capture output -%}{{- class_xs -}}{%- endcapture -%}
+{%- endif -%}
+{{- output -}}

@@ -1,0 +1,102 @@
+{%- if type == 'quick-view' -%}
+  {%- assign quick_view = true -%}
+{%- endif -%}
+
+{%- liquid
+  assign first_variant = product.variants | first
+  assign selected_variant = product.selected_or_first_available_variant | default: first_variant
+-%}
+
+<div class="product-info row">
+  <div class="col-lg-5 col-md-6 col-sm-6 col-12 product-info_media">
+    {%- render 'product-snippet', type:'media', quick_view: quick_view -%}
+  </div>
+
+  <div class="col-lg-4 col-md-6 col-sm-6 col-12 product-info_details">
+    <div class="product-info_title">
+      {%- if section.settings.show_vendor -%}
+        <a href="{{ product.vendor | url_for_vendor }}" class="product-details_vendor">{{ product.vendor }}</a>
+      {%- endif -%}
+
+      <h1 class="product-details_title">{{ product.title }}</h1>
+
+      <div class="product-info_reviews">
+        {%- render 'review', product: product, type: 'badge', write_review: true -%}
+      </div>
+
+      {%- if settings.show_social_sharing_product -%}
+         {%- render 'product-snippet', type: 'social-sharing' -%}
+      {%- endif -%}
+
+      {%- if section.settings.show_sku -%}
+        {%- render 'product-snippet', type: 'sku', selected_variant: selected_variant -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_short_des -%}
+      {%- render 'product-snippet', type: 'short-description' -%}
+    {%- endif -%}
+
+    {%- if section.settings.show_countdown_timer -%}
+      {%- render 'product-snippet', type: 'product-countdown', selected_variant: selected_variant -%}
+    {%- endif -%}
+
+    {%- if settings.show_peple_in_cart -%}
+      {%- render 'product-snippet', type: 'people-in-cart', selected_variant: selected_variant -%}
+    {%- endif -%}
+
+    {%- if settings.order_shipping_time -%}
+      {%- render 'product-snippet', type: 'shipping', selected_variant: selected_variant -%}
+    {%- endif -%}
+  </div>
+
+  <div class="col-lg-3 col-md-12 col-sm-12 col-12 product-info_action">
+    <div class="product-info_action_inner">
+      {%- render 'product-snippet', type: 'inventory', selected_variant: selected_variant -%}
+      <div class="product-details_price d-flex">
+        {%- render 'product-snippet', type: 'price', selected_variant: selected_variant -%}
+      </div>
+      {%- render 'product-snippet', type: 'form', selected_variant: selected_variant, section: section -%}
+
+      {%- if settings.enable_product_wishlist -%}
+        {%- if section.settings.enable_notifications_subscribe != true or selected_variant.available -%}
+          {%- assign show_notification_subcribe = false -%}
+        {%- else -%}
+          {%- assign show_notification_subcribe = true -%}
+        {%- endif -%}
+        
+        <div class="product-wishlist-compare{% if show_notification_subcribe %} d-none{% endif %}">
+          {%- if settings.enable_product_wishlist -%}
+            <button class="st-wishlist-button" data-type="details" data-handle="{{ product.handle }}"></button>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script type="application/json" data-settings>
+  {
+    "showInventory": {{ section.settings.show_inventory_quantity | json }},
+    "inventoryThreshold": {{ section.settings.inventory_threshold | json }},
+    "enableSubscribe": {{ section.settings.enable_notifications_subscribe | json }}
+  }
+</script>
+
+{%- if type == 'quick-view' -%}
+  <script type="application/json" data-product-json>
+    {{ product | json }}
+  </script>
+
+  <script type="application/json" data-variants-inventory-json>
+    {
+      {%- for variant in product.variants -%}
+        {%- unless forloop.first -%} ,{%- endunless -%}
+        "{{ variant.id }}": {
+          "inventory_policy" : {{ variant.inventory_policy | json }},
+          "inventory_quantity" : {{ variant.inventory_quantity }}
+        }
+      {%- endfor -%}
+    }
+  </script>
+{%- endif -%}

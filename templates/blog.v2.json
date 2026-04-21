@@ -1,0 +1,67 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div.page-template.page-blog-template.page-blog-template-v2",
+  "sections": {
+    "main": {
+      "type": "blog-template-v2",
+      "blocks": {
+        "69f70665-60a4-4efc-8450-ef02e794e8df": {
+          "type": "search",
+          "settings": {
+            "placeholder": "Enter Keywords..."
+          }
+        },
+        "815c265c-ddbd-4b03-8da6-103b5ee00c6b": {
+          "type": "textbox",
+          "settings": {
+            "title": "About",
+            "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, erat in malesuada aliquam, est erat faucibus purus, eget viverra nulla sem vitae neque. Quisque id sodales libero."
+          }
+        },
+        "999feaf5-1157-4d4a-b832-495ef53fb00b": {
+          "type": "menu",
+          "settings": {
+            "title": "Categories",
+            "menu": "all-categories"
+          }
+        },
+        "d0bfec7c-be7d-4bc6-af85-4fd0f2e2965f": {
+          "type": "featured-blogs",
+          "settings": {
+            "title": "Top Stories",
+            "blog": "news",
+            "limit": 5
+          }
+        },
+        "004dd684-cd8f-484b-bf53-326c8f634617": {
+          "type": "tags",
+          "settings": {
+            "title": "Tags"
+          }
+        }
+      },
+      "block_order": [
+        "69f70665-60a4-4efc-8450-ef02e794e8df",
+        "815c265c-ddbd-4b03-8da6-103b5ee00c6b",
+        "999feaf5-1157-4d4a-b832-495ef53fb00b",
+        "d0bfec7c-be7d-4bc6-af85-4fd0f2e2965f",
+        "004dd684-cd8f-484b-bf53-326c8f634617"
+      ],
+      "settings": {
+        "layout": "right-sidebar",
+        "item_per_page": 12
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

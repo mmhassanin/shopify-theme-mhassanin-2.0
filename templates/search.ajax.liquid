@@ -1,0 +1,69 @@
+{% layout none %}
+{%- liquid
+  assign q = search.terms | split: 'product_type:' | first
+  assign limit = settings.search_limit
+  assign page_results = search.results | where: 'object_type', 'page'
+  assign product_results = search.results | where: 'object_type', 'product'
+  assign article_results = search.results | where: 'object_type', 'article'
+-%}
+
+{%- if product_results.size > 0 -%}
+  <div class="search-resutls_group search-resutls_group--products">
+    <div class="search-resutls_group_title d-none">{{ 'sections.search_form.products' | t }}</div>
+    {%- for product in product_results limit: limit -%}
+      {%- liquid
+        assign first_variant = product.variants | first
+        assign selected_variant = product.first_available_variant | default: first_variant
+        assign image = selected_variant.image | default: product.featured_image
+      -%}
+
+      <a href="{{ product.url }}" class="search-resutls_item" style="--counter:{% increment counter %}s;">
+        <div class="search-resutls_item-image">
+          {%- render 'image-style', image: image, limit: 200 -%}
+        </div>
+        <div class="search-resutls_item-info">
+          <div class="search-resutls_item-title">{{ product.title }}</div>
+          <div class="search-resutls_item-price">
+            {%- if selected_variant.compare_at_price > selected_variant.price -%}
+              <div class="price-sale">{{ selected_variant.price | money }}</div>
+              <del class="price-compare">{{ selected_variant.compare_at_price | money }}</del>
+            {%- else -%}
+              <div class="price">{{ selected_variant.price | money }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{%- if article_results.size > 0 -%}
+  <div class="search-resutls_group search-resutls_group--articles">
+    <div class="search-resutls_group_title">{{ 'sections.search_form.articles' | t }}</div>
+    {%- for article in article_results limit: limit -%}
+      {%- liquid
+        assign image = article.image
+      -%}
+      <a href="{{ article.url }}" class="search-resutls_item" style="--counter:{% increment counter %}s;">
+        <div class="search-resutls_item-image">
+          {%- render 'image-style', image: image, limit: 375 -%}
+        </div>
+        <div class="search-resutls_item-info">
+          <div class="search-resutls_item-title">{{ article.title }}</div>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{%- if page_results.size > 0 -%}
+  <div class="search-resutls_group search-resutls_group--pages">
+    <div class="search-resutls_group_title">{{ 'sections.search_form.pages' | t }}</div>
+    {%- for page in page_results limit: limit -%}
+      <a href="{{ page.url }}" class="search-resutls_item" style="--counter:{% increment counter %}s;">{{ page.title }}</a>
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+
+

@@ -1,0 +1,53 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div.page-template.page-collection-template",
+  "sections": {
+    "main": {
+      "type": "collection-template",
+      "blocks": {
+        "ea3f1024-6b1d-4e7c-803f-503404bdd17d": {
+          "type": "menu",
+          "settings": {
+            "heading": "Categories",
+            "menu": "all-categories"
+          }
+        },
+        "adefb6ab-a319-4a6e-a872-6e57da402e46": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-sidebar-banner.png",
+            "link": "shopify:\/\/collections"
+          }
+        }
+      },
+      "block_order": [
+        "ea3f1024-6b1d-4e7c-803f-503404bdd17d",
+        "adefb6ab-a319-4a6e-a872-6e57da402e46"
+      ],
+      "settings": {
+        "collection_page_limit": 24,
+        "enable_filter": true,
+        "filter_limit": 5,
+        "sub_collections_type": "menu",
+        "subcategory_title": "Categories",
+        "subcategory_menu": "all-categories",
+        "col_description": true,
+        "enable_sort": true,
+        "show_products_showing": true,
+        "col_mode_view": "grid-4",
+        "sidebar_mode": "left"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

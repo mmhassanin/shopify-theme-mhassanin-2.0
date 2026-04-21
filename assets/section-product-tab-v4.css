@@ -1,0 +1,98 @@
+.section-product-tab-v4 .slider-container:not(.slider-initialized) .slider-list > :first-child .product-card:before {
+  content: none;
+}
+
+.section-product-tab-v4 .section-wrapper-image {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 25px;
+  -moz-column-gap: 16px;
+  column-gap: 16px;
+}
+
+@media (min-width: 1200px) {
+  .section-product-tab-v4 .section-wrapper-image {
+    -moz-column-gap: 26px;
+    column-gap: 26px;
+  }
+}
+
+.section-product-tab-v4 .block-image {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 992px) {
+  .section-product-tab-v4 .block-image {
+    flex: 0 0 calc(29% - 16px);
+    max-width: calc(29% - 16px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .section-product-tab-v4 .block-image {
+    flex: 0 0 394px;
+    max-width: 394px;
+  }
+}
+
+.section-product-tab-v4 .section-body {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 992px) {
+  .section-product-tab-v4 .section-body {
+    flex: 0 0 71%;
+    max-width: 71%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .section-product-tab-v4 .section-body {
+    flex: 0 0 calc(100% - 420px);
+    max-width: calc(100% - 420px);
+  }
+}
+
+.section-product-tab-v4 .block-slider-component {
+  position: relative;
+}
+
+.section-product-tab-v4 .slider-controls {
+  position: static;
+}
+
+.section-product-tab-v4 .slider-controls button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--body-bg-color);
+  box-shadow: 3px 3px 16px rgba(0, 0, 0, 0.19);
+}
+
+.section-product-tab-v4 .slider-controls button.slider-prev-button {
+  left: 0;
+}
+
+@media (min-width: 1300px) {
+  .section-product-tab-v4 .slider-controls button.slider-prev-button {
+    left: -15px;
+  }
+}
+
+.section-product-tab-v4 .slider-controls button.slider-next-button {
+  right: 0;
+}
+
+@media (min-width: 1300px) {
+  .section-product-tab-v4 .slider-controls button.slider-next-button {
+    right: -15px;
+  }
+}

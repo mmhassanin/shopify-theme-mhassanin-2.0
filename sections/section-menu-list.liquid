@@ -1,0 +1,128 @@
+{{ 'section-menu-list.css' | asset_url | stylesheet_tag }}
+
+{%- assign section_id = '#section-' | append: section.id -%}
+
+<div class="section-menu-list" id="section-{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper">
+
+      <div class="section-body row">
+        {%- for block in section.blocks -%}
+          <div class="block-widget col-md-3 col-6">
+            <div class="block-wrapper"> 
+              {%- if block.settings.title != blank -%}
+                <h6 class="block-widget_title">{{ block.settings.title }}</h6>
+              {%- endif -%}
+
+              <ul class="menu-list">
+                {%- if block.settings.menu != blank -%}
+                  {%- for link in linklists[block.settings.menu].links -%}
+                    <li class="menu-item">
+                      <a href="{{ link.url }}">{{ link.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- for i in (1..8) -%}
+                    <li class="menu-item">
+                      <a role="link" aria-disabled="true">{{ 'general.onboarding.menu_title' | t }}</a>
+                    </li>
+                  {%- endfor -%}
+                {%- endif -%}
+              </ul>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.menu-list.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "t:sections.footer-widget.blocks.menu.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "Menu title"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.common.menu_item"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.menu-list.name",
+      "blocks": [
+        {
+          "type": "menu"
+        },
+        {
+          "type": "menu"
+        },
+        {
+          "type": "menu"
+        },
+        {
+          "type": "menu"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

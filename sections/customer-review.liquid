@@ -1,0 +1,233 @@
+{{ 'section-customer-review.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign slider_id = '#slider-' | append: section.id
+  assign controls_id = '#controls-' | append: section.id
+  assign items_resp = '1'
+  assign gallery_blocks = section.blocks | where: 'type', 'block-item'
+  assign limit = gallery_blocks.size
+-%}
+
+<div class="customer-review" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="featured-collection">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+
+    {%- capture content -%}
+      {%- for block in gallery_blocks -%}
+        <div class="slider-item">
+          <div class="textbox text-center">
+            {%- case block.settings.star -%}
+              {%- when 1 -%}
+                {%- render 'svg', type: "star-1" -%}
+              {%- when 2 -%}
+                {%- render 'svg', type: "star-2" -%}
+              {%- when 3 -%}
+                {%- render 'svg', type: "star-3" -%}
+              {%- when 4 -%}
+                {%- render 'svg', type: "star-4" -%}
+              {%- else -%}
+                {%- render 'svg', type: "star-5" -%}
+            {%- endcase -%}
+
+            {%- if block.settings.text != blank -%}
+              <div class="cr_title">{{ block.settings.text }}</div>
+            {%- endif -%}
+            {%- if block.settings.author != blank -%}
+              <div class="cr_author">{{ block.settings.author }}</div>
+            {%- endif -%}
+            {%- if block.settings.date != blank -%}
+              <div class="cr_date">{{ block.settings.date }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    <div class="section-wrapper">
+      <div class="section-body">
+        <slider-component>
+          <div class="slider-container js-slider-container">
+            <div class="slider-wrapper">
+              <div class="slider-list" id="slider-{{ section.id }}">
+                {{ content }}
+              </div>
+            </div>
+
+            {%- render 'set-tns-config'
+              slider_id: slider_id,
+              classID: section_id,
+              loop: section.settings.loop,
+              dots: section.settings.dots,
+              controls: section.settings.controls,
+              controls_id: controls_id,
+              customControls: true,
+              autoplay: section.settings.autoplay,
+              autoplay_timeout: section.settings.autoplay_timeout,
+              items_resp: items_resp,
+              total_item: limit
+            -%}
+          </div>
+        </slider-component>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.sectionRegister){
+    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
+  }else{
+    window.theme.sectionRegister = ["featured-collection"];
+  }
+</script>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.customElementsList){
+    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
+  }else{
+    window.theme.customElementsList = ["slider-component"];
+  }
+</script>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.customer-review.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.slider_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.common.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "t:sections.common.controls",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "dots",
+      "label": "t:sections.common.dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.common.autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_timeout",
+      "label": "t:sections.common.autoplay_timeout",
+      "step": 0.1,
+      "min": 2,
+      "max": 10,
+      "unit": "s",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block-item",
+      "name": "t:sections.common.block_item",
+      "settings": [
+        {
+          "type": "range",
+          "id": "star",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "t:sections.customer-review.blocks.settings.star.label"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "t:sections.common.text",
+          "default": "Share your review with everyone"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "t:sections.customer-review.blocks.settings.author.label",
+          "default": "Author"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "t:sections.customer-review.blocks.settings.date.label",
+          "default": "01/01/2025"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.customer-review.name",
+      "blocks": [
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        },
+        {
+          "type": "block-item"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

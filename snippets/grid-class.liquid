@@ -1,0 +1,18 @@
+{%- if value != blank -%}
+  {%- liquid
+    assign value = value | split: ','
+    assign size = value | size
+  -%}
+  {%- case size -%}
+    {%- when 1 -%}
+      d-grid grid-{{value[0]-}}
+    {%- when 2 -%}
+      d-grid grid-{{value[1]}} grid-md-{{value[0]-}}
+    {%- when 3 -%}
+      d-grid grid-{{value[2]}} grid-md-{{value[1]}} grid-lg-{{value[0]-}}
+    {%- when 4 -%}
+      d-grid grid-{{value[3]}} grid-sm-{{value[2]}} grid-md-{{value[1]}} grid-lg-{{value[0]-}}
+    {%- when 5 -%}
+      d-grid grid-{{value[4]}} grid-sm-{{value[3]}} grid-md-{{value[2]}} grid-lg-{{value[1]}} grid-xl-{{value[0]-}}
+  {%- endcase -%}
+{%- endif -%}

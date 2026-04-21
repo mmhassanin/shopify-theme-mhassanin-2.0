@@ -1,0 +1,54 @@
+{%- case type -%}
+	{%- when 'width' -%}
+		{%- assign swbootstrap = number | split: ',' -%}
+		{%- assign sw_out = '' -%}
+
+		{%- if swbootstrap.size == 1 -%}
+			{%- unless swbootstrap[0] == '0' -%}
+		    	{%- assign swbootstrap = swbootstrap[0] | strip | prepend: 'col-' | split: '.' | first -%}
+			{%- else -%}					
+		    	{%- assign swbootstrap = 'd-none' -%}
+			{%- endunless -%}
+		   	{%- assign sw_out = swbootstrap -%}
+		{%- else -%}
+		    {%- case swbootstrap.size -%}
+		      {%- when 2 -%}{%- assign ii = 1 -%}{%- assign ar_class = 'col-md-, col-' -%}
+		      {%- when 3 -%}{%- assign ii = 2 -%}{%- assign ar_class = 'col-lg-, col-md-, col-' -%}
+		      {%- when 4 -%}{%- assign ii = 3 -%}{%- assign ar_class = 'col-lg-, col-md-, col-sm-, col-' -%}
+		      {%- when 5 -%}{%- assign ii = 4 -%}{%- assign ar_class = 'col-xl-, col-lg-, col-md-, col-sm-, col-' -%}
+		      {%- else -%}  {%- assign ii = 5 -%}{%- assign ar_class = 'col-xl-, col-lg-, col-md-, col-sm-, col-xxs-, col-' -%}
+		    {%- endcase -%}
+		    {%- assign arr_class = ar_class | split: ',' -%}
+		    {%- for i in (0..ii) -%}
+		    	{%- unless swbootstrap[i] == '0' -%}
+		        	{%- assign class_item = swbootstrap[i] | strip | prepend: arr_class[i] | split: '.' | first -%}
+		    	{%- else -%}		    		
+		        	{%- assign class_item = 'none' | prepend: arr_class[i] | replace: 'col-','' -%}
+		        	{%- if class_item == ' none' -%}
+		        		{%- assign class_item = ' xs-none' -%}
+		        	{%- endif -%}
+		    	{%- endunless -%}
+
+		        {%- assign sw_out = sw_out | append: class_item -%}
+		    {%- endfor -%}
+
+		{%- endif -%}
+	{%- else -%}
+		{%- assign set_width_bootstrap = number | strip | split: '.' | first | plus: 0 -%}
+		{%- case set_width_bootstrap -%}
+			{%- when 6 -%}{%- assign sw_out = "2" -%}
+			{%- when 5 -%}{%- assign sw_out = "5th" -%}
+			{%- when 4 -%}{%- assign sw_out = "3" -%}
+			{%- when 3 -%}{%- assign sw_out = "4" -%}
+			{%- when 2 -%}{%- assign sw_out = "6" -%}
+			{%- when 1 -%}{%- assign sw_out = "12" -%}
+			{%- else -%}  {%- assign sw_out =  number | append: 'th' -%}
+		{%- endcase -%}
+{%- endcase -%}
+
+{%- comment -%}
+	**
+	* Output
+	*
+{%- endcomment-%}
+{{ sw_out }}

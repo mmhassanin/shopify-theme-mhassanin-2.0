@@ -1,0 +1,829 @@
+<style>
+  :root {
+    --body-cl: #333E48;
+    --body-link-color: #333E48;
+    --heading-cl: #333E48;
+    --input-bg-cl: #f0f2f5;
+    --border-radius: 42px;
+    --main-cl: #FED700;
+    --btn1-bg-color: #FED700;
+    --btn1-color: #333E48;
+    --btn1-border-color: #FED700; 
+    --btn1-hover-bg-color: #333E48;
+    --btn1-hover-color: #ffffff;
+    --btn1-hover-border-color: #333E48;  
+  }
+  @-webkit-keyframes hvr-icon-bob {
+    0%, to {
+      transform: translateY(-8px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hvr-icon-bob {
+    0%, to {
+      transform: translateY(-8px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  body.not-verify{
+    max-height: 100vh!important; 
+    overflow: hidden!important;
+  }
+  
+  #verifyCode {
+    display: none;
+  }
+
+  #verifyCode:after {
+    content: "";
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+    visibility: hidden;
+    opacity: 0;
+    transition: .35s ease-in-out 0s;
+  }
+
+  #verifyCode:after, #verifyCode > div {
+    position: fixed;
+    right: 0;
+  }
+
+  #verifyCode > div {
+    left: 50%;
+    top: 50%;
+    z-index: 995;
+    width: calc(100% - 30px);
+    max-width: 700px;
+    max-height: 95vh;
+    overflow: hidden;
+    overflow-y: auto;
+    transform: translate(-50%, -50.1%);
+    padding: 0;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    background: #fff;
+  }
+
+  #verifyCode .dialog-body {
+    color: var(--body-cl);
+  }
+
+  #verifyCode .dialog-body > strong {
+    padding: 20px;
+    display: block;
+  }
+
+  @media (min-width: 992px) {
+    #verifyCode .dialog-body > strong {
+      padding: 20px 30px;
+    }
+  }
+
+  #verifyCode .dialog-body > p {
+    margin: 0;
+    padding: 0 20px 30px;
+  }
+
+  @media (min-width: 992px) {
+    #verifyCode .dialog-body > p {
+      padding: 0 30px 30px;
+    }
+  }
+
+  #verifyCode .line {
+    width: 100%;
+    height: 1px;
+    display: block;
+    background: #f0f2f5;
+  }
+
+  #verifyCode form {
+    padding: 20px;
+  }
+
+  @media (min-width: 992px) {
+    #verifyCode form {
+      padding: 20px 30px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    #verifyCode form .verify-form-group:last-of-type {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  #verifyCode form .verify-form-group > a {
+    color: var(--body-link-color);
+    margin-bottom: 15px;
+    display: block;
+    font-weight: 400;
+  }
+
+  @media (min-width: 768px) {
+    #verifyCode form .verify-form-group > a {
+      margin-bottom: 0;
+      font-weight: 700;
+    }
+  }
+
+  #verifyCode form.fail-to-verify input[type=text] {
+    border: 1px solid red;
+  }
+
+  #verifyCode h1 {
+    font-size: 30px;
+    padding: 20px 20px 0;
+    font-weight: 600;
+    color: var(--heading-cl);
+  }
+
+  @media (min-width: 992px) {
+    #verifyCode h1 {
+      padding: 20px 30px 0;
+    }
+  }
+
+  #verifyCode p {
+    margin: 0 0 10px;
+  }
+
+  #verifyCode #verify-error,
+  #verifyCode #verify-error-support,
+  #verifyCode #verify-error-support > a {
+    color: red;
+  }
+
+  #verifyCode input[type=text],
+  #verifyCode input[type=email] {
+    width: 100%;
+    margin-bottom: 20px;
+    height: 46px;
+    padding: 10px 25px;
+    background: var(--input-bg-cl);
+    border: 1px solid var(--input-bg-cl);
+    outline: none;
+    border-radius: var(--border-radius);
+  }
+
+  #verifyCode input[type=text]:focus,
+  #verifyCode input[type=email]:focus  {
+    box-shadow: inset 0 0 0 2px var(--main-cl);
+  }
+
+  #verifyCode input[type=submit] {
+    cursor: pointer;
+    height: 46px;
+    padding: 10px 25px;
+    background: var(--btn1-bg-color);
+    color: var(--btn1-color);
+    border: 1px solid var(--btn1-border-color);
+    font-weight: 600;
+    width: 100%;
+    outline: none;
+    border-radius: var(--border-radius);
+  }
+
+  @media (min-width: 768px) {
+    #verifyCode input[type=submit] {
+      width: auto;
+    }
+  }
+
+  #verifyCode input[type=submit]:focus {
+    box-shadow: none;
+  }
+
+  @media (min-width: 1025px) {
+    #verifyCode input[type=submit]:hover {
+      background: var(--btn1-hover-bg-color);
+      color: var(--btn1-hover-color);
+      border-color: var(--btn1-hover-border-color);
+    }
+  }
+
+  #verifyCode.is-open {
+    display: block;
+  }
+
+  #verifyCode.is-open:after {
+    visibility: visible;
+    opacity: 1;
+    z-index: 100;
+  }
+</style>
+
+<dialog id="verifyCode" class="modal-ui" aria-hidden="true">
+  <div role="dialog" aria-modal="true" aria-labelledby="verifyCode-title">
+    <div id="verifyCode-content">
+      <div class="dialog-body" data-notify-content>
+        <strong>Active theme purchase code</strong>
+        <span class="line"></span>
+        <h1>Add License Key/Purchase Code</h1>
+
+        <form action="/" id="verifyCodeForm" method="POST">
+          <p>
+            Enter your purchase code and email then hit return/enter. 
+            <a href="https://support.arenacommerce.com/support/solutions/articles/6000116407-how-to-find-your-themeforest-item-purchase-code">
+              Find out how to get your purchase code.
+            </a>
+          </p>
+        
+          <p>Purchase code:</p>
+          <div class="verify-form-group">
+            <input type="text" name="pcode" placeholder="Purchase code (e.g. xxxxxxxxxx)" pattern="[(a-z0-9)]{8}-[(a-z0-9)]{4}-[(a-z0-9)]{4}-[(a-z0-9)]{4}-[(a-z0-9)]{12}">
+            <p id="verify-error" style="display: none;">Please try again!</p>
+            <p id="verify-error-support" style="display: none;">Please contact <a href="mailto:support@arenacommerce.com"><strong>support@arenacommerce.com</strong></a> if you have any problem</p>
+          </div>
+
+          <p>Email:</p>
+          <div class="verify-form-group">
+            <input type="email" name="customer_email" placeholder="Your email" required>
+          </div>
+
+          <div class="verify-form-group">
+            <a href="https://support.arenacommerce.com/support/solutions/articles/6000116407-how-to-find-your-themeforest-item-purchase-code">How to get License key?</a>
+            <input type="submit" value="Active License Key">
+          </div>
+        </form>
+        <p>A purchase code (license) is only valid for One Domain. Are you using this theme on a new domain? Purchase a new license here to get a new purchase code.</p>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  :root {
+    --color-heading: #FFC727;
+  }
+  #support-banner {
+    display: none;
+  }
+  #support-banner.is-open {
+    display: block;
+  }
+  #support-banner:after {
+    content: "";
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+    transition: .35s ease-in-out 0s;
+  }
+  #support-banner.is-open:after {
+    visibility: visible;
+    opacity: 1;
+    z-index: 100;
+  }
+  #support-banner >div {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 995;
+  }
+  #support-banner #support-banner-content {
+    width: calc(100% - 30px);
+    max-height: 95vh;
+    background-image: url("https://cdn.shopify.com/s/files/1/0265/3493/6627/files/support-banner-bg.png?v=1711074600") ;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: cover;
+    overflow: hidden;
+    overflow-y: auto;
+    padding: 30px 20px 30px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    position: relative;
+    word-wrap: break-word;
+  }
+  @media (min-width: 992px) {
+    #support-banner #support-banner-content {
+      padding: 50px 30px 60px;
+    }
+  }
+  #support-banner .support-heading {
+    display: block;
+    color: var(--color-heading);
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 3px;
+  }
+  @media (min-width: 992px) {
+    #support-banner .support-heading  {
+      font-size: 40px;
+    }
+  }
+   #support-banner .support-subheading {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 20px;
+  }
+  @media (min-width: 992px) {
+    #support-banner .support-subheading  {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+  }
+   #support-banner .title-wrapper {
+    display: block;
+    position: relative;
+    text-align: center;
+    margin-bottom: -20px;
+     z-index: 2;
+  }
+   #support-banner .title-content {
+      display: inline-block;
+     font-size: 14px;
+     font-weight: 700;
+     background: #ffffff;
+     color: #333e48;
+     border: 1px solid #333e48; 
+     border-radius: 8px;
+     padding: 10px 20px;
+  }
+  @media (min-width: 992px) {
+    #support-banner .title-content  {
+      font-size: 16px;
+    }
+  }
+  #support-banner .support-content {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  @media (min-width: 992px) {
+    #support-banner .support-content {
+      font-size: 18px;
+    }
+  }
+  #support-banner .support-content p {
+    margin: 0;
+  }
+  #support-banner .time-work {
+    display: flex;
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+  @media (min-width: 992px) {
+    #support-banner .time-work {
+      width: 50%;
+    }
+  }
+  #support-banner .icon-work {
+    display: flex;
+    margin-inline-end: 10px;
+  }
+  #support-banner .time-work p {
+    margin: 0;
+  }
+  #support-banner .support-content-wrapper {
+    position: relative;
+  }
+  @media (max-width: 991px) {
+    #support-banner .support-content-wrapper {
+      padding: 30px;
+      border: 1px solid #34640E;
+      border-radius: 20px;
+      background: #fff;
+    }
+  }
+  @media (min-width: 992px) {
+    .support-content-image {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      right: 100px;
+      bottom: 30%;
+    }
+  }
+  @media (max-width: 991px) {
+    .support-content-wrapper img {
+      display: none;
+    }
+  }
+  #support-banner .btn-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333e48;
+    cursor: pointer;
+  }
+</style>
+
+<div id="support-banner" class="modal-ui" aria-hidden="true">
+  <div role="dialog" aria-modal="true" aria-labelledby="support-banner-title">
+    <div id="support-banner-content">
+      <button type="button" id="btn-close" class="btn-close js-popup-close">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 44 64"><path d="M0 48.64q0-2.304 1.664-3.968l12.48-12.48-12.48-12.544q-1.664-1.6-1.664-3.904t1.664-3.904 3.904-1.6 3.904 1.6l12.544 12.544 12.48-12.544q1.6-1.6 3.904-1.6t3.904 1.6 1.6 3.904-1.6 3.904l-12.48 12.544 12.48 12.48q1.6 1.664 1.6 3.968t-1.6 3.904-3.904 1.6-3.904-1.6l-12.48-12.48-12.544 12.48q-1.6 1.6-3.904 1.6t-3.904-1.6q-1.664-1.664-1.664-3.904z"></path></svg>
+      </button>
+      <strong class="support-heading">THANK YOU FOR CHOOSING US</strong>
+      <span class="support-subheading">Your Partner for Shopify Success!</span>
+      <div class="title-wrapper">
+        <div class="title-content">Let's Start Building!</div>
+      </div>
+      <div class="support-content-wrapper">
+        <img width="100%" height="100%" src="https://cdn.shopify.com/s/files/1/0265/3493/6627/files/support-banner-content.png?v=1711082865"/>
+        <div class="support-content-image">
+          <div class="support-content">
+            <p>Hey there!</p>
+            <p>We can't thank you enough for picking ArenaCommerce! Seriously, you're making our day.
+                As you begin this epic journey with us, rest assured we're here to be your sidekick every step of the way. 
+                Got a question? Need some advice? Or just want to shoot the breeze about your journey? We're all ears and just a quick email away at <strong><a href="mailto:support@arenacommerce.com">support@arenacommerce.com</a></strong>.</p>
+            <p>Let's make this adventure together unforgettable! 🎉</p>
+          </div>
+          <div class="time-work">
+            <span class="icon-work">
+              <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5107 13.3269C19.071 13.4201 18.2983 13.7132 17.7788 13.9796C17.2193 14.2727 16.5132 14.7923 16.007 15.2985C15.4474 15.858 14.9945 16.4709 14.6614 17.137C14.355 17.7498 14.0886 18.5225 13.982 19.1353C13.8887 19.7214 13.8488 20.5074 13.9021 21.0403C13.942 21.5332 14.1152 22.3059 14.2884 22.7722C14.4483 23.2251 14.7946 23.9179 15.0478 24.3175C15.3009 24.7172 15.8471 25.3433 16.2601 25.7164C16.6731 26.0894 17.3924 26.5823 17.8587 26.8088C18.325 27.0486 19.0444 27.3017 19.444 27.4083C19.8437 27.5015 20.6297 27.5681 21.1759 27.5681C21.7221 27.5681 22.5348 27.4615 22.9744 27.3283C23.414 27.2084 24.1334 26.9153 24.573 26.6889C25.0127 26.4491 25.7321 25.9029 26.1717 25.4632C26.6113 25.0236 27.1575 24.3042 27.3973 23.8646C27.6238 23.425 27.9169 22.7056 28.0368 22.2659C28.17 21.8263 28.2766 21.0137 28.2766 20.4675C28.2766 19.9213 28.21 19.1353 28.1167 18.7356C28.0101 18.3359 27.757 17.6166 27.5172 17.1503C27.2907 16.684 26.7978 15.9646 26.4248 15.5516C26.0518 15.1387 25.4256 14.5924 25.026 14.3393C24.6263 14.0862 23.9203 13.7398 23.4407 13.5667C22.8811 13.3668 22.1751 13.2336 21.4424 13.1936C20.7762 13.167 19.9769 13.2203 19.5107 13.3269ZM19.7771 14.4544C19.1755 14.5971 18.8476 14.7455 18.3117 15.0539C17.639 15.441 17.293 15.7375 16.7796 16.3195C16.3071 16.8552 15.7805 17.8515 15.7805 17.8515C15.7805 17.8515 15.365 18.7439 15.2476 19.3836C15.1351 19.9965 15.0982 20.3981 15.181 21.0403C15.2541 21.607 15.38 21.9127 15.5806 22.4477C15.7962 23.0222 15.9096 23.3609 16.2601 23.8646C16.5809 24.3257 16.8217 24.544 17.2459 24.9122C17.6555 25.2678 17.9038 25.4536 18.3783 25.7164C18.8468 25.9758 19.1278 26.1014 19.6439 26.2444C20.2253 26.4056 20.5726 26.441 21.1759 26.4443C21.8051 26.4476 22.1764 26.4395 22.7746 26.2444C23.3056 26.0713 23.5663 25.874 24.0401 25.5783C24.5919 25.234 24.9014 25.0277 25.3724 24.5792C25.8379 24.1359 26.113 23.8757 26.4248 23.3136C26.693 22.83 26.783 22.5208 26.9044 21.9814C27.0346 21.4023 27.0799 21.0605 27.1042 20.4675C27.1255 19.9476 27.1436 19.6453 27.0376 19.1353C26.9101 18.5215 26.4248 17.6517 26.4248 17.6517C26.4248 17.6517 25.9728 16.7897 25.5722 16.3195C25.186 15.8663 24.9276 15.6055 24.4398 15.2985C23.9682 15.0017 23.6417 14.8132 23.1076 14.6543C22.4719 14.4651 22.1031 14.3777 21.4424 14.3393C20.7916 14.3016 20.4114 14.304 19.7771 14.4544Z" fill="black"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.85301 0.551009C9.21271 0.337856 9.71895 0.111381 9.98539 0.0580932C10.2385 0.00480499 10.9313 -0.00851705 11.5174 0.00480499C12.1968 0.0447711 12.7963 0.151348 13.1827 0.311212C13.5157 0.457755 13.9554 0.75084 14.1685 0.963992C14.3683 1.17715 14.6614 1.59013 14.808 1.88321C14.9678 2.1763 15.1144 2.76247 15.2476 3.93481L17.3125 3.97478C19.0977 4.01474 19.444 4.05471 19.9103 4.2945C20.2034 4.45437 20.6697 4.84071 20.9494 5.16044C21.2292 5.48017 21.509 5.95976 21.5756 6.21288C21.6555 6.466 21.7088 7.45183 21.7088 8.41102C21.7088 9.59668 21.6555 10.1962 21.5489 10.3161C21.429 10.436 20.5231 10.4759 14.4483 10.4759L14.3683 11.2353C14.3284 11.6616 14.1818 12.2478 13.7822 13.0737L11.4508 13.1137C10.1719 13.127 8.98623 13.1137 8.82637 13.0737C8.59989 13.0204 8.46667 12.8339 8.32013 12.3144C8.21355 11.928 8.1203 11.3552 8.1203 10.4759H1.99216L2.03212 13.127C2.05877 15.6049 2.07209 15.8181 2.33853 16.1644C2.4984 16.3643 2.79148 16.6574 2.97799 16.8039C3.32436 17.057 3.57748 17.0703 11.1844 17.137V18.3359H7.16111C3.4709 18.3359 3.08457 18.3093 2.59165 18.0828C2.29856 17.9363 1.85894 17.5899 1.60582 17.3101C1.3527 17.0304 1.05961 16.5908 0.939715 16.3376C0.753207 15.938 0.726562 15.1653 0.726562 6.41271L1.12622 5.69332C1.3527 5.29366 1.69907 4.84071 1.92555 4.66752C2.15202 4.49434 2.59165 4.26786 2.9247 4.14796C3.36433 4.00142 4.03043 3.94813 7.32098 3.94813L7.36094 3.10884C7.37427 2.44274 7.46752 2.13633 7.80057 1.60345C8.05369 1.19047 8.44003 0.804128 8.85301 0.551009ZM1.99216 9.32543V6.66102L2.59165 5.39543L4.12369 5.16044H7.32098H15.2476H17.3125L19.5107 5.39543L20.31 6.41271L20.4432 8.41102V9.32543H14.4483H8.1203H1.99216ZM8.32013 2.89887C8.22992 3.29858 8.2462 3.93481 8.2462 3.93481H14.3347C14.3347 3.93481 14.3965 3.20004 14.2622 2.76075C14.135 2.3449 13.99 2.12639 13.7097 1.79392C13.4381 1.47184 12.881 1.10333 12.881 1.10333C12.881 1.10333 11.8797 0.827091 11.2236 0.827091C10.5674 0.827091 10.1214 0.891798 9.56613 1.24145C9.21091 1.46513 9.06506 1.58438 8.82637 1.88321C8.54978 2.22949 8.4177 2.46656 8.32013 2.89887Z" fill="black"/>
+                <path d="M20.3756 21.8089C20.2291 21.5825 20.1758 21.1162 20.1758 19.8906V18.252H21.3082V21.0496H23.5063V22.1153H22.0409C20.6687 22.1153 20.5621 22.102 20.3756 21.8089Z" fill="black"/>
+              </svg>
+            </span>
+            <p>WORKING HOURS: Monday - Friday, 9AM - 6PM (GMT+7)</p>                        
+          </div>
+          <div class="time-work">
+              <span class="icon-work">
+                <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0.788834 1.23856C0.985513 1.04188 1.31741 0.80832 1.52638 0.722273C1.80911 0.599348 3.33337 0.562471 14.8022 0.550179L15.3554 0.832905C15.7487 1.04188 16.0192 1.31231 16.3142 1.79172C16.6707 2.39405 16.7076 2.55385 16.7076 4.36084L16.2773 4.20104C15.8594 4.05353 15.8471 4.04123 15.8471 3.40203C15.8471 3.05784 15.7733 2.61531 15.675 2.41863C15.5766 2.23424 15.3554 1.95152 14.8391 1.47211L2.141 1.39836L1.71077 1.68108C1.47721 1.84089 1.18219 2.16049 1.07156 2.39405C0.874881 2.76282 0.850297 3.20535 0.850297 5.73759C0.850297 8.41734 0.874881 8.70007 1.09615 9.15489C1.23136 9.42533 1.51409 9.74493 1.73535 9.85556C2.07954 10.0399 2.58353 10.0891 7.6726 10.1997L9.98359 11.638C11.2497 12.437 12.3314 13.0885 12.4052 13.0885C12.479 13.0885 12.5035 12.941 12.4667 12.7443C12.4421 12.5599 12.356 11.9699 12.2823 11.429C12.2085 10.8881 12.1716 10.3718 12.2085 10.2858C12.2577 10.1875 12.651 10.126 13.4132 10.1014C14.3351 10.0768 14.6424 10.0154 15.4783 9.52366L16.0315 10.1629L15.6996 10.4579C15.5029 10.6177 15.1464 10.8021 14.9006 10.8758C14.6424 10.9373 14.1384 10.9988 13.7942 10.9988C13.4378 10.9988 13.1427 11.0356 13.1427 11.0848C13.1427 11.1463 13.2534 11.8469 13.3763 12.6582C13.5115 13.5433 13.5607 14.2194 13.4992 14.3423C13.4378 14.4652 13.2903 14.5636 13.1796 14.5636C13.0567 14.5636 11.6554 13.7646 7.18091 10.9988L1.74765 10.9373L1.24365 10.5931C0.960929 10.4087 0.579863 10.0277 0.0512875 9.24094L0.0144102 5.97115C-0.0224672 3.07013 0.00211774 2.63989 0.198797 2.1482C0.321721 1.84089 0.579863 1.43523 0.788834 1.23856Z" fill="black"/>
+                  <path d="M13.1305 16.1739C13.3025 16.0141 13.6099 15.8051 13.8188 15.7191C14.0278 15.633 14.3966 15.5593 14.6424 15.547C15.0235 15.547 15.171 15.6207 15.761 16.346L15.0112 16.4074C14.5318 16.4443 14.1507 16.5549 13.9172 16.727C13.7328 16.8623 13.4746 17.1696 13.364 17.4031C13.1673 17.7719 13.1427 18.2021 13.1427 20.7713C13.1427 23.4264 13.1673 23.7706 13.3763 24.1517C13.4992 24.3852 13.7574 24.6925 13.9418 24.8278C14.2122 25.0244 14.4949 25.0736 15.4906 25.0982C16.5232 25.1351 16.7198 25.1719 16.7813 25.344C16.8305 25.467 16.8059 25.9833 16.7198 26.4872C16.6338 26.9912 16.5478 27.5567 16.5232 27.7411C16.4863 27.9377 16.5109 28.0853 16.5846 28.0853C16.6584 28.0853 17.777 27.4215 21.4401 25.1597L24.2059 25.1228C26.7751 25.0736 26.9963 25.0613 27.3405 24.8155C27.5372 24.668 27.8076 24.3606 27.9183 24.1025C28.1149 23.7214 28.1395 23.2666 28.1395 20.7344C28.1395 18.2021 28.1149 17.7596 27.9183 17.3908C27.8076 17.1573 27.5126 16.8377 27.2791 16.6779C26.9349 16.4566 26.689 16.4074 25.2508 16.4197L25.5704 16.0141C25.804 15.7314 26.0129 15.5961 26.308 15.5715C26.5415 15.547 26.898 15.5593 27.0947 15.5961C27.2913 15.633 27.7093 15.8789 28.0043 16.1247C28.3116 16.3828 28.6558 16.8131 28.7787 17.0835C28.9631 17.5138 29 17.9563 29 20.7344C29 23.3281 28.9631 23.9919 28.8033 24.3606C28.705 24.6188 28.4714 24.9876 28.287 25.1842C28.1027 25.3809 27.7339 25.6391 27.4634 25.762C27.0332 25.9587 26.6398 25.9955 21.8089 25.9955L18.9202 27.7779C17.3345 28.7613 15.9331 29.5726 15.8102 29.5604C15.6996 29.5604 15.5521 29.462 15.4906 29.3391C15.4291 29.2162 15.4783 28.5893 15.6135 27.7165C15.7365 26.9421 15.8348 26.2291 15.8471 26.1431C15.8471 26.0447 15.6135 25.9955 15.085 25.9955C14.5933 25.9955 14.1261 25.9095 13.8188 25.762C13.5484 25.6391 13.1796 25.3809 12.9952 25.1842C12.8108 24.9876 12.5773 24.6188 12.479 24.3606C12.3191 23.9919 12.2823 23.3158 12.2823 20.7098C12.2823 17.6736 12.2946 17.4892 12.5527 16.9852C12.7002 16.7025 12.9584 16.3337 13.1305 16.1739Z" fill="black"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M9.1477 5.20902C9.55335 5.06151 10.2417 4.87712 10.6843 4.79107C11.1268 4.70503 12.0118 4.61898 12.651 4.61898C13.2903 4.60669 14.2859 4.69273 14.8637 4.80336C15.4414 4.9017 16.3265 5.15985 16.8305 5.36882C17.3345 5.57779 18.1949 6.03261 18.7358 6.38909C19.2767 6.74557 20.0757 7.42166 20.5182 7.88877C20.9976 8.39276 21.5016 9.11801 21.772 9.65888C22.0302 10.1629 22.3252 10.9004 22.4235 11.3061C22.5219 11.7117 22.6325 12.5107 22.694 14.1333L23.9601 14.1948C24.9558 14.244 25.2508 14.3054 25.3614 14.4652C25.4721 14.625 25.2508 14.9692 24.0584 16.432C23.5304 17.0755 22.8806 17.8741 22.3617 18.5118L22.3608 18.5128C22.1069 18.8249 21.8844 19.0983 21.7229 19.2962C21.0345 20.132 20.7395 20.4025 20.5182 20.4025C20.2847 20.4025 19.7684 19.837 17.9614 17.6367C16.7198 16.1124 15.6873 14.7971 15.6504 14.7111C15.6258 14.6373 15.675 14.4775 15.761 14.3792C15.8717 14.2194 16.1667 14.1825 18.3056 14.1948V13.4818C18.3056 13.0885 18.1826 12.437 18.0228 11.9822C17.8753 11.5396 17.5557 10.8512 17.3222 10.4579C17.0886 10.0645 16.56 9.40074 16.1544 8.99509C15.7487 8.60173 15.0235 8.02399 14.5564 7.72897C14.0893 7.44624 13.1673 7.0283 12.5281 6.80703C11.5078 6.46285 11.1637 6.40138 9.86066 6.36451C8.43474 6.32763 8.3364 6.31534 8.21347 6.0449C8.11513 5.83593 8.11513 5.73759 8.25035 5.62696C8.3364 5.54091 8.74205 5.35653 9.1477 5.20902ZM11.3705 5.62696C12.4052 5.36882 15.3041 5.62696 16.5333 6.26617L16.6224 6.31244C18.136 7.09899 19.8109 7.9694 20.8357 9.83098C21.6961 11.3939 21.7371 13.4572 21.6962 14.3177H19.2991L19.1148 12.5353C18.9713 11.9617 18.771 11.2522 18.3772 10.5071C17.9129 9.62848 17.5387 9.1861 16.8407 8.47881C15.9841 7.61087 15.3789 7.24093 14.3207 6.63494C13.839 6.35908 13.118 6.16394 12.4911 5.99426C12.0142 5.8652 11.5918 5.75087 11.3705 5.62696ZM17.7626 15.1167C17.3201 15.1167 17.1685 15.1987 17.148 15.2397L20.5284 19.2962C21.7167 17.985 24.044 15.338 23.8473 15.2397C23.6507 15.1413 23.3147 15.1167 23.1713 15.1167H17.7626Z" fill="black"/>
+                </svg>
+              </span>
+              <p>RESPONSE TIME: Within 24 hours on weekdays and 48 hours on weekends</p>                        
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  :root {
+    --color-heading: #333e48;
+  }
+  #renew-support-banner {
+    display: none;
+  }
+  #renew-support-banner.is-open {
+    display: block;
+  }
+  #renew-support-banner:after {
+    content: "";
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+    transition: .35s ease-in-out 0s;
+  }
+  #renew-support-banner.is-open:after {
+    visibility: visible;
+    opacity: 1;
+    z-index: 100;
+  }
+  #renew-support-banner >div {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 995;
+  }
+  #renew-support-banner #renew-support-banner-content {
+    width: calc(100% - 30px);
+    max-height: 95vh;
+    background-image: url("https://cdn.shopify.com/s/files/1/0265/3493/6627/files/support-banner-bg.png?v=1711074600") ;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: cover;
+    overflow: hidden;
+    overflow-y: auto;
+    padding: 30px 20px 30px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    position: relative;
+    word-wrap: break-word;
+  }
+  @media (min-width: 992px) {
+    #renew-support-banner #renew-support-banner-content {
+      padding: 50px 30px 50px;
+    }
+  }
+  #renew-support-banner .support-heading {
+    display: block;
+    color: var(--color-heading);
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 15px;
+  }
+   #renew-support-banner .title-content {
+      display: inline-block;
+     font-size: 14px;
+     font-weight: 700;
+     background: #ffffff;
+     color: #333e48;
+     border: 1px solid #333e48; 
+     border-radius: 8px;
+     padding: 10px 20px;
+  }
+  @media (min-width: 992px) {
+    #renew-support-banner .title-content  {
+      font-size: 16px;
+    }
+  }
+  #renew-support-banner .support-content {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  @media (min-width: 992px) {
+    #renew-support-banner .support-content {
+      font-size: 18px;
+    }
+  }
+  #renew-support-banner .support-content p {
+    margin: 0;
+  }
+  #renew-support-banner .support-content p a{
+    text-decoration: underline;
+  }
+  #renew-support-banner .time-work {
+    display: flex;
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+  @media (min-width: 992px) {
+    #renew-support-banner .time-work {
+      width: 50%;
+    }
+  }
+  #renew-support-banner .icon-work {
+    display: flex;
+    margin-inline-end: 10px;
+  }
+  #renew-support-banner .time-work p {
+    margin: 0;
+  }
+  #renew-support-banner .support-content-wrapper {
+    position: relative;
+  }
+  #renew-support-banner .support-content-wrapper {
+    padding: 30px;
+    border: 1px solid #34640E;
+    border-radius: 20px;
+    background: #fff;
+  }
+  #renew-support-banner .support-content-image {
+      position: static;
+  }
+  #renew-support-banner .btn-renew-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333e48;
+    cursor: pointer;
+  }
+</style>
+                    
+<div id="renew-support-banner" class="modal-ui" aria-hidden="true">
+  <div role="dialog" aria-modal="true" aria-labelledby="renew-support-banner-title">
+    <div id="renew-support-banner-content">
+      <button type="button" id="btn-renew-close" class="btn-renew-close js-popup-close">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 44 64"><path d="M0 48.64q0-2.304 1.664-3.968l12.48-12.48-12.48-12.544q-1.664-1.6-1.664-3.904t1.664-3.904 3.904-1.6 3.904 1.6l12.544 12.544 12.48-12.544q1.6-1.6 3.904-1.6t3.904 1.6 1.6 3.904-1.6 3.904l-12.48 12.544 12.48 12.48q1.6 1.664 1.6 3.968t-1.6 3.904-3.904 1.6-3.904-1.6l-12.48-12.48-12.544 12.48q-1.6 1.6-3.904 1.6t-3.904-1.6q-1.664-1.664-1.664-3.904z"></path></svg>
+      </button>
+      <strong class="support-heading">The support for your item has already expired</strong>
+      <div class="support-content-wrapper">
+        <div class="support-content-image">
+          <div class="support-content">
+            <p>Hey there!</p>
+            <p>
+              I regret to inform you that the support for your item has already expired.
+              I understand that the support expiration may have slipped your mind and for that.
+              I apologize for the inconvenience this may have caused.
+            </p>
+            <p>You can take a look at Envato's Item Support Policy here: <a target="_blank" href="https://themeforest.net/page/item_support_policy">https://themeforest.net/page/item_support_policy</a></p>
+            <p>You can see how to extend the Item Support period again here: <a target="_blank" href="https://help.market.envato.com/hc/en-us/articles/207886473-Extending-and-Renewing-">https://help.market.envato.com/hc/en-us/articles/207886473-Extending-and-Renewing-</a></p>
+            <p>
+              Renewing the support will not only ensure that your item continues to function optimally, but it will also give you access to the latest updates, enhancements, and technical support.
+              Our support team is ready to assist you in renewing the support for your item and answer any questions you may have.
+            </p>
+            <p>Please let us know if you have any questions or if there is anything else we can assist you with. We value your business and look forward to continuing our relationship with you. We're all ears and just a quick email away at <a href="mailto:support@arenacommerce.com">support@arenacommerce.com</a></p>
+          </div>
+          <div class="time-work">
+            <span class="icon-work">
+              <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5107 13.3269C19.071 13.4201 18.2983 13.7132 17.7788 13.9796C17.2193 14.2727 16.5132 14.7923 16.007 15.2985C15.4474 15.858 14.9945 16.4709 14.6614 17.137C14.355 17.7498 14.0886 18.5225 13.982 19.1353C13.8887 19.7214 13.8488 20.5074 13.9021 21.0403C13.942 21.5332 14.1152 22.3059 14.2884 22.7722C14.4483 23.2251 14.7946 23.9179 15.0478 24.3175C15.3009 24.7172 15.8471 25.3433 16.2601 25.7164C16.6731 26.0894 17.3924 26.5823 17.8587 26.8088C18.325 27.0486 19.0444 27.3017 19.444 27.4083C19.8437 27.5015 20.6297 27.5681 21.1759 27.5681C21.7221 27.5681 22.5348 27.4615 22.9744 27.3283C23.414 27.2084 24.1334 26.9153 24.573 26.6889C25.0127 26.4491 25.7321 25.9029 26.1717 25.4632C26.6113 25.0236 27.1575 24.3042 27.3973 23.8646C27.6238 23.425 27.9169 22.7056 28.0368 22.2659C28.17 21.8263 28.2766 21.0137 28.2766 20.4675C28.2766 19.9213 28.21 19.1353 28.1167 18.7356C28.0101 18.3359 27.757 17.6166 27.5172 17.1503C27.2907 16.684 26.7978 15.9646 26.4248 15.5516C26.0518 15.1387 25.4256 14.5924 25.026 14.3393C24.6263 14.0862 23.9203 13.7398 23.4407 13.5667C22.8811 13.3668 22.1751 13.2336 21.4424 13.1936C20.7762 13.167 19.9769 13.2203 19.5107 13.3269ZM19.7771 14.4544C19.1755 14.5971 18.8476 14.7455 18.3117 15.0539C17.639 15.441 17.293 15.7375 16.7796 16.3195C16.3071 16.8552 15.7805 17.8515 15.7805 17.8515C15.7805 17.8515 15.365 18.7439 15.2476 19.3836C15.1351 19.9965 15.0982 20.3981 15.181 21.0403C15.2541 21.607 15.38 21.9127 15.5806 22.4477C15.7962 23.0222 15.9096 23.3609 16.2601 23.8646C16.5809 24.3257 16.8217 24.544 17.2459 24.9122C17.6555 25.2678 17.9038 25.4536 18.3783 25.7164C18.8468 25.9758 19.1278 26.1014 19.6439 26.2444C20.2253 26.4056 20.5726 26.441 21.1759 26.4443C21.8051 26.4476 22.1764 26.4395 22.7746 26.2444C23.3056 26.0713 23.5663 25.874 24.0401 25.5783C24.5919 25.234 24.9014 25.0277 25.3724 24.5792C25.8379 24.1359 26.113 23.8757 26.4248 23.3136C26.693 22.83 26.783 22.5208 26.9044 21.9814C27.0346 21.4023 27.0799 21.0605 27.1042 20.4675C27.1255 19.9476 27.1436 19.6453 27.0376 19.1353C26.9101 18.5215 26.4248 17.6517 26.4248 17.6517C26.4248 17.6517 25.9728 16.7897 25.5722 16.3195C25.186 15.8663 24.9276 15.6055 24.4398 15.2985C23.9682 15.0017 23.6417 14.8132 23.1076 14.6543C22.4719 14.4651 22.1031 14.3777 21.4424 14.3393C20.7916 14.3016 20.4114 14.304 19.7771 14.4544Z" fill="black"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.85301 0.551009C9.21271 0.337856 9.71895 0.111381 9.98539 0.0580932C10.2385 0.00480499 10.9313 -0.00851705 11.5174 0.00480499C12.1968 0.0447711 12.7963 0.151348 13.1827 0.311212C13.5157 0.457755 13.9554 0.75084 14.1685 0.963992C14.3683 1.17715 14.6614 1.59013 14.808 1.88321C14.9678 2.1763 15.1144 2.76247 15.2476 3.93481L17.3125 3.97478C19.0977 4.01474 19.444 4.05471 19.9103 4.2945C20.2034 4.45437 20.6697 4.84071 20.9494 5.16044C21.2292 5.48017 21.509 5.95976 21.5756 6.21288C21.6555 6.466 21.7088 7.45183 21.7088 8.41102C21.7088 9.59668 21.6555 10.1962 21.5489 10.3161C21.429 10.436 20.5231 10.4759 14.4483 10.4759L14.3683 11.2353C14.3284 11.6616 14.1818 12.2478 13.7822 13.0737L11.4508 13.1137C10.1719 13.127 8.98623 13.1137 8.82637 13.0737C8.59989 13.0204 8.46667 12.8339 8.32013 12.3144C8.21355 11.928 8.1203 11.3552 8.1203 10.4759H1.99216L2.03212 13.127C2.05877 15.6049 2.07209 15.8181 2.33853 16.1644C2.4984 16.3643 2.79148 16.6574 2.97799 16.8039C3.32436 17.057 3.57748 17.0703 11.1844 17.137V18.3359H7.16111C3.4709 18.3359 3.08457 18.3093 2.59165 18.0828C2.29856 17.9363 1.85894 17.5899 1.60582 17.3101C1.3527 17.0304 1.05961 16.5908 0.939715 16.3376C0.753207 15.938 0.726562 15.1653 0.726562 6.41271L1.12622 5.69332C1.3527 5.29366 1.69907 4.84071 1.92555 4.66752C2.15202 4.49434 2.59165 4.26786 2.9247 4.14796C3.36433 4.00142 4.03043 3.94813 7.32098 3.94813L7.36094 3.10884C7.37427 2.44274 7.46752 2.13633 7.80057 1.60345C8.05369 1.19047 8.44003 0.804128 8.85301 0.551009ZM1.99216 9.32543V6.66102L2.59165 5.39543L4.12369 5.16044H7.32098H15.2476H17.3125L19.5107 5.39543L20.31 6.41271L20.4432 8.41102V9.32543H14.4483H8.1203H1.99216ZM8.32013 2.89887C8.22992 3.29858 8.2462 3.93481 8.2462 3.93481H14.3347C14.3347 3.93481 14.3965 3.20004 14.2622 2.76075C14.135 2.3449 13.99 2.12639 13.7097 1.79392C13.4381 1.47184 12.881 1.10333 12.881 1.10333C12.881 1.10333 11.8797 0.827091 11.2236 0.827091C10.5674 0.827091 10.1214 0.891798 9.56613 1.24145C9.21091 1.46513 9.06506 1.58438 8.82637 1.88321C8.54978 2.22949 8.4177 2.46656 8.32013 2.89887Z" fill="black"/>
+                <path d="M20.3756 21.8089C20.2291 21.5825 20.1758 21.1162 20.1758 19.8906V18.252H21.3082V21.0496H23.5063V22.1153H22.0409C20.6687 22.1153 20.5621 22.102 20.3756 21.8089Z" fill="black"/>
+              </svg>
+            </span>
+            <p>WORKING HOURS: Monday - Friday, 9AM - 6PM (GMT+7)</p>                       
+          </div>
+          <div class="time-work">
+            <span class="icon-work">
+              <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.788834 1.23856C0.985513 1.04188 1.31741 0.80832 1.52638 0.722273C1.80911 0.599348 3.33337 0.562471 14.8022 0.550179L15.3554 0.832905C15.7487 1.04188 16.0192 1.31231 16.3142 1.79172C16.6707 2.39405 16.7076 2.55385 16.7076 4.36084L16.2773 4.20104C15.8594 4.05353 15.8471 4.04123 15.8471 3.40203C15.8471 3.05784 15.7733 2.61531 15.675 2.41863C15.5766 2.23424 15.3554 1.95152 14.8391 1.47211L2.141 1.39836L1.71077 1.68108C1.47721 1.84089 1.18219 2.16049 1.07156 2.39405C0.874881 2.76282 0.850297 3.20535 0.850297 5.73759C0.850297 8.41734 0.874881 8.70007 1.09615 9.15489C1.23136 9.42533 1.51409 9.74493 1.73535 9.85556C2.07954 10.0399 2.58353 10.0891 7.6726 10.1997L9.98359 11.638C11.2497 12.437 12.3314 13.0885 12.4052 13.0885C12.479 13.0885 12.5035 12.941 12.4667 12.7443C12.4421 12.5599 12.356 11.9699 12.2823 11.429C12.2085 10.8881 12.1716 10.3718 12.2085 10.2858C12.2577 10.1875 12.651 10.126 13.4132 10.1014C14.3351 10.0768 14.6424 10.0154 15.4783 9.52366L16.0315 10.1629L15.6996 10.4579C15.5029 10.6177 15.1464 10.8021 14.9006 10.8758C14.6424 10.9373 14.1384 10.9988 13.7942 10.9988C13.4378 10.9988 13.1427 11.0356 13.1427 11.0848C13.1427 11.1463 13.2534 11.8469 13.3763 12.6582C13.5115 13.5433 13.5607 14.2194 13.4992 14.3423C13.4378 14.4652 13.2903 14.5636 13.1796 14.5636C13.0567 14.5636 11.6554 13.7646 7.18091 10.9988L1.74765 10.9373L1.24365 10.5931C0.960929 10.4087 0.579863 10.0277 0.0512875 9.24094L0.0144102 5.97115C-0.0224672 3.07013 0.00211774 2.63989 0.198797 2.1482C0.321721 1.84089 0.579863 1.43523 0.788834 1.23856Z" fill="black"/>
+                <path d="M13.1305 16.1739C13.3025 16.0141 13.6099 15.8051 13.8188 15.7191C14.0278 15.633 14.3966 15.5593 14.6424 15.547C15.0235 15.547 15.171 15.6207 15.761 16.346L15.0112 16.4074C14.5318 16.4443 14.1507 16.5549 13.9172 16.727C13.7328 16.8623 13.4746 17.1696 13.364 17.4031C13.1673 17.7719 13.1427 18.2021 13.1427 20.7713C13.1427 23.4264 13.1673 23.7706 13.3763 24.1517C13.4992 24.3852 13.7574 24.6925 13.9418 24.8278C14.2122 25.0244 14.4949 25.0736 15.4906 25.0982C16.5232 25.1351 16.7198 25.1719 16.7813 25.344C16.8305 25.467 16.8059 25.9833 16.7198 26.4872C16.6338 26.9912 16.5478 27.5567 16.5232 27.7411C16.4863 27.9377 16.5109 28.0853 16.5846 28.0853C16.6584 28.0853 17.777 27.4215 21.4401 25.1597L24.2059 25.1228C26.7751 25.0736 26.9963 25.0613 27.3405 24.8155C27.5372 24.668 27.8076 24.3606 27.9183 24.1025C28.1149 23.7214 28.1395 23.2666 28.1395 20.7344C28.1395 18.2021 28.1149 17.7596 27.9183 17.3908C27.8076 17.1573 27.5126 16.8377 27.2791 16.6779C26.9349 16.4566 26.689 16.4074 25.2508 16.4197L25.5704 16.0141C25.804 15.7314 26.0129 15.5961 26.308 15.5715C26.5415 15.547 26.898 15.5593 27.0947 15.5961C27.2913 15.633 27.7093 15.8789 28.0043 16.1247C28.3116 16.3828 28.6558 16.8131 28.7787 17.0835C28.9631 17.5138 29 17.9563 29 20.7344C29 23.3281 28.9631 23.9919 28.8033 24.3606C28.705 24.6188 28.4714 24.9876 28.287 25.1842C28.1027 25.3809 27.7339 25.6391 27.4634 25.762C27.0332 25.9587 26.6398 25.9955 21.8089 25.9955L18.9202 27.7779C17.3345 28.7613 15.9331 29.5726 15.8102 29.5604C15.6996 29.5604 15.5521 29.462 15.4906 29.3391C15.4291 29.2162 15.4783 28.5893 15.6135 27.7165C15.7365 26.9421 15.8348 26.2291 15.8471 26.1431C15.8471 26.0447 15.6135 25.9955 15.085 25.9955C14.5933 25.9955 14.1261 25.9095 13.8188 25.762C13.5484 25.6391 13.1796 25.3809 12.9952 25.1842C12.8108 24.9876 12.5773 24.6188 12.479 24.3606C12.3191 23.9919 12.2823 23.3158 12.2823 20.7098C12.2823 17.6736 12.2946 17.4892 12.5527 16.9852C12.7002 16.7025 12.9584 16.3337 13.1305 16.1739Z" fill="black"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M9.1477 5.20902C9.55335 5.06151 10.2417 4.87712 10.6843 4.79107C11.1268 4.70503 12.0118 4.61898 12.651 4.61898C13.2903 4.60669 14.2859 4.69273 14.8637 4.80336C15.4414 4.9017 16.3265 5.15985 16.8305 5.36882C17.3345 5.57779 18.1949 6.03261 18.7358 6.38909C19.2767 6.74557 20.0757 7.42166 20.5182 7.88877C20.9976 8.39276 21.5016 9.11801 21.772 9.65888C22.0302 10.1629 22.3252 10.9004 22.4235 11.3061C22.5219 11.7117 22.6325 12.5107 22.694 14.1333L23.9601 14.1948C24.9558 14.244 25.2508 14.3054 25.3614 14.4652C25.4721 14.625 25.2508 14.9692 24.0584 16.432C23.5304 17.0755 22.8806 17.8741 22.3617 18.5118L22.3608 18.5128C22.1069 18.8249 21.8844 19.0983 21.7229 19.2962C21.0345 20.132 20.7395 20.4025 20.5182 20.4025C20.2847 20.4025 19.7684 19.837 17.9614 17.6367C16.7198 16.1124 15.6873 14.7971 15.6504 14.7111C15.6258 14.6373 15.675 14.4775 15.761 14.3792C15.8717 14.2194 16.1667 14.1825 18.3056 14.1948V13.4818C18.3056 13.0885 18.1826 12.437 18.0228 11.9822C17.8753 11.5396 17.5557 10.8512 17.3222 10.4579C17.0886 10.0645 16.56 9.40074 16.1544 8.99509C15.7487 8.60173 15.0235 8.02399 14.5564 7.72897C14.0893 7.44624 13.1673 7.0283 12.5281 6.80703C11.5078 6.46285 11.1637 6.40138 9.86066 6.36451C8.43474 6.32763 8.3364 6.31534 8.21347 6.0449C8.11513 5.83593 8.11513 5.73759 8.25035 5.62696C8.3364 5.54091 8.74205 5.35653 9.1477 5.20902ZM11.3705 5.62696C12.4052 5.36882 15.3041 5.62696 16.5333 6.26617L16.6224 6.31244C18.136 7.09899 19.8109 7.9694 20.8357 9.83098C21.6961 11.3939 21.7371 13.4572 21.6962 14.3177H19.2991L19.1148 12.5353C18.9713 11.9617 18.771 11.2522 18.3772 10.5071C17.9129 9.62848 17.5387 9.1861 16.8407 8.47881C15.9841 7.61087 15.3789 7.24093 14.3207 6.63494C13.839 6.35908 13.118 6.16394 12.4911 5.99426C12.0142 5.8652 11.5918 5.75087 11.3705 5.62696ZM17.7626 15.1167C17.3201 15.1167 17.1685 15.1987 17.148 15.2397L20.5284 19.2962C21.7167 17.985 24.044 15.338 23.8473 15.2397C23.6507 15.1413 23.3147 15.1167 23.1713 15.1167H17.7626Z" fill="black"/>
+              </svg>
+            </span>
+            <p>RESPONSE TIME: Within 24 hours on weekdays and 48 hours on weekends</p>                        
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const themeUid = 'electro'
+    const data = { theme: themeUid, shop: Shopify.shop };
+    const url = `https://aclone.arenacommerce.com/storefront-api/verify-theme-store`;
+    const url_pc = `https://aclone.arenacommerce.com/storefront-api/verify-purchase-code`;
+
+    let form = document.getElementById('verifyCodeForm');
+    let dialog = document.getElementById('verifyCode');
+    let errorText = document.getElementById('verify-error');
+    let errorTextSupport = document.getElementById('verify-error-support');
+
+    let supportBanner = document.getElementById('support-banner');
+    let closeBtn = document.getElementById('btn-close');
+
+    let renewSupportBanner = document.getElementById('renew-support-banner');
+    let renewCloseBtn = document.getElementById('btn-renew-close');
+
+    //POST request with body
+    fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if(data.data === null ){ 
+        hideContent();
+        return;
+      }
+      if(typeof(data.warningMsg) != "undefined" && getWithExpiry("renewKey") === null){ 
+        showRenew();
+      }
+    })
+    .catch((error) => {
+      hideContent();
+    });
+
+    function setWithExpiry(key, value, ttl) {
+      const now = new Date()
+
+      // `item` is an object which contains the original value
+      // as well as the time when it's supposed to expire
+      const item = {
+        value: value,
+        expiry: now.getTime() + ttl,
+      }
+      localStorage.setItem(key, JSON.stringify(item))
+    }
+
+    function getWithExpiry(key) {
+      const itemStr = localStorage.getItem(key)
+
+      // if the item doesn't exist, return null
+      if (!itemStr) {
+        return null
+      }
+
+      const item = JSON.parse(itemStr)
+      const now = new Date()
+
+      // compare the expiry time of the item with the current time
+      if (now.getTime() > item.expiry) {
+        // If the item is expired, delete the item from storage
+        // and return null
+        localStorage.removeItem(key)
+        return null
+      }
+      return item.value
+    }
+
+    function showRenew(){
+      renewSupportBanner.classList.add('is-open');
+      document.body.classList.add('not-verify');
+      renewCloseBtn.addEventListener('click', () => {
+        renewSupportBanner.remove();
+        document.body.classList.remove('not-verify');
+        setWithExpiry("renewKey", true, 864000);
+      });
+    }
+
+    form.addEventListener('submit', e=>{
+      e.preventDefault();
+      form.querySelector('[name="pcode"]').checkValidity();
+
+      let key = form.querySelector('[name="pcode"]').value.trim();
+      let email = form.querySelector('[name="customer_email"]').value.trim();
+      hideContent();
+      _verify(key, email);
+    })
+
+    function hideContent(){
+      errorText.style.display = 'none';
+      errorTextSupport.style.display = 'none';
+      form.classList.remove('fail-to-verify');
+
+      document.body.classList.add('not-verify');
+      dialog.classList.add('is-open');
+    }
+
+    function _failToVerify(e){
+      errorText.style.display = 'block';
+      errorTextSupport.style.display = 'block';
+      errorText.textContent = e || 'Please try again!';
+      form.classList.add('fail-to-verify');
+    }
+
+    function _verify(key, email){
+      fetch(url_pc, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({theme: themeUid, code: key, shop: Shopify.shop, email })
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        if(data.data === null ){
+          _failToVerify(data.msg);
+          return;
+        }
+        document.body.classList.remove('not-verify');
+        dialog.remove();
+        
+        if(typeof(data.warningMsg) != "undefined" && getWithExpiry("renewKey") === null){
+          showRenew();
+        }
+        else{
+          supportBanner.classList.add('is-open');
+          document.body.classList.add('not-verify');
+          closeBtn.addEventListener('click', () => {
+            supportBanner.remove();
+            document.body.classList.remove('not-verify');
+          });
+        }
+      })
+      .catch((error) => {
+        _failToVerify(error);
+      });
+    }
+    
+  })();
+</script>

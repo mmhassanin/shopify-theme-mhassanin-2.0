@@ -1,0 +1,50 @@
+{%- if article != blank and default != true -%}
+  <article class="article-card">
+    <header class="article-card_header">
+      <a href="{{ article.url }}">
+        {%- render 'image-style', image: article.image, padding_top: '55%', default_image: true -%}
+      </a>
+    </header>
+
+    <main class="article-card_body">
+      <h3 class="article-card_title">
+        <a href="{{ article.url }}">{{ article.title }}</a>
+      </h3>
+      <ul class="article-meta">
+        <li class="article-date">{{ article.published_at | date: '%d %b, %Y' }}</li>
+        <li><span class="article-author">{{ 'pages.article.posted_by' | t }} {{ article.author | escape }}</span></li>
+      </ul>
+      <div class="article-card_excerpt">
+        {%- if article.excerpt != blank -%}
+          {{ article.excerpt }}
+        {%- else -%}
+          {{ article.content | truncatewords: 30 }}
+        {%- endif -%}
+      </div>
+    </main>
+
+    <footer class="article-card_footer">
+      <a href="{{ article.url }}" class="btn btn-2">{{ 'general.button.read_more' | t }}</a>
+      <span class="post-comment">
+        <span class="demo-icon">
+          {%- render 'svg', type: 'comment' -%}
+          <span>{{ article.comments_count }}</span>
+        </span>
+      </span>
+    </footer>
+  </article>
+{%- else -%}
+  <article class="article-card">
+    <header class="article-card_header">
+      {{- 'image' | placeholder_svg_tag | replace: '<svg', '<svg class="placeholder-svg"' -}}
+    </header>
+    <main class="article-card_body">
+      <h3 class="article-card_title">Article title</h3>
+      <div class="article-card_published-at">{{ 'now' | date: '%B %d,%Y' }}</div>
+      <div class="article-card_excerpt">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nihil suscipit doloremque quibusdam eos accusamus eius debitis fugiat.</div>
+    </main>
+    <footer class="article-card_footer">
+      <button class="btn btn-2">{{ 'general.button.read_more' | t }}</button>
+    </footer>
+  </article>
+{%- endif -%}

@@ -1,0 +1,318 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div.page-template.page-about-us",
+  "sections": {
+    "1647246020b4050e8c": {
+      "type": "section-single-banner",
+      "blocks": {
+        "2f8f73e5-7d73-468e-b688-a0933e268e5a": {
+          "type": "block-style",
+          "settings": {
+            "title_color": "#333e48",
+            "title_font_size": "40px",
+            "subtext_color": "#333e48",
+            "subtext_font_size": "18px"
+          }
+        }
+      },
+      "block_order": [
+        "2f8f73e5-7d73-468e-b688-a0933e268e5a"
+      ],
+      "settings": {
+        "section_layout": "layout-wide",
+        "margin": "",
+        "padding": "",
+        "image_desktop": "shopify:\/\/shop_images\/electro-au-banner.png",
+        "image_mobile": "shopify:\/\/shop_images\/electro-au-banner.png",
+        "image_corner_radius": 0,
+        "link": "shopify:\/\/collections\/all",
+        "text_position": "middle-center",
+        "hide_content_mobile": false,
+        "text_position_mobile": "middle",
+        "text_alignment": "center",
+        "heading": "<p><strong>About us<\/strong><\/p>",
+        "subtext": "<p>Passion may be a friendly or eager interest in or admiration for a proposal, cause, discovery, or activity or love to a feeling of unusual excitement.<\/p>",
+        "button": "",
+        "button_position": false
+      }
+    },
+    "1647252900f0c27d59": {
+      "type": "section-image-gallery",
+      "blocks": {
+        "1ae88e94-35ad-4b7c-a4ad-0f3a4c66a5c2": {
+          "type": "block-style",
+          "settings": {
+            "title_color": "#333e48",
+            "title_font_size": "20px",
+            "subtext_color": "#333e48",
+            "subtext_font_size": "14px"
+          }
+        },
+        "164725290075cec085-0": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-au-banner-1.png",
+            "link": "shopify:\/\/collections\/accessories",
+            "text_position": "below-image",
+            "text_alignment": "center",
+            "heading": "<p><strong>What we really do?<\/strong><\/p>",
+            "subtext": "<p>Donec libero dolor, tincidunt id laoreet vitae,ullamcorper eu tortor. Maecenas pellentesque, dui vitae iaculis mattis, tortor nisi faucibus magna, vitae ultrices lacus purus vitae metus.<\/p>",
+            "button": "",
+            "icon": false
+          }
+        },
+        "164725290075cec085-1": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-au-banner-2.png",
+            "link": "shopify:\/\/collections\/all-in-one",
+            "text_position": "below-image",
+            "text_alignment": "center",
+            "heading": "<p><strong>What we really do?<\/strong><\/p>",
+            "subtext": "<p>Donec libero dolor, tincidunt id laoreet vitae,ullamcorper eu tortor. Maecenas pellentesque, dui vitae iaculis mattis, tortor nisi faucibus magna, vitae ultrices lacus purus vitae metus.<\/p>",
+            "button": "",
+            "icon": false
+          }
+        },
+        "164725290075cec085-2": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-au-banner-3.png",
+            "link": "shopify:\/\/collections\/accessories",
+            "text_position": "below-image",
+            "text_alignment": "center",
+            "heading": "<p><strong>What we really do?<\/strong><\/p>",
+            "subtext": "<p>Donec libero dolor, tincidunt id laoreet vitae,ullamcorper eu tortor. Maecenas pellentesque, dui vitae iaculis mattis, tortor nisi faucibus magna, vitae ultrices lacus purus vitae metus.<\/p>",
+            "button": "",
+            "icon": false
+          }
+        }
+      },
+      "block_order": [
+        "1ae88e94-35ad-4b7c-a4ad-0f3a4c66a5c2",
+        "164725290075cec085-0",
+        "164725290075cec085-1",
+        "164725290075cec085-2"
+      ],
+      "settings": {
+        "section_layout": "container",
+        "margin": "90px 0px 0px 0px, 50px 0px 0px 0px, 50px 0px 0px 0px",
+        "padding": "",
+        "bg_color": "",
+        "border_top": "border-top-none",
+        "image_corner_radius": 0,
+        "heading": "",
+        "items_resp": "3,2,1",
+        "items_width": "",
+        "items_spacing": true,
+        "enable_slider": false,
+        "loop": false,
+        "controls": true,
+        "dots": true,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "164725291192e9ab7f": {
+      "type": "section-image-gallery",
+      "blocks": {
+        "16e14e13-9ceb-462a-965b-8aa3a97be060": {
+          "type": "block-style",
+          "settings": {
+            "title_color": "#333e48",
+            "title_font_size": "18px",
+            "subtext_color": "#333e48",
+            "subtext_font_size": "14px"
+          }
+        },
+        "1647252911268353fa-0": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-au-team-1.png",
+            "link": "shopify:\/\/collections\/accessories",
+            "text_position": "below-image",
+            "text_alignment": "center",
+            "heading": "<p><strong>Thomas Snow<\/strong><\/p>",
+            "subtext": "<p>Ceo Founder<\/p>",
+            "button": "",
+            "icon": false
+          }
+        },
+        "1647252911268353fa-1": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-au-team-2.png",
+            "link": "shopify:\/\/collections\/gaming",
+            "text_position": "below-image",
+            "text_alignment": "center",
+            "heading": "<p><strong>Anna Baranov<\/strong><\/p>",
+            "subtext": "<p>Client Care<\/p>",
+            "button": "",
+            "icon": false
+          }
+        },
+        "1647252911268353fa-2": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-au-team-3.png",
+            "link": "shopify:\/\/collections\/gadgets",
+            "text_position": "below-image",
+            "text_alignment": "center",
+            "heading": "<p><strong>Andrei Kowalsy<\/strong><\/p>",
+            "subtext": "<p>Support Boss<\/p>",
+            "button": "",
+            "icon": false
+          }
+        },
+        "210d2172-f7d3-4c30-a595-79683a94e15a": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-au-team-4.png",
+            "link": "shopify:\/\/collections\/gaming",
+            "text_position": "below-image",
+            "text_alignment": "center",
+            "heading": "<p><strong>Pamela Doe<\/strong><\/p>",
+            "subtext": "<p>Delivery Driver<\/p>",
+            "button": "",
+            "icon": false
+          }
+        },
+        "0bb52da5-41b7-4b73-97c3-b2cb05d3f249": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-au-team-5.png",
+            "link": "shopify:\/\/collections\/headphone",
+            "text_position": "below-image",
+            "text_alignment": "center",
+            "heading": "<p><strong>Susan McCain<\/strong><\/p>",
+            "subtext": "<p>Packaking Girl<\/p>",
+            "button": "",
+            "icon": false
+          }
+        },
+        "b878eb94-628f-43b6-beae-ed0ea8479538": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/electro-au-team-6.png",
+            "link": "shopify:\/\/collections\/accessories",
+            "text_position": "below-image",
+            "text_alignment": "center",
+            "heading": "<p><strong>See Details<\/strong><\/p>",
+            "subtext": "",
+            "button": "",
+            "icon": false
+          }
+        }
+      },
+      "block_order": [
+        "16e14e13-9ceb-462a-965b-8aa3a97be060",
+        "1647252911268353fa-0",
+        "1647252911268353fa-1",
+        "1647252911268353fa-2",
+        "210d2172-f7d3-4c30-a595-79683a94e15a",
+        "0bb52da5-41b7-4b73-97c3-b2cb05d3f249",
+        "b878eb94-628f-43b6-beae-ed0ea8479538"
+      ],
+      "settings": {
+        "section_layout": "container",
+        "margin": "90px 0px 0px 0px, 50px 0px 0px 0px, 50px 0px 0px 0px",
+        "padding": "90px 0 70px 0, 90px 0 70px 0, 50px 0 30px 0",
+        "bg_color": "#f5f5f5",
+        "border_top": "border-top-none",
+        "image_corner_radius": 170,
+        "heading": "",
+        "items_resp": "6,3,2",
+        "items_width": "170",
+        "items_spacing": true,
+        "enable_slider": false,
+        "loop": false,
+        "controls": true,
+        "dots": true,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "main": {
+      "type": "page-about-template",
+      "blocks": {
+        "f4ee5b6a-c3f5-4080-9ac6-2a924b2c824b": {
+          "type": "textbox",
+          "settings": {
+            "heading": "What we really do?",
+            "subtext": "Donec libero dolor, tincidunt id laoreet vitae, ullamcorper eu tortor. Maecenas pellentesque, dui vitae iaculis mattis, tortor nisi faucibus magna, vitae ultrices lacus purus vitae metus."
+          }
+        },
+        "91685228-a2fa-481c-864b-0d69b43f4a02": {
+          "type": "textbox",
+          "settings": {
+            "heading": "History of the Company",
+            "subtext": "Donec libero dolor, tincidunt id laoreet vitae, ullamcorper eu tortor. Maecenas pellentesque, dui vitae iaculis mattis, tortor nisi faucibus magna, vitae ultrices lacus purus vitae metus."
+          }
+        },
+        "9143d809-0b1d-4c27-b20b-23303296af60": {
+          "type": "textbox",
+          "settings": {
+            "heading": "Our vision",
+            "subtext": "Donec libero dolor, tincidunt id laoreet vitae, ullamcorper eu tortor. Maecenas pellentesque, dui vitae iaculis mattis, tortor nisi faucibus magna, vitae ultrices lacus purus vitae metus."
+          }
+        },
+        "0859700b-52c7-4365-8fe2-e5f688a79b2f": {
+          "type": "textbox",
+          "settings": {
+            "heading": "Cooperate with Us!",
+            "subtext": "Donec libero dolor, tincidunt id laoreet vitae, ullamcorper eu tortor. Maecenas pellentesque, dui vitae iaculis mattis, tortor nisi faucibus magna, vitae ultrices lacus purus vitae metus."
+          }
+        },
+        "aa368a49-0918-4a3f-9c9d-98882fc75d0b": {
+          "type": "policy",
+          "settings": {
+            "text": "Support 24\/7"
+          }
+        },
+        "1eae919c-9551-45b4-b529-ed0b50111a88": {
+          "type": "policy",
+          "settings": {
+            "text": "Best Quanlity"
+          }
+        },
+        "2bb6d3ce-b7f5-40ee-8f56-4d8ea3312873": {
+          "type": "policy",
+          "settings": {
+            "text": "Fastest Delivery"
+          }
+        },
+        "7e610d5d-ca60-4ddc-8675-79417e03b488": {
+          "type": "policy",
+          "settings": {
+            "text": "Customer Care"
+          }
+        }
+      },
+      "block_order": [
+        "f4ee5b6a-c3f5-4080-9ac6-2a924b2c824b",
+        "91685228-a2fa-481c-864b-0d69b43f4a02",
+        "9143d809-0b1d-4c27-b20b-23303296af60",
+        "0859700b-52c7-4365-8fe2-e5f688a79b2f",
+        "aa368a49-0918-4a3f-9c9d-98882fc75d0b",
+        "1eae919c-9551-45b4-b529-ed0b50111a88",
+        "2bb6d3ce-b7f5-40ee-8f56-4d8ea3312873",
+        "7e610d5d-ca60-4ddc-8675-79417e03b488"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "1647246020b4050e8c",
+    "1647252900f0c27d59",
+    "164725291192e9ab7f",
+    "main"
+  ]
+}

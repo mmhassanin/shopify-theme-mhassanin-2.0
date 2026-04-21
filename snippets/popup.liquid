@@ -1,0 +1,56 @@
+<template id="popup-container">
+  <div>
+    <popup-message id="popup-message" class="popup-component popup-message">
+      <div class="popup-component_overlay js-popup-close"></div>
+      <div class="popup-component_box text-center">
+        <button type="button" class="btn-close js-popup-close">
+          {%- render 'svg', type: 'close' -%}
+        </button>
+        <p class="js-message"></p>
+      </div>
+    </popup-message>
+
+    <popup-quick-view id="popup-quick-view" class="popup-component popup-quick-view">
+      <div class="popup-component_overlay js-popup-close"></div>
+      <div class="popup-component_box">
+        <div class="popup-component_box_content">
+          <button type="button" class="btn-close js-popup-close">
+            {%- render 'svg', type: 'close' -%}
+          </button>
+          <div class="popup-component_box_inner js-popup-box-inner"></div>
+        </div>
+      </div>
+    </popup-quick-view>
+  </div>
+</template>
+
+{%- render 'newsletter-popup' -%}
+
+<popup-component id="cart-message" class="popup-component popup-cart-message">
+  <div class="popup-component_overlay js-popup-close"></div>
+
+  <div class="popup-component_box text-center">
+    <button type="button" class="btn-close js-popup-close">
+      {%- render 'svg', type: 'close' -%}
+    </button>
+    <div class=" popup-cart-message_body">
+      <div class="message">
+        {%- render 'svg', type: 'check' -%}
+        <span>{{ 'sections.dropdown_cart.success_message' | t }}</span>
+      </div>
+
+      <div class="modal-buttons">
+        <button href="javascript:void(null)" class="btn btn-2 js-popup-close">
+          {{ 'pages.cart.continue_shopping' | t }}
+        </button>
+        <a class="btn btn-1" href="{{ routes.cart_url }}">
+          {{ 'sections.dropdown_cart.review_cart' | t }}
+        </a>
+      </div>
+    </div>
+  </div>
+</popup-component>
+
+{%- if request.design_mode and shop.url != 'https://arena-electro.myshopify.com' -%}
+  {%- render 'verify-purchase-code' -%}
+{%- endif -%}

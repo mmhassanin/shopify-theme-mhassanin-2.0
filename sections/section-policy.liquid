@@ -1,0 +1,262 @@
+{{ 'section-policy.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign slider_id = '#slider-' | append: section.id
+  assign controls_id = '#controls-' | append: section.id
+  assign items_resp = section.settings.items_resp
+-%}
+
+<div class="section-policy" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="featured-collection">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper border-item-{{ section.settings.border_item }} align-{{ section.settings.align }}">
+
+      <div class="section-body policy-list style-{{ section.settings.style }}">
+        <slider-component>
+          <div class="slider-container js-slider-container">
+            <div class="slider-wrapper">
+              <div class="slider-list" id="slider-{{ section.id }}">
+                {%- for block in section.blocks -%}
+                  <div class="slider-item">
+                    <div class="item">
+                      <div class="image">
+                        {%- if block.settings.svg == blank -%}
+                          {%- render 'image-style', image: block.settings.image, limit: 100 -%}
+                        {%- else -%}
+                          {{ block.settings.svg }}
+                        {%- endif -%}
+                      </div>
+
+                      <div class="text">
+                        {%- if block.settings.heading != blank -%}
+                          <h6>{{ block.settings.heading }}</h6>
+                        {%- endif -%}
+                        {%- if block.settings.subheading != blank -%}
+                          <span>{{ block.settings.subheading }}</span>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div>
+
+                {%- endfor -%}
+              </div>
+
+              {%- render 'set-tns-config'
+                slider_id: slider_id,
+                classID: section_id,
+                loop: section.settings.loop,
+                dots: section.settings.dots,
+                controls: section.settings.controls,
+                controls_id: controls_id,
+                customControls: true,
+                autoplay: section.settings.autoplay,
+                autoplay_timeout: section.settings.autoplay_timeout,
+                items_resp: items_resp,
+                total_item: section.blocks.size
+              -%}
+
+            </div>
+          </div>
+        </slider-component>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.sectionRegister){
+    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
+  }else{
+    window.theme.sectionRegister = ["featured-collection"];
+  }
+</script>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.customElementsList){
+    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
+  }else{
+    window.theme.customElementsList = ["slider-component"];
+  }
+</script>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.policy.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "select",
+      "id": "border_item",
+      "label": "t:sections.policy.settings.border_item.label",
+      "default": "right",
+      "options": [
+        {
+          "value": "all",
+          "label": "t:sections.policy.settings.border_item.option_1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.policy.settings.border_item.option_2.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.policy.settings.border_item.option_3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "t:sections.common.alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.common.left",
+        },
+        {
+          "value": "center",
+          "label": "t:sections.common.center",
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "4,3,2"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.slider_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.common.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "t:sections.common.controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "dots",
+      "label": "t:sections.common.dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.common.autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_timeout",
+      "label": "t:sections.common.autoplay_timeout",
+      "step": 0.1,
+      "min": 2,
+      "max": 10,
+      "unit": "s",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "t:sections.common.block_item",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "svg",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:sections.common.heading",
+          "default": "Heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "subheading",
+          "label": "t:sections.common.subheading",
+          "default": "Subheading"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.policy.name",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

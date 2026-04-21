@@ -1,0 +1,4 @@
+<li class="dropdown{% if l.active or l.child_active %} s-open active{% endif %}">
+  <a href="{{ l.url }}" class="dropdown-link"><span>{{ l.title }}</span></a>
+  <span class="expand">{%- render 'svg', type: 'angle-right' -%}</span>
+</li>

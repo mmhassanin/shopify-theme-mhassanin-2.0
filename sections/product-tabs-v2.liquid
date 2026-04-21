@@ -1,0 +1,217 @@
+{{ 'section-product-tab-v2.css' | asset_url | stylesheet_tag }}
+
+{%- assign section_id = '#section-' | append: section.id -%}
+{%- capture grid_class -%}{%- render 'set-item-per-row', value: section.settings.items_resp -%}{%- endcapture -%}
+
+<div class="section-product-tab-v2" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="product-tabs-v2">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper{% unless section.settings.items_spacing %} no-padding{% endunless %}">
+
+      <div class="section-body">
+        <div class="tab-heading-container">
+          <ul class="tab-heading">
+            {%- for block in section.blocks -%}
+              {%- assign collection = collections[block.settings.collection] -%}
+              <li>
+                <a href="{{ collection.url }}"{%- if block.type == 'product' -%} class="active"{% endif %}>
+                  {%- if block.settings.heading != blank -%}{{ block.settings.heading }}{%- else -%}{{ collection.title }}{%- endif -%}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        <div class="tab-content">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'product' -%}
+              <div class="tab-content-inner">
+                {%- liquid
+                  assign product = all_products[block.settings.product]
+                  assign produc_text = block.settings.product_text
+                -%}
+
+                <div class="tab-special-item">
+                  <div class="special-item">
+                    {%- render 'special-product-item-v2', product: product, produc_text: produc_text -%}
+                  </div>
+                </div>
+
+                {%- liquid
+                  assign collection = collections[block.settings.collection]
+                  if block.settings.collection != blank and section.settings.limit > collection.all_products_count
+                    assign limit = collection.all_products_count
+                  else
+                    assign limit = section.settings.limit
+                  endif
+                -%}
+                
+                <div class="tab-items">
+                  <div class="row">
+                    {%- if block.settings.collection == blank or collection.all_products_count < 1 -%}
+                      {%- for index in (1..limit) -%}
+                        <div class="product-grid-item {{ grid_class }}">
+                          {%- render 'product-item', index0: forloop.index0, product: product -%}
+                        </div>
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- for product in collection.products limit: limit -%}
+                        <div class="product-grid-item {{ grid_class }}">
+                          {%- render 'product-item', product: product, collection: collection -%}
+                        </div>
+                      {%- endfor -%}
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%} 
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.product-tabs-v2.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "4,3,2"
+    },
+    {
+      "type": "checkbox",
+      "id": "items_spacing",
+      "label": "t:sections.common.items_spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.common.limit",
+      "step": 1,
+      "min": 1,
+      "max": 20,
+      "default": 8
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "t:sections.common.block_product",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading",
+          "default": "Tab title"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.common.collection"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.common.special_product"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.common.product"
+        },
+        {
+          "type": "textarea",
+          "id": "product_text",
+          "label": "t:sections.common.label",
+          "default": "Special <br> Offer"
+        }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "t:sections.common.block_link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading",
+          "default": "Tab title"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.common.collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product-tabs-v2.name",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "link"
+        },
+        {
+          "type": "link"
+        },
+        {
+          "type": "link"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

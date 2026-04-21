@@ -1,0 +1,67 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div.page-template.page-blog-template",
+  "sections": {
+    "main": {
+      "type": "blog-template",
+      "blocks": {
+        "2c6f2924-b22e-4b97-a535-571465a6e90e": {
+          "type": "search",
+          "settings": {
+            "placeholder": "Enter Keywords..."
+          }
+        },
+        "e1b2d3a8-70ff-45f0-a61f-adbc29c0d51f": {
+          "type": "textbox",
+          "settings": {
+            "title": "About",
+            "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, erat in malesuada aliquam, est erat faucibus purus, eget viverra nulla sem vitae neque. Quisque id sodales libero."
+          }
+        },
+        "999feaf5-1157-4d4a-b832-495ef53fb00b": {
+          "type": "menu",
+          "settings": {
+            "title": "Categories",
+            "menu": "sidebar-categories"
+          }
+        },
+        "d0bfec7c-be7d-4bc6-af85-4fd0f2e2965f": {
+          "type": "featured-blogs",
+          "settings": {
+            "title": "Top Stories",
+            "blog": "news",
+            "limit": 3
+          }
+        },
+        "004dd684-cd8f-484b-bf53-326c8f634617": {
+          "type": "tags",
+          "settings": {
+            "title": "Tags"
+          }
+        }
+      },
+      "block_order": [
+        "2c6f2924-b22e-4b97-a535-571465a6e90e",
+        "e1b2d3a8-70ff-45f0-a61f-adbc29c0d51f",
+        "999feaf5-1157-4d4a-b832-495ef53fb00b",
+        "d0bfec7c-be7d-4bc6-af85-4fd0f2e2965f",
+        "004dd684-cd8f-484b-bf53-326c8f634617"
+      ],
+      "settings": {
+        "layout": "right-sidebar",
+        "item_per_page": 10
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,223 @@
+{{ 'section-newsletter.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  if section.settings.enable_newsletter and section.settings.show_textbox
+    assign col_class_body = 'row'
+    assign col_class = 'col-md-6 col-12'
+  else
+    assign col_class_body = 'no-row'
+    assign col_class = 'one-column'
+  endif
+-%}
+
+<div class="section-newsletter" id="section-{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper">
+
+      <div class="section-body {{ col_class_body }}{% if section.settings.middle_content_position %} middle-content__position{% endif %}">
+        {%- if section.settings.enable_newsletter -%}
+          <div class="newsletter-container block-widget {{ col_class }}">
+            <div class="newsletter-inner" style="background-color: {{ section.settings.background }};">
+              {%- if section.settings.title != blank -%}
+                <div class="newsletter-title">{{ section.settings.title }}</div>
+              {%- endif -%}
+              {%- if section.settings.subtext != blank -%}
+                <div class="subtext">{{ section.settings.subtext }}</div>
+              {%- endif -%}
+
+              {%- render 'subscribe-form', placeholder: section.settings.newsletter_placholder, success: section.settings.newsletter_success, button_style: '1' -%}
+              {%- if section.settings.subtext_2 != blank -%}
+                <div class="subtext-2">{{ section.settings.subtext_2 }}</div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_textbox -%}
+          {%- liquid
+            assign textbox_title = section.settings.textbox_title
+            assign textbox_subtext = section.settings.textbox_subtext
+          -%}
+
+          {%- if textbox_title != blank or textbox_subtext != blank -%}
+            <div class="block-support block-widget {{ col_class }}">
+              <div class="block-support-inner">
+                {%- if textbox_title != blank -%}<div class="newsletter-title">{{ textbox_title }}</div>{%- endif -%}
+                {%- if textbox_subtext != blank -%}<div class="subtext">{{ textbox_subtext }}</div>{%- endif -%}
+
+                {%- if section.blocks.size > 0 -%}
+                  <ul class="support-icons">
+                    {%- for block in section.blocks -%}
+                      {%- liquid
+                        assign icon = block.settings.icon
+                        assign text = block.settings.text
+                      -%}
+
+                      {%- if icon != blank or text != blank -%}
+                        <li>
+                          {%- if icon != blank -%}<span class="icon">{{ icon }}</span>{%- endif -%}
+                          {%- if text != blank -%}<span class="text">{{ text }}</span>{%- endif -%}
+                        </li>
+                      {%- endif -%}
+
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.newsletter.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.newsletter.name"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.footer-widget.blocks.newsletter.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_newsletter",
+      "label": "t:sections.common.enable_widget",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "middle_content_position",
+      "label": "t:sections.newsletter.settings.middle_content_position.label",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "t:sections.common.heading",
+      "default": "<p>Sign up & Receive a 20% Off</p>"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subtext",
+      "label": "t:sections.common.subtext",
+      "default": "Receive updates, access to exclusive deals, and more."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subtext_2",
+      "label": "t:sections.common.subtext_2"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placholder",
+      "label": "t:sections.common.placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "newsletter_success",
+      "label": "t:sections.footer-widget.blocks.newsletter.newsletter_success"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "t:sections.common.background_color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Support"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_textbox",
+      "label": "t:sections.common.enable_widget"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "textbox_title",
+      "label": "t:sections.common.heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "textbox_subtext",
+      "label": "t:sections.common.subtext"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "support",
+      "name": "Support",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "icon",
+          "label": "t:sections.common.svg"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "t:sections.common.text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.newsletter.name"
+    }
+  ]
+}
+{%- endschema -%}

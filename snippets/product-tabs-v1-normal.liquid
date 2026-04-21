@@ -1,0 +1,54 @@
+{%- liquid
+  assign section_id = '#section-' | append: section.id
+  assign slider_id = '#slider-' | append: section.id
+  assign controls_id = '#controls-' | append: section.id
+  assign collection = collections[block.settings.collection]
+  if block.settings.collection != blank and section.settings.limit > collection.all_products_count
+    assign limit = collection.all_products_count
+  else
+    assign limit = section.settings.limit
+  endif
+-%}
+
+<div class="block-slider-component">
+  {%- if enable_slider -%}<slider-component>{%- endif -%}
+    <div class="slider-container js-slider-container">
+      <div class="slider-wrapper">
+        
+        <div class="slider-list{% unless enable_slider %} row{% endunless %}" id="slider-{{ section.id }}">
+          {%- if block.settings.collection == blank or collection.all_products_count < 1 -%}
+            {%- for index in (1..limit) -%}
+              <div class="slider-item{% unless enable_slider %} {{ grid_class }}{% endunless %}">
+                {%- render 'product-item', index0: forloop.index0, product: product -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for product in collection.products limit: limit -%}
+              <div class="slider-item{% unless enable_slider %} {{ grid_class }}{% endunless %}">
+                {%- render 'product-item', product: product, collection: collection -%}
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        {%- if enable_slider -%}
+          {%- render 'set-tns-config'
+            slider_id: slider_id,
+            classID: section_id,
+            loop: section.settings.loop,
+            dots: section.settings.dots,
+            controls: section.settings.controls,
+            controls_id: controls_id,
+            customControls: true,
+            autoplay: section.settings.autoplay,
+            autoplay_timeout: section.settings.autoplay_timeout,
+            padding: items_spacing_slider,
+            items_resp: section.settings.items_resp,
+            total_item: limit
+          -%}
+        {%- endif -%}
+
+      </div>
+    </div>
+  {%- if enable_slider -%}</slider-component>{%- endif -%}
+</div>

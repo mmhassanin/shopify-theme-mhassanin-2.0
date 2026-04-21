@@ -1,0 +1,170 @@
+{{ 'section-bottom-products.css' | asset_url | stylesheet_tag }}
+
+{%- assign section_id = '#section-' | append: section.id -%}
+{%- capture grid_class -%}{%- render 'set-item-per-row', value: section.settings.items_resp -%}{%- endcapture -%}
+
+<div class="section-bottom-widget" id="section-{{ section.id }}">
+  <div class="{{ section.settings.section_layout }}">
+
+    <div class="section-wrapper">
+      <div class="section-body row">
+        {%- for block in section.blocks -%}
+          <div class="block-widget block-{{ block.type }} {{ grid_class }}">
+            <div class="block-wrapper"> 
+
+              {%- if block.type == 'product-listing' -%}
+                {%- assign collection = collections[block.settings.collection] -%}
+
+                <div class="bw-item">
+                  <h4>
+                    <a href="{{ collection.url }}">
+                      {%- if block.settings.heading != blank -%}{{ block.settings.heading }}{%- else -%}{{ collection.title }}{%- endif -%}
+                    </a>
+                  </h4>
+
+                  <div class="product-listing-items">
+                    {%- if block.settings.collection == blank or collection.all_products_count < 1 -%}
+                      {%- for index in (1..3) -%}
+                        {%- render 'product-listing-item', product: product, collection: collection -%}
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- for product in collection.products limit: 3 -%}
+                        {%- render 'product-listing-item', product: product, collection: collection -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+                  </div>
+                </div>
+
+              {%- else -%}
+                <div class="bw-item">
+                  {%- if block.settings.link == blank -%}
+                    {%- render 'image-style', image: block.settings.image -%}
+                  {%- else -%}
+                    <a href="{{ block.settings.link | default: 'javascript:void(0)' }}" aria-label="Image">
+                      {%- render 'image-style', image: block.settings.image -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.bottom-products.name",
+  "tag": "section",
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    }, 
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "4,2,1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product-listing",
+      "name": "t:sections.bottom-products.blocks.product_listing.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading",
+          "default": "List products"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.common.collection"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "t:sections.common.image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link",
+          "default": "/"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.bottom-products.name",
+      "blocks": [
+        {
+          "type": "product-listing"
+        },
+          {
+          "type": "product-listing"
+        },
+        {
+          "type": "product-listing"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

@@ -1,0 +1,137 @@
+{{ 'section-image-with-textbox.css' | asset_url | stylesheet_tag }}
+
+{%- assign section_id = '#section-' | append: section.id -%}
+
+<div class="section-image-with-textbox" id="section-{{ section.id }}">
+  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="section-wrapper">
+
+      <div class="section-body row">
+        {%- for block in section.blocks -%}
+          <div class="block-widget widget-type-{{ block.type }} col-md-6 col-12">
+            {%- if block.type == 'textbox' -%}
+              <div class="block-widget-inner">
+                {%- if block.settings.title != blank -%}
+                  <div class="block-widget_title">{{ block.settings.title }}</div>
+                {%- endif -%}
+
+                {%- if block.settings.textbox != blank -%}
+                  <div class="block-widget_text">{{ block.settings.textbox }}</div>
+                {%- endif -%}
+              </div>
+
+            {%- else -%}
+              <div class="block-widget-inner">
+                <a href="{{ block.settings.link | default: 'javascript:void(0)' }}">
+                  {%- render 'image-style', image:  block.settings.image, limit: 767 -%}
+                </a>
+              </div>
+
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
+{%- endcapture -%}
+
+{%- style -%}{{ section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.image-with-textbox.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_layout",
+      "label": "t:settings_schema.global.settings.layout_mode.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:settings_schema.global.settings.layout_mode.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:settings_schema.global.settings.layout_mode.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "textbox",
+      "name": "t:sections.common.textbox",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "t:sections.common.heading",
+          "default": "Electro - Electronics Shop"
+        },
+        {
+          "type": "richtext",
+          "id": "textbox",
+          "label": "t:sections.common.textbox",
+          "default": "<p><strong>Vivamus ipsum nibh, varius vel fringilla a, condimentum eu nunc.</strong></p>"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "t:sections.common.image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image-with-textbox.name",
+      "blocks": [
+        {
+          "type": "textbox"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

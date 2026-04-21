@@ -1,0 +1,286 @@
+{{ 'sidebar-collection.css' | asset_url | stylesheet_tag }}
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+{{ 'pagination.css' | asset_url | stylesheet_tag }}
+{{ 'pages.css' | asset_url | stylesheet_tag }}
+ 
+{%- liquid
+  assign q = search.terms | split: 'product_type:' | first
+  assign sidebar = section.settings.sidebar
+  assign pagination_type = 'default'
+  assign mode_view = section.settings.col_mode_view
+  assign enable_sort = section.settings.enable_sort
+  assign sort_by = search.sort_by | default: search.default_sort_by
+  assign grid_view = cart.attributes['grid_view'] | default: mode_view
+
+  if section.settings.enable_filter and search.filters.size > 0
+    assign enable_filter = true
+  else
+    assign enable_filter = false
+  endif
+-%}
+
+{%- if search.performed -%}
+  {%- if search.results_count > 0 -%}
+    {%- paginate search.results by section.settings.items_per_page -%}
+      {%- capture filter_element -%}
+        <div class="collection-filters{%- unless enable_filter %} d-none{% endunless -%}" id="main-collection-filters" style="overscroll-behavior: none;">
+          <div class="collection-filters-wrapper">            
+            {%- render 'filter-element', enable_filter: enable_filter, id: 'collection-filters-form', class: 'main-range-slider', collection: search -%}
+
+            <div class="group-type-list-wrapper">
+              {%- render 'filter-element', enable_filter: enable_filter, class: 'js-range-slider', collection: search -%}
+            </div>
+          </div>
+        </div>
+      {%- endcapture -%}
+
+      {%- capture collection_tool_bar -%}
+        <div class="mobile-filter-icon{%- unless enable_filter %} d-none{% endunless -%}">
+          {%- render 'svg', type: 'filter' -%}
+          <span>{{- 'pages.collection.filter_by' | t -}}</span> 
+        </div>
+
+        {%- if mode_view != 'none' -%}
+          <div class="collection-view-as d-flex align-items-center">
+            <div class="grid-list">
+              <span class="grid grid-4" title="Small" data-grid="grid-4">
+                {%- render 'svg', type: 'grid-view-4' -%}
+              </span>
+              <span class="grid grid-3" title="Medium" data-grid="grid-3">
+                {%- render 'svg', type: 'grid-view-3' -%}
+              </span>
+              <span class="grid grid-2" title="Large" data-grid="grid-2">
+                {%- render 'svg', type: 'grid-view-2' -%}
+              </span>
+              <span class="grid grid-1" title="List" data-grid="grid-1">
+                {%- render 'svg', type: 'grid-view-1' -%}
+              </span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if enable_sort -%}
+          <div class="collection-sorting d-flex align-items-center">
+            <label for="select-sort-by">{{ 'pages.collection.sort_by' | t }}</label>
+            <div class="select-group">
+              <select name="sort_by" class="select-sort-by">
+                {%- for option in search.sort_options -%}
+                  <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>
+                {%- endfor -%}
+              </select>
+              {%- render 'svg', type: 'bold-angle-down' -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_products_showing -%}
+          <div id="pagination-top-container" class="pagination-container">
+            {%- render 'pagination', paginate: paginate -%}
+          </div>
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {%- capture collection_product_grid -%}
+        <div id="collection-product-grid">      
+          {%- if collection_tool_bar != blank -%}
+            <div class="collection-tool-bar d-flex justify-content-between">{{ collection_tool_bar }}</div>
+          {%- endif -%}
+
+          <div id="main-collection-product-grid">
+            {%- for product in search.results -%}
+              {%- if product.object_type == 'product' -%}
+                {%- render 'product-item', product: product -%}        
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            <div class="pagination-container">
+              {%- render 'pagination', paginate: paginate  -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endcapture -%}
+      
+      <div class="section-search-template section-collection-template collection-template" data-section-id="{{ section.id }}" data-section-type="collection-template">
+        <div id="collection-product-grid-container" class="{{ grid_view }}">
+          <div id="collection-template-inner">
+          <h3 class="search-results_title text-center">
+            {{ 'pages.search.products_results_title_html' | t: terms: q }}
+          </h3>
+
+          <div class="section-body row">
+            {% if sidebar == 'none' %}
+              <div class="col-12 col-sidebar no-sidebar">
+                <div class="col-sidebar-inner">
+                  <button type="button" class="btn-close js-sidebar-close">{%- render 'svg', type: 'close' -%}</button>
+                  {{ filter_element }}
+                </div>
+              </div>
+              <div class="col-12 col-main no-sidebar">{{ collection_product_grid }}</div>
+
+            {%- else -%}
+              {%- if sidebar == 'left-sidebar' -%}
+                <div class="col-lg-3 col-12 col-sidebar">
+                  <div class="col-sidebar-inner">
+                    <button type="button" class="btn-close js-sidebar-close">{%- render 'svg', type: 'close' -%}</button>
+                    {{ filter_element }}
+                  </div>
+                </div>
+              {%- endif -%}
+
+              <div class="col-lg-9 col-12 col-main">{{ collection_product_grid }}</div>
+              
+              {%- if sidebar == 'right-sidebar' -%}
+                <div class="col-lg-3 col-12 col-sidebar">
+                  <div class="col-sidebar-inner">
+                    <button type="button" class="btn-close js-sidebar-close">{%- render 'svg', type: 'close' -%}</button>
+                    {{ filter_element }}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+          
+          <script type="application/json" data-collection-settings>
+            {
+              "enableSort": {{ enable_sort }},
+              "paginationType": "{{ pagination_type }}",
+              "nextPage": {%- if paginate.next != blank -%}1{%- else -%}0{%- endif -%},
+              "currentPage": "{{ paginate.current_page }}",
+              "isEmpty": {%- if collection.products.size > 0 -%}false{%- else -%}true{%- endif -%}
+            }
+          </script>
+
+          <script type="application/json" data-collection-filter-active-values>
+            {
+              {%- for filter in search.filters -%}
+                "{{ filter.param_name }}": [
+                  {%- for value in filter.active_values -%}
+                    "{{ value.value }}"{%- unless forloop.last -%} , {%- endunless -%}
+                  {%- endfor -%}
+                ]{%- unless forloop.last -%} , {%- endunless -%}
+              {%- endfor -%}
+            }
+          </script>
+          </div>
+        </div>
+      </div>
+    {%- endpaginate -%}
+
+  {%- else -%}
+    <div class="search-empty text-center">
+      <h3 class="search-empty_title">{{ 'pages.search.empty_title_html' | t: terms: q }}</h3>
+      <div class="search-empty_subtitle">{{ 'pages.search.empty_subtitle' | t }}</div>
+
+      <form action="{{ routes.search_url }}" class="search-form" methos="get">
+        <input type="hidden" value="{{ settings.search_type }}" name="type">
+        <input type="hidden" value="{{ settings.search_unavailable_products }}" name="options[unavailable_products]">
+        <input type="hidden" value="last" name="options[prefix]">
+        <span class="input-group d-flex">
+          <input type="text" name="q" placeholder="{{ 'sections.header.search_placeholder' | t }}" autocomplete="off">
+          <button type="submit" class="btn btn-1">
+            {%- render 'svg', type: 'search' -%}
+          </button>
+        </span>
+      </form>
+    </div>
+  {%- endif -%}
+
+{%- else -%}
+  <div class="search-empty text-center">
+    <h3 class="search-empty_title">{{ 'pages.search.empty_title_html' | t: terms: q }}</h3>
+    <div class="search-empty_subtitle">{{ 'pages.search.empty_subtitle' | t }}</div>
+
+    <form action="{{ routes.search_url }}" class="search-form" methos="get">
+      <input type="hidden" value="{{ settings.search_type }}" name="type">
+      <input type="hidden" value="{{ settings.search_unavailable_products }}" name="options[unavailable_products]">
+      <input type="hidden" value="last" name="options[prefix]">
+      <span class="input-group d-flex">
+        <input type="text" name="q" placeholder="{{ 'sections.header.search_placeholder' | t }}" autocomplete="off">
+        <button type="submit" class="btn btn-1">
+          {%- render 'svg', type: 'search' -%}
+        </button>
+      </span>
+    </form>
+  </div>
+{%- endif -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.search-template.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "sidebar",
+      "label": "t:sections.common.sidebar",
+      "default": "left-sidebar",
+      "options": [
+        {
+          "value": "left-sidebar",
+          "label": "t:sections.common.left_sidebar"
+        },
+        {
+          "value": "right-sidebar",
+          "label": "t:sections.common.right_sidebar"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.common.none"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "items_per_page",
+      "label": "t:sections.common.items_per_page",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection-template.settings.storefront_filters.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filter",
+      "label": "t:sections.common.enable_widget",
+      "default": true,
+      "info": "t:sections.collection-template.settings.storefront_filters.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection-template.settings.toolbar.label"
+    },
+    {
+      "type": "select",
+      "id": "col_mode_view",
+      "label": "t:sections.collection-template.settings.toolbar.mode_view.label",
+      "options": [
+        { "value": "grid-4", "label": "t:sections.collection-template.settings.toolbar.mode_view.option_1.label" },
+        { "value": "grid-3", "label": "t:sections.collection-template.settings.toolbar.mode_view.option_2.label" },
+        { "value": "grid-2", "label": "t:sections.collection-template.settings.toolbar.mode_view.option_3.label" },
+        { "value": "grid-1", "label": "t:sections.collection-template.settings.toolbar.mode_view.option_4.label" },
+        { "value": "none", "label": "t:sections.common.none" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sort",
+      "label": "t:sections.collection-template.settings.toolbar.enable_sort",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_products_showing",
+      "label": "t:sections.collection-template.settings.toolbar.products_showing",
+      "default": true
+    }
+  ],
+  "blocks": [
+  ]
+}
+{%- endschema -%}
