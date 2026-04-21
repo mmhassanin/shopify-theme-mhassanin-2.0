@@ -15,7 +15,7 @@
 
 <div class="section-slideshow{% if right_sidebar != 'none' %} sidebar-{{ right_sidebar }}{% endif %} {{ section.settings.section_visibility }}" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="featured-blog">
   <div
-    class="{% if template == 'index' or template contains 'page' %}{{ section.settings.section_layout }}{% endif %}
+    class="{{ section.settings.section_layout }}
     {{ slideshow_height }}"
   >
     <div class="section-wrapper push-layout-{{ section.settings.push_layout_right }}">

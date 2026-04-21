@@ -11,7 +11,7 @@
 {%- endcapture -%}
 
 <div class="section-multicolumn" id="section-{{ section.id }}">
-  <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+  <div class="{{ section.settings.section_layout }}">
     <div class="section-wrapper column-align-{{ section.settings.column_alignment }}">
 
       {%- if section_heading != blank -%}

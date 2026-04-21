@@ -41,7 +41,7 @@
 <div class="section-single-banner"> 
   <div class="section-single-banner-inner" id="section-{{ section.id }}">
 
-    <div class="{%- if template == 'index' or template contains 'page' -%}{{ section.settings.section_layout }}{%- endif -%}">
+    <div class="{{ section.settings.section_layout }}">
       <div class="section-wrapper">
         {{ image_html }}
 
