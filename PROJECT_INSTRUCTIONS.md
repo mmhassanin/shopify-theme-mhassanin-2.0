@@ -27,7 +27,7 @@
 - Remote URL: `https://github.com/mmhassanin/shopify-theme-mhassanin-2.0.git` (HTTPS).
 - `section-list-collections-v2`: Floating overlap effect committed and pushed (`47c7026`).
 - `section-slideshow`: Added `dots_bottom_offset` px-based range setting with mobile responsive halving (`b4952a8`).
-- `section-list-collections-v2`: Refactored wrapper to use explicit `is_wide` variable for strict boxed vs wide layout control (`b4952a8`).
 - Resolved Z-Index Conflict: Lowered `section-list-collections-v2` overlap z-index from 10 to 1, and reinforced `.header-sticky` with `z-index: 999 !important` in `header.css` to guarantee header visibility during scroll.
 - `section-slideshow`: Implemented advanced matrix flexbox caption positioning (per-slide desktop/mobile axes controls) overriding legacy absolute positioning blocks (`7bda450`).
 - **Global Architecture**: Implemented theme-wide Section Visibility logic via custom CSS utilities (`.v-desktop-only` and `.v-mobile-only`) mapped into `assets/themes.css`. Systematically retrofitted core sections (`section-slideshow`, `section-list-collections-v2`, `featured-collection`) with a new `section_visibility` schema select to allow macro-level toggling mapped directly to the root bounding HTML container, ensuring zero functional breakage of internal block rendering (`ef25155`).
+- `section-list-collections-v2`: Implemented permanent structural fix for "Boxed vs Wide" layout, establishing the layout variable definitively on the master wrapper and forcing inline background injection on the child element, ensuring external container compliance (`4c55993`).
