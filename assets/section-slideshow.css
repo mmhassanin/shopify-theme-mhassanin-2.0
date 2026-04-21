@@ -896,3 +896,10 @@
 .section-slideshow.sidebar-product .product-card .product-buttons {
   display: none;
 }
+
+.section-slideshow .layout-wide {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}

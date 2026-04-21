@@ -23,3 +23,10 @@
 .section-multicolumn .multicolumn-item__text > :last-child {
   margin-bottom: 0;
 }
+
+.section-multicolumn .container-fluid {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
