@@ -50,7 +50,8 @@
     </div>
   </div>
 </popup-component>
-
-{%- if request.design_mode and shop.url != 'https://arena-electro.myshopify.com' -%}
-  {%- render 'verify-purchase-code' -%}
-{%- endif -%}
+{% comment %}
+  {%- if request.design_mode and shop.url != 'https://arena-electro.myshopify.com' -%}
+    {%- render 'verify-purchase-code' -%}
+  {%- endif -%}
+{% endcomment %}
