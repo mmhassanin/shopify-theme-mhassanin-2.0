@@ -288,12 +288,46 @@
 {%- capture section_css -%}
   {%- render 'snippet-theme', type: 'section-style', preClassID: section_id, config: section.settings -%}
   {%- if slideshow_height == 'fix-height' -%}
+    .section-slideshow#section-{{ section.id }} .bc-slideshow {
+      height: {{ section.settings.manually_height | times: 0.65 | round }}px;
+    }
     @media (min-width: 768px) {
-      .section-slideshow#section-{{ section.id }} .bc-slideshow{
+      .section-slideshow#section-{{ section.id }} .bc-slideshow {
         height: {{ section.settings.manually_height }}px;
       }
     }
+  {%- elsif slideshow_height == 'auto-height' -%}
+    {%- assign first_slide = section.blocks | where: 'type', 'block-item' | first -%}
+    {%- assign ar_desk = first_slide.settings.image.aspect_ratio | default: 2.333 -%}
+    {%- assign img_mob = first_slide.settings.image_mobile | default: first_slide.settings.image -%}
+    {%- assign ar_mob = img_mob.aspect_ratio | default: 1.0 -%}
+    .section-slideshow#section-{{ section.id }} .bc-slideshow {
+      height: auto;
+      aspect-ratio: {{ ar_mob }};
+    }
+    @media (min-width: 768px) {
+      .section-slideshow#section-{{ section.id }} .bc-slideshow {
+        aspect-ratio: {{ ar_desk }};
+      }
+    }
+  {%- elsif slideshow_height == 'full-height' -%}
+    .section-slideshow#section-{{ section.id }} .bc-slideshow {
+      height: 100vh;
+    }
   {%- endif -%}
+
+  /* Force inner elements to stretch correctly to the container's dictated height */
+  .section-slideshow#section-{{ section.id }} .bc-slideshow .slider-item,
+  .section-slideshow#section-{{ section.id }} .bc-slideshow .slide-bg,
+  .section-slideshow#section-{{ section.id }} .bc-slideshow .image-desktop,
+  .section-slideshow#section-{{ section.id }} .bc-slideshow .image-mobile {
+    height: 100% !important;
+  }
+  .section-slideshow#section-{{ section.id }} .bc-slideshow .slide-bg img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover;
+  }
   .section-slideshow#section-{{ section.id }} .bc-slideshow .slider-wrapper .tns-nav{
     bottom: {{ section.settings.dots_position }}%;
   }
