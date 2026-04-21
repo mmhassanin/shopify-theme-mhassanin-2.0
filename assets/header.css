@@ -71,7 +71,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 10;
+    z-index: 999 !important;
     -webkit-animation: animation-header-sticky 1s;
     animation: animation-header-sticky 1s;
     box-shadow: 0 0 6px rgba(32, 33, 36, 0.15);
@@ -88,7 +88,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 10;
+    z-index: 999 !important;
     -webkit-animation: animation-header-sticky 1s;
     animation: animation-header-sticky 1s;
     box-shadow: 0 0 6px rgba(32, 33, 36, 0.15);
