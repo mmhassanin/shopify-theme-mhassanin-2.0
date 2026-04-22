@@ -15,17 +15,24 @@
         "block_item_JfrYz7": {
           "type": "block-item",
           "settings": {
-            "image": "shopify://shop_images/A_high-end__photorealistic_202604180909_5fd37459-1c75-4af0-a1e2-b197bf5d87b0.jpg",
+            "image": "shopify://shop_images/A_photorealistic__high-end_202604171014_53f2d5d4-8023-4343-8512-1a79c240bcfc.jpg",
             "text_bg_color": "rgba(0,0,0,0)",
             "text_position": "middle-left",
             "hide_content_mobile": true,
             "text_position_mobile": "middle",
             "text_alignment": "start",
-            "heading": "<p>New Arrival!</p>",
-            "subtext": "<p><strong>M3 Super Sprint</strong></p>",
-            "subtext_2": "<p>13-inch ultimate on-the-go laptop, 15-inch for multitasking.</p><h2>$109,900.00</h2>",
+            "heading": "",
+            "subtext": "<h2><strong>Unified Communications</strong></h2>",
+            "subtext_2": "<p></p><p>Empowering your business</p><p>with cutting-edge VoIP and Collaboration technology.</p>",
             "button_label": "START BUYING",
-            "link": "shopify://collections/accessories"
+            "link": "shopify://collections/accessories",
+            "caption_x_desktop": 20,
+            "caption_y_desktop": 50,
+            "caption_x_mobile": 50,
+            "caption_y_mobile": 50,
+            "enable_caption_animation": true,
+            "caption_animation_type": "slide-in-left",
+            "animation_duration": 0.8
           }
         },
         "style_paragraph_npBCnh": {
@@ -58,7 +65,7 @@
         "block_item_GzimnT": {
           "type": "block-item",
           "settings": {
-            "image": "shopify://shop_images/A_high-end__photorealistic_202604180859_d84fbceb-40a6-4dbe-ae1d-51263e4f0f6b.jpg",
+            "image": "shopify://shop_images/A_high-end__photorealistic_202604171031_b3600718-20bd-482d-9190-6ba274c91a48.jpg",
             "text_bg_color": "#fed700",
             "text_position": "middle-center",
             "hide_content_mobile": true,
@@ -68,7 +75,14 @@
             "subtext": "<p><strong>M3 Super Sprint</strong></p>",
             "subtext_2": "<p>13-inch ultimate on-the-go laptop, 15-inch for multitasking.</p><h2>$109,900.00</h2>",
             "button_label": "START BUYING",
-            "link": "shopify://collections/all-in-one"
+            "link": "shopify://collections/all-in-one",
+            "caption_x_desktop": 100,
+            "caption_y_desktop": 100,
+            "caption_x_mobile": 100,
+            "caption_y_mobile": 100,
+            "enable_caption_animation": true,
+            "caption_animation_type": "fade-in-up",
+            "animation_duration": 0.8
           }
         },
         "style_paragraph_btDWGE": {
@@ -97,6 +111,56 @@
             "btn_padding": "10px 25px 10px 25px",
             "btn_radius": "25px 25px 25px 25px"
           }
+        },
+        "block_item_GLXDXT": {
+          "type": "block-item",
+          "settings": {
+            "image": "shopify://shop_images/A_high-end__photorealistic_202604180909_5fd37459-1c75-4af0-a1e2-b197bf5d87b0.jpg",
+            "text_bg_color": "",
+            "text_position": "middle-center",
+            "hide_content_mobile": false,
+            "text_position_mobile": "middle",
+            "text_alignment": "center",
+            "heading": "<h2>Image slide</h2>",
+            "subtext": "",
+            "subtext_2": "",
+            "button_label": "Button label",
+            "link": "",
+            "caption_x_desktop": 50,
+            "caption_y_desktop": 50,
+            "caption_x_mobile": 50,
+            "caption_y_mobile": 50,
+            "enable_caption_animation": true,
+            "caption_animation_type": "fade-in-up",
+            "animation_duration": 0.8
+          }
+        },
+        "style_paragraph_tXNRQ7": {
+          "type": "style_paragraph",
+          "settings": {
+            "title": "",
+            "text_fs_1": "",
+            "text_cl_1": "",
+            "text_fs_2": "",
+            "text_cl_2": "",
+            "text_cl_3": ""
+          }
+        },
+        "style_button_zURh8R": {
+          "type": "style_button",
+          "settings": {
+            "title": "",
+            "btn_fs": "",
+            "btn_cl": "",
+            "btn_bg_cl": "",
+            "btn_border_cl": "",
+            "btn_hover_cl": "",
+            "btn_hover_bg_cl": "",
+            "btn_hover_border_cl": "",
+            "btn_fw": 0,
+            "btn_padding": "",
+            "btn_radius": ""
+          }
         }
       },
       "block_order": [
@@ -105,24 +169,29 @@
         "style_button_3wBfje",
         "block_item_GzimnT",
         "style_paragraph_btDWGE",
-        "style_button_iQCWBh"
+        "style_button_iQCWBh",
+        "block_item_GLXDXT",
+        "style_paragraph_tXNRQ7",
+        "style_button_zURh8R"
       ],
       "settings": {
         "section_layout": "layout-wide",
-        "right_sidebar": "overlay",
+        "section_visibility": "always",
+        "right_sidebar": "none",
         "margin": "",
         "padding": "",
         "bg_color": "#ffffff",
-        "slideshow_height": "auto-height",
-        "manually_height": 600,
+        "slideshow_height": "full-height",
+        "manually_height": 650,
         "disable_lazyload": true,
         "push_layout_right": false,
         "loop": true,
         "controls": true,
         "dots": true,
-        "dots_position": -5,
-        "autoplay": true,
-        "autoplay_timeout": 4,
+        "dots_position": -15,
+        "dots_bottom_offset": 45,
+        "autoplay": false,
+        "autoplay_timeout": 8,
         "three_banner_style": "1",
         "three_image_bg_color": "#ffffff",
         "three_text_1": "",
@@ -152,7 +221,7 @@
         "block_item_YrGx8y": {
           "type": "block-item",
           "settings": {
-            "collection": "",
+            "collection": "accessories",
             "text": "Collection title"
           }
         },
@@ -188,8 +257,11 @@
       "custom_css": [],
       "name": "t:sections.list-collections-v2.name",
       "settings": {
-        "section_layout": "container-fluid",
-        "margin": "-50px 50px -50px 50px",
+        "enable_overlap": true,
+        "overlap_amount": 30,
+        "section_layout": "container",
+        "section_visibility": "always",
+        "margin": "50px 0 0 0",
         "padding": "0 0 0 0",
         "items_resp": "4,2",
         "full_background": true,
@@ -201,7 +273,59 @@
         "enable_list_collections": true,
         "style": "1",
         "text_color": "#0062bd",
-        "item_bg_color": "#E9E9F2"
+        "item_bg_color": "#e9e9f2"
+      }
+    },
+    "featured_collection_MPPEMA": {
+      "type": "featured-collection",
+      "blocks": {
+        "heading_style_j3cqWa": {
+          "type": "heading-style",
+          "settings": {
+            "section_heading_container_align": "start",
+            "section_heading_margin": "",
+            "section_heading_color": "",
+            "section_heading_font_size": "",
+            "section_heading_font_weight": 600
+          }
+        }
+      },
+      "block_order": [
+        "heading_style_j3cqWa"
+      ],
+      "name": "t:sections.featured-collection.name",
+      "settings": {
+        "section_layout": "container-fluid",
+        "section_visibility": "always",
+        "style": "textbox",
+        "margin": "-50px 0px 0px 0px",
+        "padding": "100px 50px 50px 20px",
+        "bg_color": "",
+        "border_radius": true,
+        "bg_image": "shopify://shop_images/imgi_1_background-1.png",
+        "heading": "",
+        "subheading": "",
+        "subheading_below": false,
+        "collection": "ip-phones",
+        "items_resp": "5,5,3,2",
+        "items_spacing": false,
+        "limit": 8,
+        "link": "/",
+        "position": "1",
+        "text_1": "OUTLET DEALS",
+        "text_2": "dfsdf",
+        "expire": "",
+        "textbox_1": "OUTLET DEALS",
+        "textbox_2": "sdfsdfs",
+        "button_label": "sdfsdf",
+        "button_link": "/",
+        "enable_slider": true,
+        "loop": true,
+        "controls": true,
+        "controls_position": "2",
+        "dots": true,
+        "autoplay": true,
+        "autoplay_timeout": 4
       }
     },
     "section_rich_text_n7BbcM": {
@@ -705,6 +829,7 @@
   "order": [
     "section_slideshow_MXjXy4",
     "section_list_collections_v2_TD8ThB",
+    "featured_collection_MPPEMA",
     "section_rich_text_n7BbcM",
     "section_policy_iFWtnm",
     "featured_collection_v3_4LX4Jx",

@@ -90,36 +90,41 @@
                               {%- endif -%}
                             </a>
 
-                              <div class="slide-content text-{{ block.settings.text_alignment }}{% if block.settings.hide_content_mobile %} hide-mobile{% endif %}">
-                                <div class="slide-content-wrapper">
+                            <div class="slide-content text-{{ block.settings.text_alignment }}{% if block.settings.hide_content_mobile %} hide-mobile{% endif %}">
+                              <div class="slide-content-wrapper">
+                                <div
+                                  class="slide-content-inner"
+                                  style="--pos-x-desk: {{ block.settings.caption_x_desktop }}%; --pos-y-desk: {{ block.settings.caption_y_desktop }}%; --pos-x-mob: {{ block.settings.caption_x_mobile }}%; --pos-y-mob: {{ block.settings.caption_y_mobile }}%;"
+                                >
                                   <div
-                                    class="slide-content-inner"
-                                    style="--pos-x-desk: {{ block.settings.caption_x_desktop }}%; --pos-y-desk: {{ block.settings.caption_y_desktop }}%; --pos-x-mob: {{ block.settings.caption_x_mobile }}%; --pos-y-mob: {{ block.settings.caption_y_mobile }}%;"
+                                    class="slide-caption-animation-container{% if block.settings.enable_caption_animation %} animate-{{ block.settings.caption_animation_type }}{% endif %}"
+                                    style="--anim-duration: {{ block.settings.animation_duration }}s;"
                                   >
-                                    <div class="slide-caption-animation-container{% if block.settings.enable_caption_animation %} animate-{{ block.settings.caption_animation_type }}{% endif %}" style="--anim-duration: {{ block.settings.animation_duration }}s;">
-                                      {%- if block.settings.heading != blank -%}
-                                        <span class="image-gallery_title content-text-1">{{ block.settings.heading }}</span>
-                                      {%- endif -%}
-                                      {%- if block.settings.subtext != blank -%}
-                                        <span class="image-gallery_subtext content-text-2">
-                                          {{- block.settings.subtext -}}
-                                        </span>
-                                      {%- endif -%}
-                                      {%- if block.settings.subtext_2 != blank -%}
-                                        <span class="image-gallery_subtext_2 content-text-3">
-                                          {{- block.settings.subtext_2 -}}
-                                        </span>
-                                      {%- endif -%}
-                                      {%- if block.settings.button_label != blank -%}
-                                        <a
-                                          href="{{ block.settings.link | default: 'javascript:void(0)' }}"
-                                          class="btn btn-1 btn-slideshow btn-slide content-button"
-                                        >
-                                          {{ block.settings.button_label }}
-                                        </a>
-                                      {%- endif -%}
-                                    </div>
+                                    {%- if block.settings.heading != blank -%}
+                                      <span class="image-gallery_title content-text-1">
+                                        {{- block.settings.heading -}}
+                                      </span>
+                                    {%- endif -%}
+                                    {%- if block.settings.subtext != blank -%}
+                                      <span class="image-gallery_subtext content-text-2">
+                                        {{- block.settings.subtext -}}
+                                      </span>
+                                    {%- endif -%}
+                                    {%- if block.settings.subtext_2 != blank -%}
+                                      <span class="image-gallery_subtext_2 content-text-3">
+                                        {{- block.settings.subtext_2 -}}
+                                      </span>
+                                    {%- endif -%}
+                                    {%- if block.settings.button_label != blank -%}
+                                      <a
+                                        href="{{ block.settings.link | default: 'javascript:void(0)' }}"
+                                        class="btn btn-1 btn-slideshow btn-slide content-button"
+                                      >
+                                        {{ block.settings.button_label }}
+                                      </a>
+                                    {%- endif -%}
                                   </div>
+                                </div>
 
                                 {%- unless block.settings.text_bg_color == blank
                                   or block.settings.text_bg_color == 'rgba(0,0,0,0)'
@@ -387,14 +392,11 @@
     object-fit: cover;
   }
   .section-slideshow#section-{{ section.id }} .bc-slideshow .slider-wrapper .tns-nav{
-    bottom: {{ section.settings.dots_position }}%;
-  }
-  .section-slideshow#section-{{ section.id }} .bc-slideshow .slider-wrapper .tns-nav{
-    bottom: {{ section.settings.dots_bottom_offset }}px !important;
+    bottom: {{ section.settings.dots_bottom_offset }}% !important;
   }
   @media (max-width: 767px) {
     .section-slideshow#section-{{ section.id }} .bc-slideshow .slider-wrapper .tns-nav{
-      bottom: {{ section.settings.dots_bottom_offset | divided_by: 2 }}px !important;
+      bottom: {{ section.settings.dots_bottom_offset_mobile }}% !important;
     }
   }
 
@@ -543,23 +545,24 @@
     },
     {
       "type": "range",
-      "id": "dots_position",
-      "label": "t:sections.slideshow.settings.dots_position",
-      "min": -15,
-      "max": 50,
-      "step": 1,
-      "unit": "%",
-      "default": 4
-    },
-    {
-      "type": "range",
       "id": "dots_bottom_offset",
       "label": "Pagination Dots Bottom Offset",
-      "info": "Pixel-based offset for precise positioning. Overrides the percentage value above.",
+      "info": "Pixel-based offset for precise positioning.",
       "min": 0,
       "max": 100,
       "step": 1,
-      "unit": "px",
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "dots_bottom_offset_mobile",
+      "label": "Pagination Dots Bottom Offset (Mobile)",
+      "info": "Pixel-based offset for precise positioning for mobile.",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
       "default": 30
     },
     {
