@@ -337,6 +337,7 @@
 
 .section-slideshow .slide-content-inner .image-gallery_title {
   line-height: .9;
+  font-size: var(--fluid-font-size, inherit);
 }
 
 .section-slideshow .slide-content-inner .image-gallery_title > * {
@@ -347,12 +348,20 @@
   margin-bottom: 0;
 }
 
+.section-slideshow .slide-content-inner .image-gallery_subtext {
+  font-size: var(--fluid-font-size, inherit);
+}
+
 .section-slideshow .slide-content-inner .image-gallery_subtext > * {
   margin: 0 0 var(--gutter-xxs);
 }
 
 .section-slideshow .slide-content-inner .image-gallery_subtext > :last-child {
   margin-bottom: 0;
+}
+
+.section-slideshow .slide-content-inner .image-gallery_subtext_2 {
+  font-size: var(--fluid-font-size, inherit);
 }
 
 .section-slideshow .slide-content-inner .image-gallery_subtext_2 > * {
@@ -372,6 +381,7 @@
 
 .section-slideshow .slide-content-inner .btn-slideshow {
   display: inline-block;
+  font-size: var(--fluid-font-size, inherit);
 }
 
 .section-slideshow .tns-ovh {

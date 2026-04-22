@@ -10,12 +10,20 @@
                 assign text_cl        = 'text_cl_' | append: i
                 assign text_fs        = block.settings[text_fs]
                 assign text_cl        = block.settings[text_cl] | default: 'rgba(0,0,0,0)'
+                assign fs_min         = 'text_fs_min_' | append: i
+                assign fs_pref        = 'text_fs_pref_' | append: i
+                assign fs_max         = 'text_fs_max_' | append: i
+                assign fs_min         = block.settings[fs_min]
+                assign fs_pref        = block.settings[fs_pref]
+                assign fs_max         = block.settings[fs_max]
             -%}
             {%- capture text_id -%}{{ blockID }} .content-text-{{ i }}{%- endcapture -%}
 
             {%- capture block_css -%}
                 {%- unless text_cl == 'rgba(0,0,0,0)' -%}color: {{ text_cl }};{%- endunless -%}
                 {%- render 'css-resp', type: 'value', showFirst: true, css_value: text_fs, css_property: 'font-size' -%}
+                --fluid-font-size: clamp({{ fs_min }}px, {{ fs_pref }}vw, {{ fs_max }}px);
+                font-size: var(--fluid-font-size, inherit);
             {%- endcapture -%}
 
             {%- render 'css-resp', classID: text_id, css_values: block_css -%}
@@ -34,6 +42,9 @@
             assign btn_padding            = block.settings.btn_padding
             assign btn_fs                 = block.settings.btn_fs
             assign btn_radius             = block.settings.btn_radius
+            assign btn_fs_min             = block.settings.btn_fs_min
+            assign btn_fs_pref            = block.settings.btn_fs_pref
+            assign btn_fs_max             = block.settings.btn_fs_max
         -%}
 
         {%- capture block_css -%}
@@ -44,6 +55,8 @@
             {%- render 'css-resp', type: 'value', showFirst: true, css_value: btn_padding, css_property: 'padding' -%}
             {%- render 'css-resp', type: 'value', showFirst: true, css_value: btn_fs, css_property: 'font-size' -%}
             {%- render 'css-resp', type: 'value', showFirst: true, css_value: btn_radius, css_property: 'border-radius' -%}
+            --fluid-font-size: clamp({{ btn_fs_min }}px, {{ btn_fs_pref }}vw, {{ btn_fs_max }}px);
+            font-size: var(--fluid-font-size, inherit);
         {%- endcapture -%}
 
         {%- render 'css-resp', classID: blockID, nextClassID: ' .btn-slide', css_values: block_css -%}
