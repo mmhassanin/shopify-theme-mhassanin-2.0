@@ -928,8 +928,8 @@
       ]
     },
     {
-      "type": "style_paragraph",
-      "name": "t:sections.slideshow.blocks.paragraph.name",
+      "type": "style_heading",
+      "name": "Heading Style",
       "settings": [
         {
           "type": "text",
@@ -937,136 +937,148 @@
           "label": "t:sections.common.block_label"
         },
         {
-          "type": "paragraph",
-          "content": "[What mean of comma?](https:\/\/support.arenacommerce.com\/a\/solutions\/articles\/6000243911)"
-        },
-        {
-          "type": "header",
-          "content": "t:sections.common.heading"
-        },
-        {
           "type": "text",
-          "id": "text_fs_1",
+          "id": "text_fs",
           "label": "t:sections.common.font_size",
           "info": "E.g: 24px"
         },
         {
-          "type": "range",
-          "id": "text_fs_min_1",
-          "min": 10,
-          "max": 50,
-          "step": 1,
-          "unit": "px",
-          "label": "Heading: Min Font Size (Mobile)",
-          "default": 18
+          "type": "color",
+          "id": "text_cl",
+          "label": "t:sections.common.text_color"
         },
         {
           "type": "range",
-          "id": "text_fs_pref_1",
+          "id": "font_size_min",
+          "min": 10,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Minimum Font Size (Mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "font_size_preferred",
           "min": 1,
           "max": 10,
           "step": 0.1,
           "unit": "vw",
-          "label": "Heading: Preferred Scaling (vw)",
+          "label": "Preferred Scaling Size (vw)",
           "default": 3.2
         },
         {
           "type": "range",
-          "id": "text_fs_max_1",
+          "id": "font_size_max",
           "min": 16,
           "max": 120,
           "step": 1,
           "unit": "px",
-          "label": "Heading: Max Font Size (Desktop)",
+          "label": "Maximum Font Size (Desktop)",
           "default": 48
-        },
+        }
+      ]
+    },
+    {
+      "type": "style_subheading",
+      "name": "Subheading Style",
+      "settings": [
         {
-          "type": "color",
-          "id": "text_cl_1",
-          "label": "t:sections.common.text_color"
-        },
-        {
-          "type": "header",
-          "content": "t:sections.common.subtext"
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.block_label"
         },
         {
           "type": "text",
-          "id": "text_fs_2",
+          "id": "text_fs",
           "label": "t:sections.common.font_size",
           "info": "E.g: 24px"
         },
         {
+          "type": "color",
+          "id": "text_cl",
+          "label": "t:sections.common.text_color"
+        },
+        {
           "type": "range",
-          "id": "text_fs_min_2",
+          "id": "font_size_min",
           "min": 10,
-          "max": 50,
+          "max": 60,
           "step": 1,
           "unit": "px",
-          "label": "Subtext: Min Font Size (Mobile)",
+          "label": "Minimum Font Size (Mobile)",
           "default": 14
         },
         {
           "type": "range",
-          "id": "text_fs_pref_2",
+          "id": "font_size_preferred",
           "min": 1,
           "max": 10,
           "step": 0.1,
           "unit": "vw",
-          "label": "Subtext: Preferred Scaling (vw)",
+          "label": "Preferred Scaling Size (vw)",
           "default": 2.0
         },
         {
           "type": "range",
-          "id": "text_fs_max_2",
+          "id": "font_size_max",
           "min": 16,
           "max": 100,
           "step": 1,
           "unit": "px",
-          "label": "Subtext: Max Font Size (Desktop)",
+          "label": "Maximum Font Size (Desktop)",
           "default": 24
+        }
+      ]
+    },
+    {
+      "type": "style_paragraph",
+      "name": "Paragraph Style",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.common.block_label"
+        },
+        {
+          "type": "text",
+          "id": "text_fs",
+          "label": "t:sections.common.font_size",
+          "info": "E.g: 24px"
         },
         {
           "type": "color",
-          "id": "text_cl_2",
-          "label": "t:sections.common.text_color"
-        },
-        {
-          "type": "header",
-          "content": "t:sections.common.subtext_2"
-        },
-        {
-          "type": "color",
-          "id": "text_cl_3",
+          "id": "text_cl",
           "label": "t:sections.common.text_color"
         },
         {
           "type": "range",
-          "id": "text_fs_min_3",
+          "id": "font_size_min",
           "min": 10,
-          "max": 50,
+          "max": 60,
           "step": 1,
           "unit": "px",
-          "label": "Subtext 2: Min Font Size (Mobile)",
+          "label": "Minimum Font Size (Mobile)",
           "default": 12
         },
         {
           "type": "range",
-          "id": "text_fs_pref_3",
+          "id": "font_size_preferred",
           "min": 1,
           "max": 10,
           "step": 0.1,
           "unit": "vw",
-          "label": "Subtext 2: Preferred Scaling (vw)",
+          "label": "Preferred Scaling Size (vw)",
           "default": 1.5
         },
         {
           "type": "range",
-          "id": "text_fs_max_3",
+          "id": "font_size_max",
           "min": 16,
           "max": 100,
           "step": 1,
           "unit": "px",
-          "label": "Subtext 2: Max Font Size (Desktop)",
+          "label": "Maximum Font Size (Desktop)",
           "default": 18
         }
       ]
@@ -1092,32 +1104,32 @@
         },
         {
           "type": "range",
-          "id": "btn_fs_min",
+          "id": "font_size_min",
           "min": 10,
-          "max": 40,
+          "max": 60,
           "step": 1,
           "unit": "px",
-          "label": "Button: Min Font Size (Mobile)",
+          "label": "Minimum Font Size (Mobile)",
           "default": 14
         },
         {
           "type": "range",
-          "id": "btn_fs_pref",
+          "id": "font_size_preferred",
           "min": 1,
           "max": 10,
           "step": 0.1,
           "unit": "vw",
-          "label": "Button: Preferred Scaling (vw)",
+          "label": "Preferred Scaling Size (vw)",
           "default": 1.8
         },
         {
           "type": "range",
-          "id": "btn_fs_max",
-          "min": 14,
-          "max": 60,
+          "id": "font_size_max",
+          "min": 16,
+          "max": 120,
           "step": 1,
           "unit": "px",
-          "label": "Button: Max Font Size (Desktop)",
+          "label": "Maximum Font Size (Desktop)",
           "default": 18
         },
         {
@@ -1172,7 +1184,8 @@
           "info": "E.g: 8px 8px 8px 8px"
         }
       ]
-    },
+    }
+},
     {
       "type": "style_image_layout",
       "name": "t:sections.slideshow.blocks.sub_image.name",
